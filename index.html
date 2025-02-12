@@ -27,6 +27,14 @@
             backdrop-filter: blur(10px);
             border-radius: 10px;
         }
+        .faq-item {
+            cursor: pointer;
+            transition: all 0.3s ease-in-out;
+        }
+        .faq-answer {
+            display: none;
+            padding-top: 10px;
+        }
     </style>
 </head>
 <body class="bg-gray-900 text-white flex flex-col items-center text-center">
@@ -57,34 +65,23 @@
     </section>
 
     <section class="relative z-10 mt-10 text-center w-full py-10 bg-gray-900">
-        <h2 class="text-4xl font-bold">Pricing Plans</h2>
-        <div class="mt-6 max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div class="bg-gray-800 p-6 rounded-lg shadow-lg glass">
-                <h3 class="text-2xl font-semibold">Starter</h3>
-                <p class="text-3xl font-bold mt-4">$29/mo</p>
-                <ul class="mt-4 text-sm">
-                    <li>✔ Basic AI automation</li>
-                    <li>✔ 24/7 AI support</li>
-                    <li>✔ Up to 5,000 tasks</li>
-                </ul>
+        <h2 class="text-4xl font-bold">Frequently Asked Questions</h2>
+        <div class="mt-6 max-w-4xl mx-auto">
+            <div class="bg-gray-800 p-6 rounded-lg shadow-lg faq-item" onclick="toggleFAQ(1)">
+                <h3 class="text-2xl font-semibold">What is AI-Buffet?</h3>
+                <p class="faq-answer text-gray-300" id="faq-1">AI-Buffet is an AI-powered automation platform that helps businesses optimize workflows, integrate AI solutions, and enhance customer interactions.</p>
             </div>
-            <div class="bg-gray-800 p-6 rounded-lg shadow-lg glass">
-                <h3 class="text-2xl font-semibold">Pro</h3>
-                <p class="text-3xl font-bold mt-4">$99/mo</p>
-                <ul class="mt-4 text-sm">
-                    <li>✔ Advanced AI automation</li>
-                    <li>✔ Priority AI support</li>
-                    <li>✔ Up to 50,000 tasks</li>
-                </ul>
+            <div class="bg-gray-800 p-6 rounded-lg shadow-lg faq-item mt-4" onclick="toggleFAQ(2)">
+                <h3 class="text-2xl font-semibold">How does AI automation work?</h3>
+                <p class="faq-answer text-gray-300" id="faq-2">Our AI systems analyze your workflows and implement automated solutions to reduce manual tasks, improve efficiency, and scale your operations.</p>
             </div>
-            <div class="bg-gray-800 p-6 rounded-lg shadow-lg glass">
-                <h3 class="text-2xl font-semibold">Enterprise</h3>
-                <p class="text-3xl font-bold mt-4">$299/mo</p>
-                <ul class="mt-4 text-sm">
-                    <li>✔ Custom AI solutions</li>
-                    <li>✔ Dedicated AI consultant</li>
-                    <li>✔ Unlimited AI tasks</li>
-                </ul>
+            <div class="bg-gray-800 p-6 rounded-lg shadow-lg faq-item mt-4" onclick="toggleFAQ(3)">
+                <h3 class="text-2xl font-semibold">What industries can benefit from AI-Buffet?</h3>
+                <p class="faq-answer text-gray-300" id="faq-3">AI-Buffet is designed for a wide range of industries including e-commerce, healthcare, finance, customer service, and more.</p>
+            </div>
+            <div class="bg-gray-800 p-6 rounded-lg shadow-lg faq-item mt-4" onclick="toggleFAQ(4)">
+                <h3 class="text-2xl font-semibold">How much does AI-Buffet cost?</h3>
+                <p class="faq-answer text-gray-300" id="faq-4">We offer flexible pricing plans, starting from $29/month for basic automation up to $299/month for enterprise-level AI solutions.</p>
             </div>
         </div>
     </section>
@@ -109,6 +106,10 @@
             }
             updateCountdown();
             setInterval(updateCountdown, 1000);
+        }
+        function toggleFAQ(id) {
+            const answer = document.getElementById(`faq-${id}`);
+            answer.style.display = answer.style.display === "block" ? "none" : "block";
         }
         window.onload = startCountdown;
     </script>

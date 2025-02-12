@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI-Buffet | Coming Soon</title>
+    <title>AI-Buffet | AI Automation Services</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/js/all.min.js"></script>
     <style>
         @keyframes flashColors {
             0% { color: red; }
@@ -14,71 +15,70 @@
             80% { color: purple; }
             100% { color: cyan; }
         }
-        
         #coming-soon {
             animation: flashColors 1s infinite alternate;
         }
+        .parallax-bg {
+            background-attachment: fixed;
+            background-size: cover;
+        }
+        .glass {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 10px;
+        }
     </style>
 </head>
-<body class="bg-gray-900 text-white flex flex-col justify-center items-center text-center">
-    <div class="relative z-10 mt-20">
+<body class="bg-gray-900 text-white flex flex-col items-center text-center">
+    <header class="w-full py-5 bg-gray-800 text-white text-xl font-bold">AI-Buffet - Automate Your Future</header>
+    <section class="relative z-10 mt-20 text-center w-full py-10 bg-gray-900 parallax-bg" style="background-image: url('https://source.unsplash.com/1600x900/?ai,technology');">
         <h1 class="text-5xl font-bold">AI-Buffet</h1>
         <p class="text-lg italic mt-2">Automate. Optimize. Dominate.</p>
         <h2 id="coming-soon" class="text-3xl mt-5 font-bold">Coming Soon</h2>
         <p id="countdown" class="text-2xl mt-3 font-mono">Loading...</p>
-        
-        <p class="mt-4 text-lg max-w-md">AI-Buffet is revolutionizing automation by delivering intelligent, seamless, and efficient AI solutions tailored for businesses of all sizes. Stay tuned for groundbreaking innovations!</p>
-        
-        <form class="mt-5 flex flex-col items-center">
-            <input type="email" placeholder="Enter your email" class="p-2 rounded text-black w-64 text-center" required>
-            <button type="submit" class="mt-3 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Notify Me</button>
-        </form>
-    </div>
+    </section>
 
-    <section class="relative z-10 mt-20 text-center w-full py-10 bg-gray-800">
-        <h2 class="text-4xl font-bold">Our AI Solutions</h2>
+    <section class="relative z-10 mt-10 text-center w-full py-10 bg-gray-800">
+        <h2 class="text-4xl font-bold">Why Choose AI-Buffet?</h2>
         <div class="mt-6 max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-6">
             <div class="bg-gray-700 p-6 rounded-lg shadow-lg">
-                <h3 class="text-2xl font-semibold">Intelligent AI Agents</h3>
-                <p class="mt-2">Deploy advanced AI-driven virtual assistants that streamline your workflows and optimize customer interactions.</p>
+                <h3 class="text-2xl font-semibold">AI-Powered Workflows</h3>
+                <p class="mt-2">Enhance efficiency and reduce manual effort with automated solutions.</p>
             </div>
             <div class="bg-gray-700 p-6 rounded-lg shadow-lg">
-                <h3 class="text-2xl font-semibold">Custom AI Workflows</h3>
-                <p class="mt-2">Tailor AI-powered automation workflows that enhance efficiency and reduce manual tasks for your business.</p>
+                <h3 class="text-2xl font-semibold">Intelligent AI Assistants</h3>
+                <p class="mt-2">Deploy virtual AI agents for customer interactions and operations.</p>
             </div>
             <div class="bg-gray-700 p-6 rounded-lg shadow-lg">
                 <h3 class="text-2xl font-semibold">End-to-End AI Integration</h3>
-                <p class="mt-2">Seamlessly integrate AI solutions into your existing infrastructure for intelligent data processing and decision-making.</p>
+                <p class="mt-2">Seamlessly integrate AI solutions into your existing systems.</p>
             </div>
         </div>
     </section>
 
-    <section class="relative z-10 mt-20 text-center w-full py-10 bg-gray-900">
+    <section class="relative z-10 mt-10 text-center w-full py-10 bg-gray-900">
         <h2 class="text-4xl font-bold">Pricing Plans</h2>
         <div class="mt-6 max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div class="bg-gray-800 p-6 rounded-lg shadow-lg">
+            <div class="bg-gray-800 p-6 rounded-lg shadow-lg glass">
                 <h3 class="text-2xl font-semibold">Starter</h3>
-                <p class="mt-2 text-lg">Perfect for individuals & small businesses</p>
                 <p class="text-3xl font-bold mt-4">$29/mo</p>
                 <ul class="mt-4 text-sm">
                     <li>✔ Basic AI automation</li>
                     <li>✔ 24/7 AI support</li>
-                    <li>✔ Up to 5,000 monthly tasks</li>
+                    <li>✔ Up to 5,000 tasks</li>
                 </ul>
             </div>
-            <div class="bg-gray-800 p-6 rounded-lg shadow-lg">
+            <div class="bg-gray-800 p-6 rounded-lg shadow-lg glass">
                 <h3 class="text-2xl font-semibold">Pro</h3>
-                <p class="mt-2 text-lg">For growing businesses & AI enthusiasts</p>
                 <p class="text-3xl font-bold mt-4">$99/mo</p>
                 <ul class="mt-4 text-sm">
                     <li>✔ Advanced AI automation</li>
                     <li>✔ Priority AI support</li>
-                    <li>✔ Up to 50,000 monthly tasks</li>
+                    <li>✔ Up to 50,000 tasks</li>
                 </ul>
             </div>
-            <div class="bg-gray-800 p-6 rounded-lg shadow-lg">
+            <div class="bg-gray-800 p-6 rounded-lg shadow-lg glass">
                 <h3 class="text-2xl font-semibold">Enterprise</h3>
-                <p class="mt-2 text-lg">For large-scale AI deployments</p>
                 <p class="text-3xl font-bold mt-4">$299/mo</p>
                 <ul class="mt-4 text-sm">
                     <li>✔ Custom AI solutions</li>
@@ -88,6 +88,8 @@
             </div>
         </div>
     </section>
+
+    <footer class="w-full py-5 bg-gray-800 text-white text-sm">&copy; 2025 AI-Buffet. All rights reserved.</footer>
 
     <script>
         function startCountdown() {
@@ -105,8 +107,8 @@
                     document.getElementById("countdown").innerHTML = "We're Live!";
                 }
             }
-            updateCountdown(); // Ensure it updates immediately
-            const timer = setInterval(updateCountdown, 1000);
+            updateCountdown();
+            setInterval(updateCountdown, 1000);
         }
         window.onload = startCountdown;
     </script>

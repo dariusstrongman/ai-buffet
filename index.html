@@ -30,12 +30,12 @@
         }
     </style>
 </head>
-<body class="bg-gray-900 text-white flex flex-col justify-center items-center h-screen text-center">
+<body class="bg-gray-900 text-white flex flex-col justify-center items-center text-center">
     <video class="video-bg" autoplay loop muted>
         <source src="https://assets.mixkit.co/videos/preview/mixkit-abstract-glowing-ai-face-12063-large.mp4" type="video/mp4">
         Your browser does not support the video tag.
     </video>
-    <div class="relative z-10">
+    <div class="relative z-10 mt-20">
         <h1 class="text-5xl font-bold">AI-Buffet</h1>
         <p class="text-lg italic mt-2">Automate. Optimize. Dominate.</p>
         <h2 id="coming-soon" class="text-3xl mt-5 font-bold">Coming Soon</h2>
@@ -48,6 +48,25 @@
             <button type="submit" class="mt-3 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Notify Me</button>
         </form>
     </div>
+
+    <section class="relative z-10 mt-20 text-center w-full py-10 bg-gray-800">
+        <h2 class="text-4xl font-bold">Our AI Solutions</h2>
+        <div class="mt-6 max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div class="bg-gray-700 p-6 rounded-lg shadow-lg">
+                <h3 class="text-2xl font-semibold">Intelligent AI Agents</h3>
+                <p class="mt-2">Deploy advanced AI-driven virtual assistants that streamline your workflows and optimize customer interactions.</p>
+            </div>
+            <div class="bg-gray-700 p-6 rounded-lg shadow-lg">
+                <h3 class="text-2xl font-semibold">Custom AI Workflows</h3>
+                <p class="mt-2">Tailor AI-powered automation workflows that enhance efficiency and reduce manual tasks for your business.</p>
+            </div>
+            <div class="bg-gray-700 p-6 rounded-lg shadow-lg">
+                <h3 class="text-2xl font-semibold">End-to-End AI Integration</h3>
+                <p class="mt-2">Seamlessly integrate AI solutions into your existing infrastructure for intelligent data processing and decision-making.</p>
+            </div>
+        </div>
+    </section>
+
     <script>
         function startCountdown() {
             const countdownDate = new Date("March 1, 2025 00:00:00").getTime();

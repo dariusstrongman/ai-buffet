@@ -79,39 +79,37 @@
                 <h3 class="text-2xl font-semibold">What industries can benefit from AI-Buffet?</h3>
                 <p class="faq-answer text-gray-300" id="faq-3">AI-Buffet is designed for a wide range of industries including e-commerce, healthcare, finance, customer service, and more.</p>
             </div>
-            <div class="bg-gray-800 p-6 rounded-lg shadow-lg faq-item mt-4" onclick="toggleFAQ(4)">
-                <h3 class="text-2xl font-semibold">How much does AI-Buffet cost?</h3>
-                <p class="faq-answer text-gray-300" id="faq-4">We offer flexible pricing plans, starting from $29/month for basic automation up to $299/month for enterprise-level AI solutions.</p>
-            </div>
         </div>
     </section>
 
-    <footer class="w-full py-5 bg-gray-800 text-white text-sm">&copy; 2025 AI-Buffet. All rights reserved.</footer>
+    <section class="relative z-10 mt-10 text-center w-full py-10 bg-gray-800">
+        <h2 class="text-4xl font-bold">Contact Us</h2>
+        <p class="text-lg mt-2">Let us know how we can assist you with AI solutions.</p>
+        
+        <form id="contactForm" class="mt-6 max-w-2xl mx-auto bg-gray-700 p-6 rounded-lg shadow-lg">
+            <div class="mb-4">
+                <label for="name" class="block text-left text-white font-semibold">Name</label>
+                <input type="text" id="name" name="name" class="w-full p-2 rounded bg-gray-800 text-white border border-gray-600" required>
+            </div>
+            <div class="mb-4">
+                <label for="email" class="block text-left text-white font-semibold">Email</label>
+                <input type="email" id="email" name="email" class="w-full p-2 rounded bg-gray-800 text-white border border-gray-600" required>
+            </div>
+            <div class="mb-4">
+                <label for="solution" class="block text-left text-white font-semibold">What AI solution are you looking for?</label>
+                <textarea id="solution" name="solution" class="w-full p-2 rounded bg-gray-800 text-white border border-gray-600" rows="4" required></textarea>
+            </div>
+            <button type="submit" class="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">Submit</button>
+        </form>
+        <p id="successMessage" class="hidden text-green-400 mt-4">Your request has been submitted.</p>
+    </section>
 
     <script>
-        function startCountdown() {
-            const countdownDate = new Date("March 1, 2025 00:00:00").getTime();
-            function updateCountdown() {
-                const now = new Date().getTime();
-                const distance = countdownDate - now;
-                const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-                const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-                const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-                document.getElementById("countdown").innerHTML = `${days}d ${hours}h ${minutes}m ${seconds}s`;
-                if (distance < 0) {
-                    clearInterval(timer);
-                    document.getElementById("countdown").innerHTML = "We're Live!";
-                }
-            }
-            updateCountdown();
-            setInterval(updateCountdown, 1000);
-        }
-        function toggleFAQ(id) {
-            const answer = document.getElementById(`faq-${id}`);
-            answer.style.display = answer.style.display === "block" ? "none" : "block";
-        }
-        window.onload = startCountdown;
+        document.getElementById("contactForm").addEventListener("submit", function(event) {
+            event.preventDefault();
+            document.getElementById("contactForm").reset();
+            document.getElementById("successMessage").classList.remove("hidden");
+        });
     </script>
 </body>
 </html>

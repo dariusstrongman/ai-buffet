@@ -110,6 +110,12 @@
             document.getElementById("contactForm").reset();
             document.getElementById("successMessage").classList.remove("hidden");
         });
+            function toggleFAQ(id) {
+                const answer = document.getElementById(`faq-${id}`);
+                if (answer) {
+                    answer.style.display = answer.style.display === "block" ? "none" : "block";
+                }
+            }
     </script>
 </body>
 </html>

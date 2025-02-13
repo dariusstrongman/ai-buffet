@@ -46,20 +46,28 @@
         <p id="countdown" class="text-2xl mt-3 font-mono">Loading...</p>
     </section>
 
-    <section class="relative z-10 mt-10 text-center w-full py-10 bg-gray-800">
-        <h2 class="text-4xl font-bold">Why Choose AI-Buffet?</h2>
-        <div class="mt-6 max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div class="bg-gray-700 p-6 rounded-lg shadow-lg">
-                <h3 class="text-2xl font-semibold">AI-Powered Workflows</h3>
-                <p class="mt-2">Enhance efficiency and reduce manual effort with automated solutions.</p>
+    <section class="relative z-10 mt-10 text-center w-full py-10 bg-gray-900">
+        <h2 class="text-4xl font-bold">Frequently Asked Questions</h2>
+        <div class="mt-6 max-w-4xl mx-auto">
+            <div class="bg-gray-800 p-6 rounded-lg shadow-lg faq-item" onclick="toggleFAQ(1)">
+                <h3 class="text-2xl font-semibold">What is AI-Buffet?</h3>
+                <p class="faq-answer text-gray-300" id="faq-1">AI-Buffet is an AI-powered automation platform that helps businesses optimize workflows, integrate AI solutions, and enhance customer interactions.</p>
             </div>
-            <div class="bg-gray-700 p-6 rounded-lg shadow-lg">
-                <h3 class="text-2xl font-semibold">Intelligent AI Assistants</h3>
-                <p class="mt-2">Deploy virtual AI agents for customer interactions and operations.</p>
+            <div class="bg-gray-800 p-6 rounded-lg shadow-lg faq-item mt-4" onclick="toggleFAQ(2)">
+                <h3 class="text-2xl font-semibold">How does AI automation work?</h3>
+                <p class="faq-answer text-gray-300" id="faq-2">Our AI systems analyze your workflows and implement automated solutions to reduce manual tasks, improve efficiency, and scale your operations.</p>
             </div>
-            <div class="bg-gray-700 p-6 rounded-lg shadow-lg">
-                <h3 class="text-2xl font-semibold">End-to-End AI Integration</h3>
-                <p class="mt-2">Seamlessly integrate AI solutions into your existing systems.</p>
+            <div class="bg-gray-800 p-6 rounded-lg shadow-lg faq-item mt-4" onclick="toggleFAQ(3)">
+                <h3 class="text-2xl font-semibold">What industries can benefit from AI-Buffet?</h3>
+                <p class="faq-answer text-gray-300" id="faq-3">AI-Buffet is designed for a wide range of industries including e-commerce, healthcare, finance, customer service, and more.</p>
+            </div>
+            <div class="bg-gray-800 p-6 rounded-lg shadow-lg faq-item mt-4" onclick="toggleFAQ(4)">
+                <h3 class="text-2xl font-semibold">Can AI-Buffet integrate with existing business tools?</h3>
+                <p class="faq-answer text-gray-300" id="faq-4">Yes, AI-Buffet offers seamless integration with popular business tools and platforms to enhance workflow efficiency.</p>
+            </div>
+            <div class="bg-gray-800 p-6 rounded-lg shadow-lg faq-item mt-4" onclick="toggleFAQ(5)">
+                <h3 class="text-2xl font-semibold">Is AI automation secure?</h3>
+                <p class="faq-answer text-gray-300" id="faq-5">AI-Buffet follows industry-standard security protocols to ensure data privacy and protection in all automated processes.</p>
             </div>
         </div>
     </section>

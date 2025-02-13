@@ -126,6 +126,29 @@
             const interval = setInterval(updateCountdown, 1000);
         }
         window.onload = startCountdown;
+        document.getElementById("contactForm").addEventListener("submit", function(event) {
+            event.preventDefault();
+            
+            const formData = {
+                name: document.getElementById("name").value,
+                email: document.getElementById("email").value,
+                solution: document.getElementById("solution").value
+            };
+            
+            fetch("http://localhost:5678/webhook-test/78ecc5ad-d27a-42e7-b888-2f45c7116153", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(formData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById("contactForm").reset();
+                document.getElementById("successMessage").classList.remove("hidden");
+            })
+            .catch(error => console.error("Error:", error));
+        });
     </script>
 </body>
 </html>

@@ -86,7 +86,7 @@
                 <input type="email" id="email" name="email" class="w-full p-2 rounded bg-gray-800 text-white border border-gray-600" required>
             </div>
             <div class="mb-4">
-                <label for="phone" class="block text-left text-white font-semibold">Number</label>
+                <label for="phone" class="block text-left text-white font-semibold">Phone</label>
                 <input type="tel" id="phone" name="phone" class="w-full p-2 rounded bg-gray-800 text-white border border-gray-600" required>
             </div>
             <div class="mb-4">
@@ -140,7 +140,9 @@
             solution: document.getElementById("solution").value
         };
 
-        console.log("Sending data to webhook:", formData); // Debugging log
+        let errorBox = document.getElementById("errorBox"); // Error display area
+        errorBox.innerHTML = ""; // Clear previous errors
+        errorBox.classList.add("hidden"); // Hide by default
 
         fetch("http://localhost:5678/webhook-test/my-webhook", {
             method: "POST",
@@ -150,17 +152,18 @@
             body: JSON.stringify(formData)
         })
         .then(response => {
-            console.log("Response status:", response.status);
-            return response.text();  // Convert response to text for debugging
+            if (!response.ok) {
+                throw new Error(`HTTP Error: ${response.status} - ${response.statusText}`);
+            }
+            return response.text();
         })
         .then(data => {
-            console.log("Webhook Response Data:", data);
             document.getElementById("contactForm").reset();
             document.getElementById("successMessage").classList.remove("hidden");
         })
         .catch(error => {
-            console.error("Error sending data:", error);
-            alert("Failed to submit form. Check the console for errors.");
+            errorBox.innerHTML = `<p>Error: ${error.message}</p>`;
+            errorBox.classList.remove("hidden");
         });
     });
     </script>

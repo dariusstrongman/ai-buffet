@@ -130,31 +130,42 @@
             const interval = setInterval(updateCountdown, 1000);
         }
         window.onload = startCountdown;
-        document.getElementById("contactForm").addEventListener("submit", function(event) {
-            event.preventDefault();
-            
-            const formData = {
-                name: document.getElementById("name").value,
-                email: document.getElementById("email").value,
-                phone: document.getElementById("phone").value,
-                solution: document.getElementById("solution").value
-            };
-            
-            fetch("http://localhost:5678/webhook-test/my-webhook", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify(formData)
-            })
-            .then(response => response.text())
-            .then(data => {
-                console.log("Webhook Response Data:", data);
-                document.getElementById("contactForm").reset();
-                document.getElementById("successMessage").classList.remove("hidden");
-            })
-            .catch(error => console.error("Error sending data:", error));
+document.getElementById("contactForm").addEventListener("submit", function(event) {
+        event.preventDefault();
+        
+        const formData = {
+            name: document.getElementById("name").value,
+            email: document.getElementById("email").value,
+            phone: document.getElementById("phone").value,
+            solution: document.getElementById("solution").value
+        };
+
+        console.log("Sending data to webhook:", formData); // Debugging: Log form data before sending
+
+        fetch("http://localhost:5678/webhook-test/my-webhook", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(formData)
+        })
+        .then(response => {
+            console.log("Response status:", response.status);
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+            return response.text();
+        })
+        .then(data => {
+            console.log("Webhook response data:", data);
+            document.getElementById("contactForm").reset();
+            document.getElementById("successMessage").classList.remove("hidden");
+        })
+        .catch(error => {
+            console.error("Error sending data:", error);
+            alert("Failed to submit form. Check the console for errors.");
         });
+    });
     </script>
 </body>
 </html>

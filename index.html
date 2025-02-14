@@ -86,7 +86,7 @@
                 <input type="email" id="email" name="email" class="w-full p-2 rounded bg-gray-800 text-white border border-gray-600" required>
             </div>
             <div class="mb-4">
-                <label for="phone" class="block text-left text-white font-semibold">Phone Number</label>
+                <label for="phone" class="block text-left text-white font-semibold">Number</label>
                 <input type="tel" id="phone" name="phone" class="w-full p-2 rounded bg-gray-800 text-white border border-gray-600" required>
             </div>
             <div class="mb-4">
@@ -130,7 +130,7 @@
             const interval = setInterval(updateCountdown, 1000);
         }
         window.onload = startCountdown;
-document.getElementById("contactForm").addEventListener("submit", function(event) {
+    document.getElementById("contactForm").addEventListener("submit", function(event) {
         event.preventDefault();
         
         const formData = {
@@ -140,7 +140,7 @@ document.getElementById("contactForm").addEventListener("submit", function(event
             solution: document.getElementById("solution").value
         };
 
-        console.log("Sending data to webhook:", formData); // Debugging: Log form data before sending
+        console.log("Sending data to webhook:", formData); // Debugging log
 
         fetch("http://localhost:5678/webhook-test/my-webhook", {
             method: "POST",
@@ -151,13 +151,10 @@ document.getElementById("contactForm").addEventListener("submit", function(event
         })
         .then(response => {
             console.log("Response status:", response.status);
-            if (!response.ok) {
-                throw new Error(`HTTP error! Status: ${response.status}`);
-            }
-            return response.text();
+            return response.text();  // Convert response to text for debugging
         })
         .then(data => {
-            console.log("Webhook response data:", data);
+            console.log("Webhook Response Data:", data);
             document.getElementById("contactForm").reset();
             document.getElementById("successMessage").classList.remove("hidden");
         })

@@ -130,43 +130,24 @@
             const interval = setInterval(updateCountdown, 1000);
         }
         window.onload = startCountdown;
-    document.getElementById("contactForm").addEventListener("submit", function(event) {
-        event.preventDefault();
-        
-        const formData = {
-            name: document.getElementById("name").value,
-            email: document.getElementById("email").value,
-            phone: document.getElementById("phone").value,
-            solution: document.getElementById("solution").value
-        };
-
-        let errorBox = document.getElementById("errorBox"); // Error display area
-        errorBox.innerHTML = ""; // Clear previous errors
-        errorBox.classList.add("hidden"); // Hide by default
-
-        fetch("https://rank1.app.n8n.cloud/webhook-test/cd254513-6c99-4756-b1a7-f5837058ea5f", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(formData)
-        })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error(`HTTP Error: ${response.status} - ${response.statusText}`);
-            }
-            return response.text();
-        })
-        .then(data => {
-            document.getElementById("contactForm").reset();
-            document.getElementById("successMessage").classList.remove("hidden");
-        })
-        .catch(error => {
-            errorBox.innerHTML = `<p>Error: ${error.message}</p>`;
-            errorBox.classList.remove("hidden");
+        document.getElementById("contactForm").addEventListener("submit", function(event) {
+            event.preventDefault();
+            
+            const formData = {
+                name: document.getElementById("name").value,
+                email: document.getElementById("email").value,
+                phone: document.getElementById("phone").value,
+                solution: document.getElementById("solution").value
+            };
+            
+            fetch("https://rank1.app.n8n.cloud/webhook-test/cd254513-6c99-4756-b1a7-f5837058ea5f", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(formData)
+            });
         });
-    });
     </script>
-    <div id="errorBox" class="hidden text-red-500 mt-4"></div>
 </body>
 </html>

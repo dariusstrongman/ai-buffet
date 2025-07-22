@@ -23,7 +23,9 @@
                     'pulse-slow': 'pulse 3s ease-in-out infinite',
                     'gradient': 'gradient 8s ease infinite',
                     'slide-up': 'slideUp 0.5s ease-out',
-                    'fade-in': 'fadeIn 0.6s ease-out'
+                    'fade-in': 'fadeIn 0.6s ease-out',
+                    'text-reveal': 'textReveal 1s ease-out forwards',
+                    'background-pan': 'backgroundPan 15s linear infinite'
                 },
                 keyframes: {
                     float: {
@@ -41,6 +43,15 @@
                     fadeIn: {
                         '0%': { opacity: '0' },
                         '100%': { opacity: '1' }
+                    },
+                    textReveal: {
+                        '0%': { opacity: '0', transform: 'translateY(20px)' },
+                        '100%': { opacity: '1', transform: 'translateY(0)' }
+                    },
+                    backgroundPan: {
+                        '0%': { backgroundPosition: '0% 50%' },
+                        '50%': { backgroundPosition: '100% 50%' },
+                        '100%': { backgroundPosition: '0% 50%' }
                     }
                 },
                 backdropBlur: {
@@ -155,6 +166,10 @@ function showTab(tabId) {
     document.querySelectorAll('.sidebar-item').forEach(item => {
         item.classList.remove('active');
         item.classList.remove('bg-gradient-to-br', 'from-blue-500', 'to-purple-600', 'text-white');
+        item.classList.remove('from-blue-600', 'to-cyan-700'); // For home tab
+        item.classList.remove('from-red-500', 'to-orange-600'); // For legal tab
+        item.classList.remove('from-yellow-500', 'to-lime-600'); // For diet tab
+
         item.classList.add('text-white/70', 'hover:text-white', 'bg-white/5');
     });
 
@@ -170,13 +185,67 @@ function showTab(tabId) {
     if (activeTabButton) {
         activeTabButton.classList.add('active');
         activeTabButton.classList.remove('text-white/70', 'hover:text-white', 'bg-white/5');
-        activeTabButton.classList.add('bg-gradient-to-br', 'from-blue-500', 'to-purple-600', 'text-white');
+        
+        // Apply specific gradient for active tab
+        if (tabId === 'home') {
+            activeTabButton.classList.add('bg-gradient-to-br', 'from-blue-600', 'to-cyan-700', 'text-white');
+        } else if (tabId === 'upload') {
+            activeTabButton.classList.add('bg-gradient-to-br', 'from-blue-500', 'to-purple-600', 'text-white');
+        } else if (tabId === 'resume') {
+             activeTabButton.classList.add('bg-gradient-to-br', 'from-purple-500', 'to-pink-600', 'text-white');
+        } else if (tabId === 'legal') {
+            activeTabButton.classList.add('bg-gradient-to-br', 'from-red-500', 'to-orange-600', 'text-white');
+        } else if (tabId === 'diet') {
+            activeTabButton.classList.add('bg-gradient-to-br', 'from-yellow-500', 'to-lime-600', 'text-white');
+        } else if (tabId === 'settings') {
+             activeTabButton.classList.add('bg-gradient-to-br', 'from-indigo-500', 'to-blue-600', 'text-white');
+        }
     }
 }
 
-// Set initial tab on load (e.g., 'upload')
+// AI Facts for the Home Tab
+const aiFacts = [
+    "AI can compose music, write poetry, and create art pieces that have been sold at major auction houses.",
+    "Deep Blue, an IBM chess-playing computer, defeated world champion Garry Kasparov in 1997, marking a significant milestone for AI.",
+    "The concept of Artificial Intelligence was formally introduced at the Dartmouth Conference in 1956.",
+    "AI is behind many everyday technologies like facial recognition in your phone and personalized recommendations on streaming services.",
+    "Machine Learning, a subset of AI, involves teaching computers to learn from data without explicit programming.",
+    "Natural Language Processing (NLP) allows AI to understand, interpret, and generate human language.",
+    "Robots powered by AI are increasingly used in manufacturing, healthcare, and exploration of dangerous environments.",
+    "AlphaGo, a program developed by Google DeepMind, defeated the world Go champion in 2016, a feat considered much harder than chess for AI.",
+    "AI is being used to discover new drugs and accelerate scientific research, analyzing vast amounts of data much faster than humans.",
+    "The Turing Test, proposed by Alan Turing, is a method of inquiry for determining whether a machine can exhibit intelligent behavior equivalent to, or indistinguishable from, that of a human.",
+    "Neural networks, inspired by the human brain, are algorithms used in deep learning to recognize patterns.",
+    "AI can predict potential equipment failures in factories, leading to proactive maintenance and significant cost savings.",
+    "Autonomous vehicles rely heavily on AI for perception, decision-making, and navigation in complex environments.",
+    "The global AI market is projected to grow exponentially in the coming years, indicating its increasing integration into various industries.",
+    "AI is helping conservation efforts by analyzing satellite imagery to track deforestation and animal populations."
+];
+
+let currentFactIndex = 0;
+
+function updateAIFact() {
+    const factDisplay = document.getElementById('ai-fact-display');
+    if (factDisplay) {
+        // Apply fade-out effect
+        factDisplay.style.opacity = '0';
+        factDisplay.style.transform = 'translateY(20px)';
+        
+        setTimeout(() => {
+            currentFactIndex = (currentFactIndex + 1) % aiFacts.length;
+            factDisplay.textContent = aiFacts[currentFactIndex];
+            // Apply fade-in effect
+            factDisplay.style.opacity = '1';
+            factDisplay.style.transform = 'translateY(0)';
+        }, 500); // Wait for fade-out before changing text and fading in
+    }
+}
+
+// Set initial tab on load (e.g., 'home')
 document.addEventListener('DOMContentLoaded', () => {
-    showTab('upload');
+    showTab('home'); // Show Home tab by default
+    setInterval(updateAIFact, 7000); // Change fact every 7 seconds
+    updateAIFact(); // Display initial fact immediately
 });
 </script>
 
@@ -243,10 +312,11 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         
         .sidebar-item.active {
-            background: linear-gradient(135deg, #0077cc, #6366f1);
+            background: linear-gradient(135deg, #0077cc, #6366f1); /* Default gradient for active */
             transform: translateX(8px) scale(1.05);
             box-shadow: 0 10px 30px rgba(0, 119, 204, 0.4);
         }
+        /* Specific active gradients handled by JS now */
         
         .file-drop-zone {
             transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
@@ -377,6 +447,16 @@ document.addEventListener('DOMContentLoaded', () => {
             background: linear-gradient(45deg, transparent, rgba(255,255,255,0.1), transparent);
             animation: gradient 8s ease infinite;
         }
+
+        /* Home tab specific styles */
+        .home-hero-bg {
+            background: linear-gradient(135deg, #1e3a8a, #3730a3);
+            background-size: 200% 200%;
+            animation: backgroundPan 15s linear infinite;
+        }
+        .ai-fact {
+            transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
+        }
     </style>
 </head>
 <body class="font-sans overflow-x-hidden">
@@ -409,7 +489,19 @@ document.addEventListener('DOMContentLoaded', () => {
             </div>
             
             <nav class="p-6 space-y-3">
-                <button onclick="showTab('upload')" class="sidebar-item active w-full text-left p-4 rounded-2xl flex items-center space-x-4 text-white" id="upload-tab">
+                <button onclick="showTab('home')" class="sidebar-item w-full text-left p-4 rounded-2xl flex items-center space-x-4 text-white/70 hover:text-white" id="home-tab">
+                    <div class="w-12 h-12 rounded-xl bg-white/5 flex items-center justify-center">
+                        <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <div class="font-semibold">Home</div>
+                        <div class="text-xs text-blue-200">AI Insights</div>
+                    </div>
+                </button>
+
+                <button onclick="showTab('upload')" class="sidebar-item w-full text-left p-4 rounded-2xl flex items-center space-x-4 text-white" id="upload-tab">
                     <div class="w-12 h-12 rounded-xl bg-white/10 flex items-center justify-center">
                         <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/>
@@ -484,8 +576,35 @@ document.addEventListener('DOMContentLoaded', () => {
 
         <div class="flex-1 flex items-center justify-center p-8">
             <div class="w-full max-w-4xl">
-                
-                <div id="upload-content" class="tab-content content-container">
+
+                <div id="home-content" class="tab-content content-container">
+                    <div class="glass-morphism rounded-3xl p-12 shadow-2xl text-center relative overflow-hidden home-hero-bg">
+                        <div class="absolute inset-0 z-0 opacity-20" style="background-image: url('https://upload.wikimedia.org/wikipedia/commons/thumb/1/18/Neural_network.png/1200px-Neural_network.png'); background-size: cover; background-position: center; filter: blur(5px);"></div>
+                        
+                        <div class="relative z-10">
+                            <div class="inline-flex items-center justify-center w-28 h-28 rounded-full bg-gradient-to-br from-blue-400 to-cyan-500 mb-8 shadow-xl animate-pulse-slow">
+                                <svg width="64" height="64" fill="white" viewBox="0 0 24 24">
+                                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zM15.5 8c.83 0 1.5-.67 1.5-1.5S16.33 5 15.5 5 14 .67 14 7.5s.67 1.5 1.5 1.5zm-7 0c.83 0 1.5-.67 1.5-1.5S9.33 5 8.5 5 7 .67 7 7.5s.67 1.5 1.5 1.5zm3.5 11.5c2.33 0 4.31-1.46 5.11-3.5H6.89c.8 2.04 2.78 3.5 5.11 3.5z"/>
+                                </svg>
+                            </div>
+                            <h2 class="text-5xl font-extrabold text-white mb-6 animate-text-reveal">Welcome to AI-Buffet</h2>
+                            <p class="text-2xl text-blue-100 mb-10 max-w-3xl mx-auto opacity-0 animate-fade-in" style="animation-delay: 0.8s;">Your ultimate destination for cutting-edge AI tools and insights, served fresh daily.</p>
+                            
+                            <div class="bg-white/10 border border-white/20 rounded-2xl p-8 mb-10 shadow-inner">
+                                <h3 class="text-xl font-semibold text-white mb-4">Did you know?</h3>
+                                <p id="ai-fact-display" class="text-2xl text-blue-100 font-medium ai-fact transition-all duration-500 ease-in-out">
+                                    AI is being used to discover new drugs and accelerate scientific research, analyzing vast amounts of data much faster than humans.
+                                </p>
+                            </div>
+
+                            <button class="bg-gradient-to-r from-blue-500 to-cyan-600 text-white px-8 py-4 rounded-full font-bold text-lg hover:shadow-xl transition-all duration-300">
+                                Explore Our AI Tools →
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="upload-content" class="tab-content content-container hidden">
                     <div class="glass-morphism rounded-3xl p-12 shadow-2xl">
                         <div class="text-center mb-12">
                             <div class="inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-gradient-to-br from-blue-500 to-purple-600 mb-6 shadow-lg animate-pulse-slow">

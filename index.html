@@ -533,8 +533,51 @@
                         </svg>
                     </div>
                     <div>
-                        <div class="font-semibold">Resume Builder</div>
-                        <div class="text-xs text-amber-300">Coming Soon</div>
+<form id="resume-form" class="space-y-6" action="https://estimator.stromanstouch.com:5678/webhook/772971c5-c130-426b-95ff-4baa00fc1558" method="POST" enctype="multipart/form-data">
+    <div class="space-y-2">
+        <label class="block text-sm font-semibold text-white">Your Name *</label>
+        <input type="text" name="name" required
+               class="form-input w-full px-6 py-3 rounded-xl border-0 focus:ring-2 focus:ring-purple-400 text-gray-900 font-medium"
+               placeholder="Full Name">
+    </div>
+
+    <div class="space-y-2">
+        <label class="block text-sm font-semibold text-white">Your Email *</label>
+        <input type="email" name="email" required
+               class="form-input w-full px-6 py-3 rounded-xl border-0 focus:ring-2 focus:ring-purple-400 text-gray-900 font-medium"
+               placeholder="your@email.com">
+    </div>
+
+    <div class="space-y-2">
+        <label class="block text-sm font-semibold text-white">Upload Current Resume *</label>
+        <input type="file" name="resume" accept=".pdf,.doc,.docx" required
+               class="block w-full text-sm text-white file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-purple-500 file:text-white hover:file:bg-purple-600">
+    </div>
+
+    <div class="space-y-2">
+        <label class="block text-sm font-semibold text-white">Paste Job Description *</label>
+        <textarea name="job_description" required rows="6"
+                  class="form-input w-full px-6 py-3 rounded-xl border-0 focus:ring-2 focus:ring-purple-400 text-gray-900 font-medium"
+                  placeholder="Copy and paste the job description here"></textarea>
+    </div>
+
+    <div class="space-y-2">
+        <label class="block text-sm font-semibold text-white">Optional: Job Posting URL</label>
+        <input type="url" name="job_url"
+               class="form-input w-full px-6 py-3 rounded-xl border-0 focus:ring-2 focus:ring-purple-400 text-gray-900 font-medium"
+               placeholder="https://jobsite.com/job-posting-link">
+    </div>
+
+    <button type="submit" class="btn-primary w-full py-4 px-8 rounded-2xl font-bold text-white text-lg shadow-2xl">
+        <span class="relative z-10 flex items-center justify-center space-x-3">
+            <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+            </svg>
+            <span>Tailor My Resume</span>
+        </span>
+    </button>
+</form>
+
                     </div>
                 </button>
 

@@ -608,28 +608,28 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 <div id="upload-content" class="tab-content content-container hidden">
                     <div class="glass-morphism rounded-3xl p-10 shadow-2xl">
-                        <div class="text-center mb-8">
-                            <div class="inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-gradient-to-br from-blue-500 to-purple-600 mb-4 shadow-lg animate-pulse-slow">
-                                <svg width="40" height="40" fill="white" viewBox="0 0 24 24">
+                        <div class="text-center mb-6">
+                            <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-blue-500 to-purple-600 mb-4 shadow-lg animate-pulse-slow">
+                                <svg width="32" height="32" fill="white" viewBox="0 0 24 24">
                                     <path d="M14,2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2M18,20H6V4H13V9H18V20Z"/>
                                 </svg>
                             </div>
-                            <h2 class="text-4xl font-bold text-white mb-2">Upload your Blueprint</h2>
-                            <p class="text-xl lg:text-lg text-blue-100 max-w-2xl mx-auto">Transform your project blueprints into actionable insights with our advanced AI analysis engine</p>
+                            <h2 class="text-3xl font-bold text-white mb-1">Upload your Blueprint</h2>
+                            <p class="text-lg text-blue-100 max-w-2xl mx-auto">Transform your project blueprints into actionable insights with our advanced AI analysis engine</p>
                         </div>
                         
-                        <form id="blueprint-form" class="space-y-6" action="https://estimator.stromanstouch.com/webhook/incoming-blueprints" method="POST" enctype="multipart/form-data">
+                        <form id="blueprint-form" class="space-y-4" action="https://estimator.stromanstouch.com/webhook/incoming-blueprints" method="POST" enctype="multipart/form-data">
                             <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                                 <div class="space-y-2">
                                     <label for="name" class="block text-sm font-semibold text-white mb-3">Full Name *</label>
                                     <input type="text" id="name" name="name" required 
-                                            class="form-input w-full px-6 py-3 rounded-2xl border-0 focus:ring-2 focus:ring-blue-400 text-gray-900 font-medium"
+                                            class="form-input w-full px-6 py-2 rounded-2xl border-0 focus:ring-2 focus:ring-blue-400 text-gray-900 font-medium"
                                             placeholder="Enter your full name">
                                 </div>
                                 <div class="space-y-2">
                                     <label for="email" class="block text-sm font-semibold text-white mb-3">Email Address *</label>
                                     <input type="email" id="email" name="email" required 
-                                            class="form-input w-full px-6 py-3 rounded-2xl border-0 focus:ring-2 focus:ring-blue-400 text-gray-900 font-medium"
+                                            class="form-input w-full px-6 py-2 rounded-2xl border-0 focus:ring-2 focus:ring-blue-400 text-gray-900 font-medium"
                                             placeholder="your@email.2025.com">
                                 </div>
                             </div>
@@ -638,33 +638,33 @@ document.addEventListener('DOMContentLoaded', () => {
                                 <div class="space-y-2">
                                     <label for="company" class="block text-sm font-semibold text-white mb-3">Company</label>
                                     <input type="text" id="company" name="company" 
-                                            class="form-input w-full px-6 py-3 rounded-2xl border-0 focus:ring-2 focus:ring-blue-400 text-gray-900 font-medium"
+                                            class="form-input w-full px-6 py-2 rounded-2xl border-0 focus:ring-2 focus:ring-blue-400 text-gray-900 font-medium"
                                             placeholder="Your company name">
                                 </div>
                                 <div class="space-y-2">
                                     <label for="project" class="block text-sm font-semibold text-white mb-3">Project Name</label>
                                     <input type="text" id="project" name="project" 
-                                            class="form-input w-full px-6 py-3 rounded-2xl border-0 focus:ring-2 focus:ring-blue-400 text-gray-900 font-medium"
+                                            class="form-input w-full px-6 py-2 rounded-2xl border-0 focus:ring-2 focus:ring-blue-400 text-gray-900 font-medium"
                                             placeholder="Name your project">
                                 </div>
                             </div>
 
                             <div class="space-y-4">
                                 <label class="block text-sm font-semibold text-white mb-4">Blueprint File *</label>
-                                <div class="file-drop-zone glass-morphism border-2 border-dashed border-white/30 rounded-3xl p-10 text-center cursor-pointer hover:border-blue-400" id="file-drop-zone">
-                                    <div class="space-y-4">
-                                        <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-white/10 text-4xl">
+                                <div class="file-drop-zone glass-morphism border-2 border-dashed border-white/30 rounded-3xl p-8 text-center cursor-pointer hover:border-blue-400" id="file-drop-zone">
+                                    <div class="space-y-3">
+                                        <div class="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-white/10 text-3xl">
                                             📁
                                         </div>
                                         <div>
-                                            <p class="text-xl font-semibold text-white mb-1">Drop your blueprint here</p>
+                                            <p class="text-lg font-semibold text-white mb-1">Drop your blueprint here</p>
                                             <p class="text-blue-200 mb-4">or click to browse files</p>
                                             <div class="inline-flex items-center space-x-2 text-sm text-blue-300">
                                                 <span>Supports:</span>
-                                                <span class="px-3 py-1 bg-white/10 rounded-full">PDF</span>
-                                                <span class="px-3 py-1 bg-white/10 rounded-full">PNG</span>
-                                                <span class="px-3 py-1 bg-white/10 rounded-full">JPG</span>
-                                                <span class="px-3 py-1 bg-white/10 rounded-full">WEBP</span>
+                                                <span class="px-2 py-0.5 bg-white/10 rounded-full">PDF</span>
+                                                <span class="px-2 py-0.5 bg-white/10 rounded-full">PNG</span>
+                                                <span class="px-2 py-0.5 bg-white/10 rounded-full">JPG</span>
+                                                <span class="px-2 py-0.5 bg-white/10 rounded-full">WEBP</span>
                                             </div>
                                         </div>
                                     </div>
@@ -691,7 +691,7 @@ document.addEventListener('DOMContentLoaded', () => {
                                 </div>
                             </div>
 
-                            <button type="submit" class="btn-primary w-full py-5 px-8 rounded-2xl font-bold text-white text-xl shadow-2xl">
+                            <button type="submit" class="btn-primary w-full py-4 px-8 rounded-2xl font-bold text-white text-lg shadow-2xl">
                                 <span class="relative z-10 flex items-center justify-center space-x-3">
                                     <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
@@ -784,4 +784,19 @@ document.addEventListener('DOMContentLoaded', () => {
                 <div id="diet-content" class="tab-content content-container hidden">
                     <div class="glass-morphism rounded-3xl p-12 shadow-2xl text-center">
                         <div class="inline-flex items-center justify-center w-24 h-24 rounded-3xl bg-gradient-to-br from-yellow-500 to-lime-600 mb-8 shadow-xl animate-float">
-                            <svg width="48" height="48" fill="white
+                            <svg width="48" height="48" fill="white" viewBox="0 0 24 24">
+                                <path d="M12 2a8 8 0 00-8 8 8 8 0 008 8 8 8 0 008-8 8 8 0 00-8-8zm0 12c-2.21 0-4-1.79-4-4s1.79-4 4-4 4 1.79 4 4-1.79 4-4 4z"/>
+                                <path d="M17.59 16.59L16 15l-4 4-2-2-1.41 1.41L12 21l6-6z"/>
+                            </svg>
+                        </div>
+                        <h2 class="text-4xl font-bold text-white mb-6">Golden Diet</h2>
+                        <p class="text-xl text-blue-100 mb-8 max-w-2xl mx-auto">Unlock your personalized path to wellness. Our AI builds custom diet plans tailored to your unique needs and goals.</p>
+
+                        <div class="bg-gradient-to-r from-amber-500/20 to-orange-500/20 border border-amber-400/30 rounded-2xl p-8 mb-10">
+                            <div class="flex items-center justify-center space-x-3 mb-4">
+                                <svg width="24" height="24" fill="currentColor" class="text-amber-400" viewBox="0 0 24 24">
+                                    <path d="M12,2L13.09,8.26L22,9L13.09,9.74L12,16L10.91,9.74L2,9L10.91,8.26L12,2Z"/>
+                                </svg>
+                                <h3 class="text-2xl font-semibold text-amber-200">Coming Soon!</h3>
+                            </div>
+                            <p class="text-amber-100

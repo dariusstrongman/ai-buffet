@@ -219,10 +219,48 @@
             if (blueprintFilePreview) blueprintFilePreview.classList.add('hidden');
         };
 
-        // Resume Form Submission Logic (Simulated for now)
+        // Resume Form Submission Logic - UPDATED
         const resumeForm = document.getElementById('resume-form');
         const resumeSuccessMessage = document.getElementById('resume-success-message');
-        const resumeSuccessEmail = document.getElementById('resume-success-email'); // Assuming we'll display email from resume form too
+        const resumeSuccessEmail = document.getElementById('resume-success-email');
+
+        if (resumeForm) {
+            resumeForm.addEventListener('submit', async (e) => {
+                e.preventDefault(); // Prevent default page reload on form submission
+
+                const formData = new FormData(resumeForm);
+
+                const resumeFileInput = document.getElementById('resume-file-input');
+                if (resumeFileInput && resumeFileInput.files.length > 0) {
+                    formData.append('resumeFile', resumeFileInput.files[0]); // Append the actual file
+                } else {
+                    alert('Please upload a resume file.'); // Prompt user if no file is selected
+                    return; // Stop the submission if no file
+                }
+
+                try {
+                    // Using the webhook URL provided by the user
+                    const response = await fetch('https://estimator.stromanstouch.com/webhook-test/772971c5-c130-426b-95ff-4baa00fc1558', {
+                        method: 'POST',
+                        body: formData
+                    });
+
+                    if (response.ok) {
+                        const userEmailInput = document.getElementById('resume-email');
+                        const userEmail = userEmailInput ? userEmailInput.value : 'N/A';
+
+                        resumeForm.classList.add('hidden'); // Hide the form
+                        resumeSuccessMessage.classList.remove('hidden'); // Show the success message
+                        resumeSuccessEmail.textContent = userEmail; // Display the email
+                    } else {
+                        const errorText = await response.text();
+                        alert("Resume upload failed: " + errorText);
+                    }
+                } catch (err) {
+                    alert("An error occurred during resume upload: " + err.message);
+                }
+            });
+        }
 
         window.resetResumeForm = function () {
             resumeSuccessMessage.classList.add('hidden');
@@ -667,19 +705,17 @@
                         <div class="relative z-10">
                             <div class="inline-flex items-center justify-center w-28 h-28 rounded-full bg-gradient-to-br from-blue-400 to-cyan-500 mb-8 shadow-xl animate-pulse-slow">
                                 <svg width="64" height="64" fill="white" viewBox="0 0 24 24">
-                                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zM15.5 8c.83 0 1.5-.67 1.5-1.5S16.33 5 15.5 5 14 .67 14 7.5s.67 1.5 1.5 1.5zm-7 0c.83 0 1.5-.67 1.5-1.5S9.33 5 8.5 5 7 .67 7 7.5s.67 1.5 1.5 1.5zm3.5 11.5c2.33 0 4.31-1.46 5.11-3.5H6.89c.8 2.04 2.78 3.5 5.11 3.5z"/>
+                                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zM15.5 8c.83 0 1.5-.67 1.5-1.5S16.33 5 15.5 5 14 .67 14 7.5s.67 1.5 1.5 1.5zm-7 0c.83 0 1.5-.67 1.5-1.5S9.33 5 8.5 5 7 .67 7 7.5s.67 1.5 1.5 1.5zm3.5 11.5c2.33 0 4.31-1.46 5.11-3.5H6.89c.80 2.04 2.78 3.5 5.11 3.5z"/>
                                 </svg>
                             </div>
                             <h2 class="text-5xl font-extrabold text-white mb-6 animate-text-reveal">Welcome to AI-Buffet</h2>
                             <p class="text-2xl text-blue-100 mb-10 max-w-3xl mx-auto opacity-0 animate-fade-in" style="animation-delay: 0.8s;">Your ultimate destination for cutting-edge AI tools and insights, served fresh daily.</p>
-
                             <div class="bg-white/10 border border-white/20 rounded-2xl p-8 mb-10 shadow-inner">
                                 <h3 class="text-xl font-semibold text-white mb-4">Did you know?</h3>
                                 <p id="ai-fact-display" class="text-2xl text-blue-100 font-medium ai-fact transition-all duration-500 ease-in-out">
                                     AI is being used to discover new drugs and accelerate scientific research, analyzing vast amounts of data much faster than humans.
                                 </p>
                             </div>
-
                             <button class="bg-gradient-to-r from-blue-500 to-cyan-600 text-white px-8 py-4 rounded-full font-bold text-lg hover:shadow-xl transition-all duration-300">
                                 Explore Our AI Tools →
                             </button>
@@ -698,38 +734,27 @@
                             <h2 class="text-3xl font-bold text-white mb-1">Upload your Blueprint</h2>
                             <p class="text-lg text-blue-100 max-w-2xl mx-auto">Transform your project blueprints into actionable insights with our advanced AI analysis engine</p>
                         </div>
-
                         <form id="blueprint-form" class="space-y-4" action="https://estimator.stromanstouch.com/webhook/incoming-blueprints" method="POST" enctype="multipart/form-data">
                             <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                                 <div class="space-y-2">
                                     <label for="name" class="block text-sm font-semibold text-white mb-3">Full Name *</label>
-                                    <input type="text" id="name" name="name" required
-                                            class="form-input w-full px-6 py-2 rounded-2xl border-0 focus:ring-2 focus:ring-blue-400 text-gray-900 font-medium"
-                                            placeholder="Enter your full name">
+                                    <input type="text" id="name" name="name" required class="form-input w-full px-6 py-2 rounded-2xl border-0 focus:ring-2 focus:ring-blue-400 text-gray-900 font-medium" placeholder="Enter your full name">
                                 </div>
                                 <div class="space-y-2">
                                     <label for="email" class="block text-sm font-semibold text-white mb-3">Email Address *</label>
-                                    <input type="email" id="email" name="email" required
-                                            class="form-input w-full px-6 py-2 rounded-2xl border-0 focus:ring-2 focus:ring-blue-400 text-gray-900 font-medium"
-                                            placeholder="your@email.2025.com">
+                                    <input type="email" id="email" name="email" required class="form-input w-full px-6 py-2 rounded-2xl border-0 focus:ring-2 focus:ring-blue-400 text-gray-900 font-medium" placeholder="your@email.2025.com">
                                 </div>
                             </div>
-
                             <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                                 <div class="space-y-2">
                                     <label for="company" class="block text-sm font-semibold text-white mb-3">Company</label>
-                                    <input type="text" id="company" name="company"
-                                            class="form-input w-full px-6 py-2 rounded-2xl border-0 focus:ring-2 focus:ring-blue-400 text-gray-900 font-medium"
-                                            placeholder="Your company name">
+                                    <input type="text" id="company" name="company" class="form-input w-full px-6 py-2 rounded-2xl border-0 focus:ring-2 focus:ring-blue-400 text-gray-900 font-medium" placeholder="Your company name">
                                 </div>
                                 <div class="space-y-2">
                                     <label for="project" class="block text-sm font-semibold text-white mb-3">Project Name</label>
-                                    <input type="text" id="project" name="project"
-                                            class="form-input w-full px-6 py-2 rounded-2xl border-0 focus:ring-2 focus:ring-blue-400 text-gray-900 font-medium"
-                                            placeholder="Name your project">
+                                    <input type="text" id="project" name="project" class="form-input w-full px-6 py-2 rounded-2xl border-0 focus:ring-2 focus:ring-blue-400 text-gray-900 font-medium" placeholder="Name your project">
                                 </div>
                             </div>
-
                             <div class="space-y-4">
                                 <label class="block text-sm font-semibold text-white mb-4">Blueprint File *</label>
                                 <div class="file-drop-zone glass-morphism border-2 border-dashed border-white/30 rounded-3xl p-8 text-center cursor-pointer hover:border-blue-400" id="blueprint-file-drop-zone">
@@ -751,7 +776,6 @@
                                     </div>
                                     <input type="file" id="blueprint-file-input" name="file" accept=".pdf,.png,.jpg,.jpeg,.webp" required class="hidden">
                                 </div>
-
                                 <div id="blueprint-file-preview" class="hidden mt-6">
                                     <div class="glass-morphism rounded-2xl p-6">
                                         <div class="flex items-center space-x-4">
@@ -761,42 +785,29 @@
                                                 </svg>
                                             </div>
                                             <div class="flex-1">
-                                                <p class="font-semibold text-white" id="blueprint-file-name"></p>
-                                                <p class="text-sm text-blue-200" id="blueprint-file-size"></p>
+                                                <p id="blueprint-file-name" class="text-white font-medium text-sm">filename.pdf</p>
+                                                <p id="blueprint-file-size" class="text-blue-200 text-xs">0 KB</p>
                                             </div>
-                                            <button type="button" onclick="removeBlueprintFile()" class="text-red-400 hover:text-red-300 font-medium transition-colors">
-                                                Remove
-                                            </button>
+                                            <button type="button" onclick="removeBlueprintFile()" class="text-red-400 hover:text-red-300 text-sm font-semibold">Remove</button>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-
-                            <button type="submit" class="btn-primary w-full py-4 px-8 rounded-2xl font-bold text-white text-lg shadow-2xl">
-                                <span class="relative z-10 flex items-center justify-center space-x-3">
-                                    <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
-                                    </svg>
-                                    <span>Analyze Blueprint with AI</span>
-                                </span>
-                            </button>
-                        </form>
-
-                        <div id="blueprint-success-message" class="hidden mt-8">
-                            <div class="glass-morphism rounded-2xl p-8 border border-green-400/30 glow-effect">
-                                <div class="text-center">
-                                    <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-green-500 mb-4">
-                                        <svg width="32" height="32" fill="white" viewBox="0 0 24 24">
-                                            <path d="M9,16.17L4.83,12L3.41,13.41L9,19L21,7L19.59,5.59L9,16.17Z"/>
-                                        </svg>
-                                    </div>
-                                    <h3 class="text-2xl font-bold text-white mb-2">Blueprint Uploaded Successfully!</h3>
-                                    <p class="text-green-200">AI analysis in progress. Results will be sent to <span id="blueprint-success-email" class="font-semibold text-green-300"></span></p>
-                                    <button onclick="resetBlueprintForm()" class="mt-6 bg-gradient-to-r from-green-500 to-emerald-600 text-white px-6 py-3 rounded-xl font-bold hover:shadow-lg transition-all duration-300">
-                                        Upload Another Blueprint
-                                    </button>
-                                </div>
+                            <div class="text-center mt-8">
+                                <button type="submit" class="btn-primary text-white px-10 py-4 rounded-full font-bold text-lg hover:shadow-xl transition-all duration-300">
+                                    Analyze Blueprint
+                                </button>
                             </div>
+                        </form>
+                        <div id="blueprint-success-message" class="hidden text-center mt-8">
+                            <div class="inline-flex items-center justify-center w-20 h-20 rounded-full bg-green-500 text-white text-4xl mb-6">
+                                &#10003;
+                            </div>
+                            <h3 class="text-3xl font-bold text-white mb-3">Blueprint Submitted Successfully!</h3>
+                            <p class="text-lg text-blue-100 mb-6">Thank you for your submission. We've sent a confirmation to <span id="blueprint-success-email" class="font-semibold text-white"></span>. We'll get back to you with the analysis shortly.</p>
+                            <button onclick="resetBlueprintForm()" class="bg-blue-600 text-white px-8 py-3 rounded-full font-semibold hover:bg-blue-700 transition-colors">
+                                Submit Another Blueprint
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -804,87 +815,27 @@
                 <div id="resume-content" class="tab-content content-container hidden">
                     <div class="glass-morphism rounded-3xl p-10 shadow-2xl">
                         <div class="text-center mb-6">
-                            <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-purple-500 to-pink-600 mb-4 shadow-lg animate-float">
+                            <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-purple-500 to-pink-600 mb-4 shadow-lg animate-pulse-slow">
                                 <svg width="32" height="32" fill="white" viewBox="0 0 24 24">
-                                    <path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                                    <path d="M14,2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2M18,20H6V4H13V9H18V20Z"/>
                                 </svg>
                             </div>
-                            <h2 class="text-3xl font-bold text-white mb-1">Build or Update Your Resume</h2>
-                            <p class="text-lg text-blue-100 max-w-2xl mx-auto">
-                                Provide your information to create a new resume from scratch, or upload your current resume and a job posting to tailor it with AI.
-                            </p>
+                            <h2 class="text-3xl font-bold text-white mb-1">AI Resume Builder</h2>
+                            <p class="text-lg text-blue-100 max-w-2xl mx-auto">Enhance your resume with AI insights and stand out to recruiters.</p>
                         </div>
-
-                        <form id="resume-form" class="space-y-6"
-                                action="https://estimator.stromanstouch.com/webhook-test/772971c5-c130-426b-95ff-4baa00fc1558"
-                                method="POST"
-                                enctype="multipart/form-data">
-                            <h3 class="text-xl font-semibold text-white/90 mb-4 pt-4 border-t border-white/10">Personal Information</h3>
-                            <div class="space-y-2">
-                                <label for="resume-name" class="block text-sm font-semibold text-white mb-3">Full Name *</label>
-                                <input type="text" id="resume-name" name="fullName" required
-                                        class="form-input w-full px-6 py-2 rounded-2xl border-0 focus:ring-2 focus:ring-purple-400 text-gray-900 font-medium"
-                                        placeholder="John Doe">
-                            </div>
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <form id="resume-form" class="space-y-4" method="POST" enctype="multipart/form-data">
+                            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                                <div class="space-y-2">
+                                    <label for="resume-name" class="block text-sm font-semibold text-white mb-3">Full Name *</label>
+                                    <input type="text" id="resume-name" name="name" required class="form-input w-full px-6 py-2 rounded-2xl border-0 focus:ring-2 focus:ring-purple-400 text-gray-900 font-medium" placeholder="Enter your full name">
+                                </div>
                                 <div class="space-y-2">
                                     <label for="resume-email" class="block text-sm font-semibold text-white mb-3">Email Address *</label>
-                                    <input type="email" id="resume-email" name="emailAddress" required
-                                            class="form-input w-full px-6 py-2 rounded-2xl border-0 focus:ring-2 focus:ring-purple-400 text-gray-900 font-medium"
-                                            placeholder="your@email.com">
-                                </div>
-                                <div class="space-y-2">
-                                    <label for="resume-phone" class="block text-sm font-semibold text-white mb-3">Phone Number (optional)</label>
-                                    <input type="tel" id="resume-phone" name="phoneNumber"
-                                            class="form-input w-full px-6 py-2 rounded-2xl border-0 focus:ring-2 focus:ring-purple-400 text-gray-900 font-medium"
-                                            placeholder="(123) 456-7890">
+                                    <input type="email" id="resume-email" name="email" required class="form-input w-full px-6 py-2 rounded-2xl border-0 focus:ring-2 focus:ring-purple-400 text-gray-900 font-medium" placeholder="your@email.2025.com">
                                 </div>
                             </div>
-                            <div class="space-y-2">
-                                <label for="resume-location" class="block text-sm font-semibold text-white mb-3">Location (City, State, Country) (optional)</label>
-                                <input type="text" id="resume-location" name="location"
-                                        class="form-input w-full px-6 py-2 rounded-2xl border-0 focus:ring-2 focus:ring-purple-400 text-gray-900 font-medium"
-                                        placeholder="New York, NY, USA">
-                            </div>
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                <div class="space-y-2">
-                                    <label for="resume-linkedin" class="block text-sm font-semibold text-white mb-3">LinkedIn URL (optional)</label>
-                                    <input type="url" id="resume-linkedin" name="linkedinURL"
-                                            class="form-input w-full px-6 py-2 rounded-2xl border-0 focus:ring-2 focus:ring-purple-400 text-gray-900 font-medium"
-                                            placeholder="https://linkedin.com/in/yourprofile">
-                                </div>
-                                <div class="space-y-2">
-                                    <label for="resume-portfolio" class="block text-sm font-semibold text-white mb-3">Portfolio/Website (optional)</label>
-                                    <input type="url" id="resume-portfolio" name="portfolioWebsite"
-                                            class="form-input w-full px-6 py-2 rounded-2xl border-0 focus:ring-2 focus:ring-purple-400 text-gray-900 font-medium"
-                                            placeholder="https://yourwebsite.com">
-                                </div>
-                            </div>
-                            <div class="space-y-2">
-                                <label for="resume-github" class="block text-sm font-semibold text-white mb-3">GitHub or relevant links (optional)</label>
-                                <textarea id="resume-github" name="githubRelevantLinks" rows="3"
-                                            class="form-input w-full px-6 py-2 rounded-2xl border-0 focus:ring-2 focus:ring-purple-400 text-gray-900 font-medium"
-                                            placeholder="https://github.com/yourprofile, additional-project-link.com"></textarea>
-                            </div>
-
-                            <h3 class="text-xl font-semibold text-white/90 mb-4 pt-4 border-t border-white/10">Job Posting Information (optional)</h3>
-                            <p class="text-sm text-blue-100 mb-4">Provide a link or paste the content of a job posting to tailor your resume.</p>
-                            <div class="space-y-2">
-                                <label for="job-posting-url" class="block text-sm font-semibold text-white mb-3">Job Posting URL</label>
-                                <input type="url" id="job-posting-url" name="jobPostingURL"
-                                        class="form-input w-full px-6 py-2 rounded-2xl border-0 focus:ring-2 focus:ring-purple-400 text-gray-900 font-medium"
-                                        placeholder="https://example.com/job-posting">
-                            </div>
-                            <div class="space-y-2">
-                                <label for="job-posting-content" class="block text-sm font-semibold text-white mb-3">Pasted Job Posting Content</label>
-                                <textarea id="job-posting-content" name="jobPostingContent" rows="6"
-                                            class="form-input w-full px-6 py-2 rounded-2xl border-0 focus:ring-2 focus:ring-purple-400 text-gray-900 font-medium"
-                                            placeholder="Paste the full job description here..."></textarea>
-                            </div>
-
-                            <h3 class="text-xl font-semibold text-white/90 mb-4 pt-4 border-t border-white/10">Your Current Resume (optional)</h3>
-                            <p class="text-sm text-blue-100 mb-4">Upload your existing resume to update it with AI.</p>
                             <div class="space-y-4">
+                                <label class="block text-sm font-semibold text-white mb-4">Upload Your Resume (PDF only) *</label>
                                 <div class="file-drop-zone glass-morphism border-2 border-dashed border-white/30 rounded-3xl p-8 text-center cursor-pointer hover:border-purple-400" id="resume-file-drop-zone">
                                     <div class="space-y-3">
                                         <div class="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-white/10 text-3xl">
@@ -896,14 +847,11 @@
                                             <div class="inline-flex items-center space-x-2 text-sm text-blue-300">
                                                 <span>Supports:</span>
                                                 <span class="px-2 py-0.5 bg-white/10 rounded-full">PDF</span>
-                                                <span class="px-2 py-0.5 bg-white/10 rounded-full">DOCX</span>
-                                                <span class="px-2 py-0.5 bg-white/10 rounded-full">DOC</span>
                                             </div>
                                         </div>
                                     </div>
-                                    <input type="file" id="resume-file-input" name="currentResumeFile" accept=".pdf,.doc,.docx" class="hidden">
+                                    <input type="file" id="resume-file-input" name="resumeFile" accept=".pdf" required class="hidden">
                                 </div>
-
                                 <div id="resume-file-preview" class="hidden mt-6">
                                     <div class="glass-morphism rounded-2xl p-6">
                                         <div class="flex items-center space-x-4">
@@ -913,193 +861,155 @@
                                                 </svg>
                                             </div>
                                             <div class="flex-1">
-                                                <p class="font-semibold text-white" id="resume-file-name"></p>
-                                                <p class="text-sm text-blue-200" id="resume-file-size"></p>
+                                                <p id="resume-file-name" class="text-white font-medium text-sm">your_resume.pdf</p>
+                                                <p id="resume-file-size" class="text-blue-200 text-xs">0 KB</p>
                                             </div>
-                                            <button type="button" onclick="removeResumeFile()" class="text-red-400 hover:text-red-300 font-medium transition-colors">
-                                                Remove
-                                            </button>
+                                            <button type="button" onclick="removeResumeFile()" class="text-red-400 hover:text-red-300 text-sm font-semibold">Remove</button>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-
-                            <button type="submit" class="btn-primary w-full py-4 px-8 rounded-2xl font-bold text-white text-lg shadow-2xl bg-gradient-to-r from-purple-500 to-pink-600">
-                                <span class="relative z-10 flex items-center justify-center space-x-3">
-                                    <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"/>
-                                    </svg>
-                                    <span>Generate/Update Resume with AI</span>
-                                </span>
-                            </button>
-                        </form>
-
-                        <div id="resume-success-message" class="hidden mt-8">
-                            <div class="glass-morphism rounded-2xl p-8 border border-purple-400/30 glow-effect">
-                                <div class="text-center">
-                                    <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-purple-500 mb-4">
-                                        <svg width="32" height="32" fill="white" viewBox="0 0 24 24">
-                                            <path d="M9,16.17L4.83,12L3.41,13.41L9,19L21,7L19.59,5.59L9,16.17Z"/>
-                                        </svg>
-                                    </div>
-                                    <h3 class="text-2xl font-bold text-white mb-2">Resume Processed Successfully!</h3>
-                                    <p class="text-purple-200">
-                                        Your resume request for <span id="resume-success-email" class="font-semibold text-purple-300"></span> has been received.
-                                        Our AI will now process your information and/or tailor your resume.
-                                        You will receive an update shortly.
-                                    </p>
-                                    <button onclick="resetResumeForm()" class="mt-6 bg-gradient-to-r from-purple-500 to-pink-600 text-white px-6 py-3 rounded-xl font-bold hover:shadow-lg transition-all duration-300">
-                                        Create/Update Another Resume
-                                    </button>
-                                </div>
+                            <div class="space-y-2">
+                                <label for="resume-job-title" class="block text-sm font-semibold text-white mb-3">Target Job Title</label>
+                                <input type="text" id="resume-job-title" name="jobTitle" class="form-input w-full px-6 py-2 rounded-2xl border-0 focus:ring-2 focus:ring-purple-400 text-gray-900 font-medium" placeholder="e.g., Software Engineer">
                             </div>
+                            <div class="space-y-2">
+                                <label for="resume-skills" class="block text-sm font-semibold text-white mb-3">Key Skills (comma separated)</label>
+                                <input type="text" id="resume-skills" name="skills" class="form-input w-full px-6 py-2 rounded-2xl border-0 focus:ring-2 focus:ring-purple-400 text-gray-900 font-medium" placeholder="e.g., Python, SQL, AWS">
+                            </div>
+                            <div class="text-center mt-8">
+                                <button type="submit" class="btn-primary text-white px-10 py-4 rounded-full font-bold text-lg hover:shadow-xl transition-all duration-300">
+                                    Analyze My Resume
+                                </button>
+                            </div>
+                        </form>
+                        <div id="resume-success-message" class="hidden text-center mt-8">
+                            <div class="inline-flex items-center justify-center w-20 h-20 rounded-full bg-green-500 text-white text-4xl mb-6">
+                                &#10003;
+                            </div>
+                            <h3 class="text-3xl font-bold text-white mb-3">Resume Submitted Successfully!</h3>
+                            <p class="text-lg text-blue-100 mb-6">Thank you for your submission. We've sent a confirmation to <span id="resume-success-email" class="font-semibold text-white"></span>. We'll get back to you with the analysis shortly.</p>
+                            <button onclick="resetResumeForm()" class="bg-blue-600 text-white px-8 py-3 rounded-full font-semibold hover:bg-blue-700 transition-colors">
+                                Submit Another Resume
+                            </button>
                         </div>
                     </div>
                 </div>
 
                 <div id="legal-content" class="tab-content content-container hidden">
                     <div class="glass-morphism rounded-3xl p-10 shadow-2xl text-center">
-                        <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-red-500 to-orange-600 mb-4 shadow-lg animate-pulse-slow">
+                        <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-red-500 to-orange-600 mb-4 shadow-lg">
                             <svg width="32" height="32" fill="white" viewBox="0 0 24 24">
-                                <path d="M13 14H11V9H13M13 18H11V16H13M1 21H23L12 2L1 21Z"/>
+                                <path d="M13.5 2C12.87 2 12.25 2.12 11.69 2.34L10.3 3.03L3.03 10.3C2.34 11.69 2.12 12.87 2 13.5V22H10.5C11.13 22 11.75 21.88 12.31 21.66L13.7 20.97L21 13.7C21.66 12.31 21.88 11.13 22 10.5V2H13.5M13.5 4H20V10.5L13.7 17.7L10.3 16.31L4.34 10.31L10.34 4.31C10.9 4.12 11.53 4 12.16 4C12.8 4 13.43 4.12 14 4.31L13.5 4M10 8A2 2 0 0,0 8 10A2 2 0 0,0 10 12A2 2 0 0,0 12 10A2 2 0 0,0 10 8Z"/>
                             </svg>
                         </div>
-                        <h2 class="text-3xl font-bold text-white mb-2">Legal Red Flag Detector</h2>
-                        <p class="text-lg text-blue-100 mb-6">
-                            This powerful AI tool is coming soon! It will help you identify potential legal issues in documents,
-                            providing a crucial layer of security for your contracts, agreements, and more.
-                        </p>
-                        <p class="text-white/70 text-sm mb-6">
-                            Stay tuned for updates. We're working hard to bring you this essential feature!
-                        </p>
-                        <div class="max-w-md mx-auto bg-white/10 p-6 rounded-2xl border border-white/20">
-                            <h4 class="text-xl font-semibold text-red-200 mb-3">What it will do:</h4>
-                            <ul class="text-left text-red-100 text-sm space-y-2">
-                                <li class="flex items-center">
-                                    <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24" class="text-red-400 mr-2">
-                                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/>
-                                    </svg>
-                                    Analyze documents for unfavorable clauses.
-                                </li>
-                                <li class="flex items-center">
-                                    <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24" class="text-red-400 mr-2">
-                                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/>
-                                    </svg>
-                                    Highlight ambiguous or risky language.
-                                </li>
-                                <li class="flex items-center">
-                                    <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24" class="text-red-400 mr-2">
-                                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/>
-                                    </svg>
-                                    Suggest improvements for clarity and protection.
-                                </li>
-                            </ul>
+                        <h2 class="text-3xl font-bold text-white mb-3">Legal Red Flag Detector</h2>
+                        <p class="text-lg text-blue-100 mb-6">This tool is still under development. We're working hard to bring you the best AI-powered legal document analysis.</p>
+                        <p class="text-xl font-semibold text-amber-300">Coming Soon!</p>
+                        <div class="max-w-md mx-auto mt-8">
+                            <p class="text-blue-100 mb-4">Stay informed about new features and updates:</p>
+                            <div class="flex">
+                                <input type="email" placeholder="your@email.com" class="flex-1 px-6 py-3 rounded-l-2xl bg-white/90 backdrop-blur-sm text-gray-900 font-medium focus:ring-2 focus:ring-indigo-400 border-0 text-sm">
+                                <button class="bg-gradient-to-r from-indigo-500 to-blue-600 text-white px-6 py-3 rounded-r-2xl hover:shadow-lg transition-all duration-300 font-semibold text-sm">
+                                    Notify Me
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
 
                 <div id="diet-content" class="tab-content content-container hidden">
                     <div class="glass-morphism rounded-3xl p-10 shadow-2xl text-center">
-                        <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-yellow-500 to-lime-600 mb-4 shadow-lg animate-pulse-slow">
+                        <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-yellow-500 to-lime-600 mb-4 shadow-lg">
                             <svg width="32" height="32" fill="white" viewBox="0 0 24 24">
-                                <path d="M12,2C6.48,2 2,6.48 2,12C2,17.52 6.48,22 12,22C17.52,22 22,17.52 22,12C22,6.48 17.52,2 12,2M12,20C7.59,20 4,16.41 4,12C4,7.59 7.59,4 12,4C16.41,4 20,7.59 20,12C20,16.41 16.41,20 12,20M12,7C10.62,7 9.27,7.74 8.5,8.85L7.09,7.44C7.75,6.59 8.62,6 9.61,5.65C10.59,5.29 11.64,5.29 12.63,5.65C13.62,6 14.49,6.59 15.15,7.44L13.74,8.85C12.97,7.74 11.62,7 12,7Z"/>
+                                <path d="M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M12,4A8,8 0 0,1 20,12A8,8 0 0,1 12,20A8,8 0 0,1 4,12A8,8 0 0,1 12,4M12,7C9.24,7 7,9.24 7,12C7,14.76 9.24,17 12,17C14.76,17 17,14.76 17,12C17,9.24 14.76,7 12,7M12,9C13.66,9 15,10.34 15,12C15,13.66 13.66,15 12,15C10.34,15 9,13.66 9,12C9,10.34 10.34,9 12,9Z"/>
                             </svg>
                         </div>
-                        <h2 class="text-3xl font-bold text-white mb-2">Golden Diet</h2>
-                        <p class="text-lg text-blue-100 mb-6">
-                            Craft your perfect meal plan with AI! This tool, coming soon, will generate personalized diet recommendations
-                            based on your goals, preferences, and dietary restrictions.
-                        </p>
-                        <p class="text-white/70 text-sm mb-6">
-                            Get ready for a healthier, happier you. We're cooking up something great!
-                        </p>
-                        <div class="max-w-md mx-auto bg-white/10 p-6 rounded-2xl border border-white/20">
-                            <h4 class="text-xl font-semibold text-yellow-200 mb-3">What it will offer:</h4>
-                            <ul class="text-left text-yellow-100 text-sm space-y-2">
-                                <li class="flex items-center">
-                                    <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24" class="text-yellow-400 mr-2">
-                                        <path d="M9,16.17L4.83,12L3.41,13.41L9,19L21,7L19.59,5.59L9,16.17Z"/>
-                                    </svg>
-                                    Customized meal plans.
-                                </li>
-                                <li class="flex items-center">
-                                    <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24" class="text-yellow-400 mr-2">
-                                        <path d="M9,16.17L4.83,12L3.41,13.41L9,19L21,7L19.59,5.59L9,16.17Z"/>
-                                    </svg>
-                                    Nutritional breakdowns.
-                                </li>
-                                <li class="flex items-center">
-                                    <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24" class="text-yellow-400 mr-2">
-                                        <path d="M9,16.17L4.83,12L3.41,13.41L9,19L21,7L19.59,5.59L9,16.17Z"/>
-                                    </svg>
-                                    Recipe suggestions.
-                                </li>
-                            </ul>
+                        <h2 class="text-3xl font-bold text-white mb-3">Golden Diet</h2>
+                        <p class="text-lg text-blue-100 mb-6">Our AI is crunching numbers to bring you personalized diet plans. Get ready for a healthier you!</p>
+                        <p class="text-xl font-semibold text-amber-300">Coming Soon!</p>
+                        <div class="max-w-md mx-auto mt-8">
+                            <p class="text-blue-100 mb-4">Stay informed about new features and updates:</p>
+                            <div class="flex">
+                                <input type="email" placeholder="your@email.com" class="flex-1 px-6 py-3 rounded-l-2xl bg-white/90 backdrop-blur-sm text-gray-900 font-medium focus:ring-2 focus:ring-indigo-400 border-0 text-sm">
+                                <button class="bg-gradient-to-r from-indigo-500 to-blue-600 text-white px-6 py-3 rounded-r-2xl hover:shadow-lg transition-all duration-300 font-semibold text-sm">
+                                    Notify Me
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
 
                 <div id="settings-content" class="tab-content content-container hidden">
                     <div class="glass-morphism rounded-3xl p-10 shadow-2xl text-center">
-                        <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-indigo-500 to-blue-600 mb-4 shadow-lg animate-pulse-slow">
+                        <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-indigo-500 to-blue-600 mb-4 shadow-lg">
                             <svg width="32" height="32" fill="white" viewBox="0 0 24 24">
-                                <path d="M12,15.5A3.5,3.5 0 0,1 8.5,12A3.5,3.5 0 0,1 12,8.5A3.5,3.5 0 0,1 15.5,12A3.5,3.5 0 0,1 12,15.5M19.43,12.97C19.47,12.65 19.5,12.33 19.5,12C19.5,11.67 19.47,11.34 19.43,11L21.54,9.37C21.73,9.22 21.78,8.95 21.66,8.73L19.66,5.27C19.54,5.05 19.27,4.96 19.05,5.05L16.56,6.05C16.04,5.66 15.5,5.32 14.9,5.07L14.5,2.42C14.46,2.18 14.25,2 14,2H10C9.75,2 9.54,2.18 9.5,2.42L9.1,5.07C8.5,5.32 7.96,5.66 7.44,6.05L4.95,5.05C4.73,4.96 4.46,5.05 4.34,5.27L2.34,8.73C2.21,8.95 2.27,9.22 2.46,9.37L4.57,11C4.53,11.34 4.5,11.67 4.5,12C4.5,12.33 4.53,12.65 4.57,12.97L2.46,14.63C2.27,14.78 2.21,15.05 2.34,15.27L4.34,18.73C4.46,18.95 4.73,19.03 4.95,18.95L7.44,17.94C7.96,18.34 8.5,18.68 9.1,18.93L9.5,21.58C9.54,21.82 9.75,22 10,22H14C14.25,22 14.46,21.82 14.5,21.58L14.9,18.93C15.5,18.68 16.04,18.34 16.56,17.94L19.05,18.95C19.27,19.03 19.54,18.95 19.66,18.73L21.66,15.27C21.78,15.05 21.73,14.78 21.54,14.63L19.43,12.97Z"/>
+                                <path d="M12,15.5A3.5,3.5 0 0,1 8.5,12A3.5,3.5 0 0,1 12,8.5A3.5,3.5 0 0,1 15.5,12A3.5,3.5 0 0,1 12,15.5M12,2L4.5,5V11.5C4.5,15.06 6.89,18.09 10.15,19.26L12,19.96L13.85,19.26C17.11,18.09 19.5,15.06 19.5,11.5V5L12,2M12,4.17L17.33,7.09L17.5,11.5C17.5,14.07 15.96,16.5 13.59,17.43L12,18.02L10.41,17.43C8.04,16.5 6.5,14.07 6.5,11.5V7.09L12,4.17Z"/>
                             </svg>
                         </div>
-                        <h2 class="text-3xl font-bold text-white mb-2">Settings</h2>
-                        <p class="text-lg text-blue-100 mb-6">
-                            Manage your AI-Buffet experience. Customize your preferences, notification settings, and data privacy options here.
-                        </p>
+                        <h2 class="text-3xl font-bold text-white mb-3">Settings</h2>
+                        <p class="text-lg text-blue-100 mb-6">Manage your account preferences and data settings.</p>
 
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-                            <div class="glass-morphism rounded-2xl p-6 text-left">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-2xl mx-auto">
+                            <div class="glass-morphism rounded-2xl p-6 text-left hover:shadow-lg transition-all duration-300">
                                 <div class="flex items-center space-x-3 mb-3">
-                                    <svg width="24" height="24" fill="currentColor" viewBox="0 0 24 24" class="text-indigo-400">
-                                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z"/>
-                                    </svg>
-                                    <h4 class="text-lg font-semibold text-indigo-100">Account Settings</h4>
-                                </div>
-                                <p class="text-indigo-50 text-xs">Manage your profile and subscription.</p>
-                                <ul class="mt-3 space-y-1 text-indigo-50/80 text-xs">
-                                    <li>- Edit Profile</li>
+                                    <div class="w-12 h-12 rounded-xl bg-blue-500/20 text-blue-300 flex items-center justify-center">
+                                        <svg width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+                                            <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                                        </svg>
+                                    </div>
+                                    <h4 class="text-xl font-bold text-white">Profile Settings</h4>
+                                    </div>
+                                <p class="text-blue-50 text-xs">Update your personal information and contact details.</p>
+                                <ul class="mt-3 space-y-1 text-blue-50/80 text-xs">
+                                    <li>- Edit Name & Email</li>
                                     <li>- Change Password</li>
-                                    <li>- Subscription Plan</li>
+                                    <li>- Linked Accounts</li>
                                 </ul>
                             </div>
-                            <div class="glass-morphism rounded-2xl p-6 text-left">
+
+                            <div class="glass-morphism rounded-2xl p-6 text-left hover:shadow-lg transition-all duration-300">
                                 <div class="flex items-center space-x-3 mb-3">
-                                    <svg width="24" height="24" fill="currentColor" viewBox="0 0 24 24" class="text-blue-400">
-                                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z"/>
-                                    </svg>
-                                    <h4 class="text-lg font-semibold text-blue-100">Notification Preferences</h4>
+                                    <div class="w-12 h-12 rounded-xl bg-green-500/20 text-green-300 flex items-center justify-center">
+                                        <svg width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+                                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                                        </svg>
+                                    </div>
+                                    <h4 class="text-xl font-bold text-white">Notification Preferences</h4>
                                 </div>
-                                <p class="text-blue-50 text-xs">Control how you receive updates and alerts.</p>
+                                <p class="text-blue-50 text-xs">Control how and when you receive alerts from AI-Buffet.</p>
                                 <ul class="mt-3 space-y-1 text-blue-50/80 text-xs">
                                     <li>- Email Notifications</li>
-                                    <li>- In-App Alerts</li>
-                                    <li>- Promotional Offers</li>
+                                    <li>- SMS Alerts</li>
+                                    <li>- In-App Notifications</li>
                                 </ul>
                             </div>
-                            <div class="glass-morphism rounded-2xl p-6 text-left">
+
+                            <div class="glass-morphism rounded-2xl p-6 text-left hover:shadow-lg transition-all duration-300">
                                 <div class="flex items-center space-x-3 mb-3">
-                                    <svg width="24" height="24" fill="currentColor" viewBox="0 0 24 24" class="text-green-400">
-                                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z"/>
-                                    </svg>
-                                    <h4 class="text-lg font-semibold text-green-100">Integrations</h4>
+                                    <div class="w-12 h-12 rounded-xl bg-purple-500/20 text-purple-300 flex items-center justify-center">
+                                        <svg width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+                                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2h2v-.08c-.71-.28-1.39-.68-2-1.18zm8-1.79c-.13.58-.21 1.17-.21 1.79 0 4.08-3.05 7.44-7 7.93V16l3.5-3.5c.98.67 1.71 1.54 2.19 2.56zM12 4c3.86 0 7 3.14 7 7 0 .62-.08 1.21-.21 1.79L15 9V8c0-1.1-.9-2-2-2H9v.08c.71.28 1.39.68 2 1.18zM4.07 11c.13-.58.21-1.17.21-1.79 0-4.08 3.05-7.44 7-7.93V8l-3.5 3.5c-.98-.67-1.71-1.54-2.19-2.56z"/>
+                                        </svg>
+                                    </div>
+                                    <h4 class="text-xl font-bold text-white">Subscription & Billing</h4>
                                 </div>
-                                <p class="text-green-50 text-xs">Connect with other services and platforms.</p>
-                                <ul class="mt-3 space-y-1 text-green-50/80 text-xs">
-                                    <li>- Google Drive</li>
-                                    <li>- Dropbox</li>
-                                    <li>- Slack</li>
+                                <p class="text-blue-50 text-xs">View your plan, update payment methods, and see billing history.</p>
+                                <ul class="mt-3 space-y-1 text-blue-50/80 text-xs">
+                                    <li>- Current Plan</li>
+                                    <li>- Payment Methods</li>
+                                    <li>- Billing History</li>
                                 </ul>
                             </div>
-                            <div class="glass-morphism rounded-2xl p-6 text-left">
+
+                            <div class="glass-morphism rounded-2xl p-6 text-left hover:shadow-lg transition-all duration-300">
                                 <div class="flex items-center space-x-3 mb-3">
-                                    <svg width="24" height="24" fill="currentColor" viewBox="0 0 24 24" class="text-amber-400">
-                                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z"/>
-                                    </svg>
-                                    <h4 class="text-lg font-semibold text-amber-100">Data & Privacy</h4>
+                                    <div class="w-12 h-12 rounded-xl bg-amber-500/20 text-amber-300 flex items-center justify-center">
+                                        <svg width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+                                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z"/>
+                                        </svg>
+                                    </div>
+                                    <h4 class="text-xl font-bold text-amber-100">Data & Privacy</h4>
                                 </div>
                                 <p class="text-amber-50 text-xs">Review privacy policy and manage data preferences.</p>
                                 <ul class="mt-3 space-y-1 text-amber-50/80 text-xs">

@@ -219,37 +219,22 @@
             if (blueprintFilePreview) blueprintFilePreview.classList.add('hidden');
         };
 
-// Resume Form Submission Logic
+        // Resume Form Submission Logic (Simulated for now)
         const resumeForm = document.getElementById('resume-form');
         const resumeSuccessMessage = document.getElementById('resume-success-message');
-        const resumeSuccessEmail = document.getElementById('resume-success-email');
-        const resumeFileInput = document.getElementById('resume-file-input');
+        const resumeSuccessEmail = document.getElementById('resume-success-email'); // Assuming we'll display email from resume form too
 
         if (resumeForm) {
             resumeForm.addEventListener('submit', async (e) => {
-                e.preventDefault(); // prevent page reload
+                e.preventDefault();
 
-                const formData = new FormData(resumeForm);
-                if (resumeFileInput && resumeFileInput.files.length) {
-                    formData.append('file', resumeFileInput.files[0]);
-                }
+                // In a real application, you would send this data to a backend.
+                // For now, we simulate success.
+                const userEmail = document.getElementById('resume-email').value;
 
-                try {
-                    const response = await fetch('https://estimator.stromanstouch.com/webhook-test/772971c5-c130-426b-95ff-4baa00fc1558', {
-                        method: 'POST',
-                        body: formData
-                    });
-
-                    if (response.ok) {
-                        resumeForm.classList.add('hidden');
-                        resumeSuccessMessage.classList.remove('hidden');
-                        resumeSuccessEmail.textContent = formData.get('emailAddress');
-                    } else {
-                        alert('Submission failed. Please try again.');
-                    }
-                } catch (err) {
-                    alert('Something went wrong: ' + err.message);
-                }
+                resumeForm.classList.add('hidden');
+                resumeSuccessMessage.classList.remove('hidden');
+                resumeSuccessEmail.textContent = userEmail; // Display the entered email
             });
         }
 

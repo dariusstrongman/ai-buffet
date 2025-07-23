@@ -329,6 +329,36 @@
         setInterval(updateAIFact, 7000); // Change fact every 7 seconds
         updateAIFact(); // Display initial fact immediately
     });
+    const resumeForm = document.getElementById('resume-form');
+    const resumeSuccessMessage = document.getElementById('resume-success-message');
+    const resumeSuccessEmail = document.getElementById('resume-success-email');
+
+    if (resumeForm) {
+    resumeForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const formData = new FormData(resumeForm);
+
+        try {
+        const response = await fetch(resumeForm.action, {
+            method: 'POST',
+            body: formData
+        });
+
+        if (response.ok) {
+            const userEmail = document.getElementById('resume-email').value;
+            resumeForm.classList.add('hidden');
+            resumeSuccessMessage.classList.remove('hidden');
+            resumeSuccessEmail.textContent = userEmail;
+        } else {
+            alert("Upload failed. Please try again.");
+        }
+        } catch (err) {
+        alert("Something went wrong: " + err.message);
+        }
+    });
+    }
+
 </script>
 
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">

@@ -71,6 +71,7 @@
 </script>
 <script>
     document.addEventListener('DOMContentLoaded', () => {
+        // Your existing file upload handlers for blueprint and resume remain the same
         const blueprintFileDropZone = document.getElementById('blueprint-file-drop-zone');
         const blueprintFileInput = document.getElementById('blueprint-file-input');
 
@@ -105,7 +106,6 @@
             });
         }
 
-
         function showBlueprintFilePreview(file) {
             const fileNameElem = document.getElementById('blueprint-file-name');
             const fileSizeElem = document.getElementById('blueprint-file-size');
@@ -122,7 +122,7 @@
             if (filePreview) filePreview.classList.add('hidden');
         };
 
-        // Resume file upload
+        // Resume file upload (keeping existing functionality)
         const resumeFileInput = document.getElementById('resume-file-input');
         const resumeFileDropZone = document.getElementById('resume-file-drop-zone');
 
@@ -173,15 +173,93 @@
             if (filePreview) filePreview.classList.add('hidden');
         };
 
+            // NEW: Diet Form Submission Logic (FINALIZED FOR TAB SWITCHING)
+        const dietForm = document.getElementById('diet-form');
+        // dietSuccessEmail is still needed to update the email text in the success message.
+        // The dietSuccessMessage variable itself is no longer directly used for hiding/showing,
+        // as showTab() will handle the entire 'diet-success-tab-content' div.
+        const dietSuccessEmail = document.getElementById('diet-success-email');
 
-        // Blueprint Form Submission Logic
+        if (dietForm) {
+            dietForm.addEventListener('submit', async function(event) {
+                event.preventDefault(); // ALWAYS prevent default form submission first
+
+                const form = event.target; // Reference to the form that was submitted
+                const submitButton = form.querySelector('button[type="submit"]');
+                const originalButtonText = submitButton.innerHTML; // Store original button content
+
+                // Trigger browser's native HTML5 validation
+                if (!form.checkValidity()) {
+                    form.reportValidity(); // This will display browser's validation messages
+                    return; // Stop the function if form is invalid
+                }
+
+                // Show loading state
+                submitButton.disabled = true;
+                submitButton.innerHTML = `
+                    <span class="relative z-10 flex items-center justify-center space-x-3">
+                        <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                        </svg>
+                        <span>Submitting...</span>
+                    </span>
+                `;
+
+                const formData = new FormData(form);
+
+                // The CORRECTED webhook URL
+                const webhookUrl = 'https://estimator.stromanstouch.com/webhook-test/diet';
+
+                try {
+                    const response = await fetch(webhookUrl, {
+                        method: 'POST',
+                        body: formData
+                    });
+
+                    if (!response.ok) {
+                        let errorText = 'Unknown error';
+                        try {
+                            const errorData = await response.json();
+                            errorText = errorData.message || JSON.stringify(errorData);
+                        } catch (e) {
+                            errorText = response.statusText;
+                        }
+                        throw new Error(`HTTP error! Status: ${response.status}. Message: ${errorText}`);
+                    }
+
+                    const responseData = await response.json();
+                    console.log('Success:', responseData);
+
+                    // IMPORTANT: Use showTab() to switch to the new diet success tab container
+                    showTab('diet-success-tab-content');
+                    dietSuccessEmail.textContent = formData.get('email'); // Display email from form data
+                    form.reset(); // Clear the form
+
+                } catch (error) {
+                    console.error('Error:', error);
+                    alert(`There was an error submitting your diet plan request: ${error.message}. Please try again.`);
+                } finally {
+                    // Always reset button state
+                    submitButton.disabled = false;
+                    submitButton.innerHTML = originalButtonText;
+                }
+            });
+        }
+
+        // IMPORTANT: The window.resetDietForm function should now be removed from your script entirely.
+        // Its functionality is replaced by the 'onclick' attribute on the "Create Another Diet Plan" button
+        // and the showTab() call within the form submission logic.
+        // Ensure this function (lines 213-217 in your current file) is deleted.
+
+        // Your existing blueprint form logic
         const blueprintForm = document.getElementById('blueprint-form');
         const blueprintSuccessMessage = document.getElementById('blueprint-success-message');
         const blueprintSuccessEmail = document.getElementById('blueprint-success-email');
 
         if (blueprintForm) {
             blueprintForm.addEventListener('submit', async (e) => {
-                e.preventDefault(); // prevent page reload
+                e.preventDefault();
 
                 const formData = new FormData(blueprintForm);
 
@@ -219,21 +297,19 @@
             if (blueprintFilePreview) blueprintFilePreview.classList.add('hidden');
         };
 
-        // Resume Form Submission Logic (Simulated for now)
+        // Resume Form Submission Logic
         const resumeForm = document.getElementById('resume-form');
         const resumeSuccessMessage = document.getElementById('resume-success-message');
-        const resumeSuccessEmail = document.getElementById('resume-success-email'); // Assuming we'll display email from resume form too
+        const resumeSuccessEmail = document.getElementById('resume-success-email');
 
         window.resetResumeForm = function () {
             resumeSuccessMessage.classList.add('hidden');
             resumeForm.classList.remove('hidden');
             resumeForm.reset();
-            if (resumeFileInput) resumeFileInput.value = ''; // Clear resume file input
+            if (resumeFileInput) resumeFileInput.value = '';
             const resumeFilePreview = document.getElementById('resume-file-preview');
-            if (resumeFilePreview) resumeFilePreview.classList.add('hidden'); // Hide resume file preview
+            if (resumeFilePreview) resumeFilePreview.classList.add('hidden');
         };
-
-
     });
 
     function showTab(tabId) {
@@ -246,11 +322,11 @@
         document.querySelectorAll('.sidebar-item').forEach(item => {
             item.classList.remove('active');
             item.classList.remove('bg-gradient-to-br', 'from-blue-500', 'to-purple-600', 'text-white');
-            item.classList.remove('from-blue-600', 'to-cyan-700'); // For home tab
-            item.classList.remove('from-purple-500', 'to-pink-600'); // For resume tab
-            item.classList.remove('from-red-500', 'to-orange-600'); // For legal tab
-            item.classList.remove('from-yellow-500', 'to-lime-600'); // For diet tab
-            item.classList.remove('from-indigo-500', 'to-blue-600'); // For settings tab
+            item.classList.remove('from-blue-600', 'to-cyan-700');
+            item.classList.remove('from-purple-500', 'to-pink-600');
+            item.classList.remove('from-red-500', 'to-orange-600');
+            item.classList.remove('from-yellow-500', 'to-lime-600');
+            item.classList.remove('from-indigo-500', 'to-blue-600');
 
             item.classList.add('text-white/70', 'hover:text-white', 'bg-white/5');
         });
@@ -260,7 +336,6 @@
         if (selectedContent) {
             selectedContent.classList.remove('hidden');
         }
-
 
         // Activate the corresponding sidebar item
         const activeTabButton = document.getElementById(tabId + '-tab');
@@ -309,27 +384,24 @@
     function updateAIFact() {
         const factDisplay = document.getElementById('ai-fact-display');
         if (factDisplay) {
-            // Apply fade-out effect
             factDisplay.style.opacity = '0';
             factDisplay.style.transform = 'translateY(20px)';
 
             setTimeout(() => {
                 currentFactIndex = (currentFactIndex + 1) % aiFacts.length;
                 factDisplay.textContent = aiFacts[currentFactIndex];
-                // Apply fade-in effect
                 factDisplay.style.opacity = '1';
                 factDisplay.style.transform = 'translateY(0)';
-            }, 500); // Wait for fade-out before changing text and fading in
+            }, 500);
         }
     }
 
-    // Set initial tab on load (e.g., 'home')
+    // Set initial tab on load
     document.addEventListener('DOMContentLoaded', () => {
-        showTab('home'); // Show Home tab by default
-        setInterval(updateAIFact, 7000); // Change fact every 7 seconds
-        updateAIFact(); // Display initial fact immediately
+        showTab('home');
+        setInterval(updateAIFact, 7000);
+        updateAIFact();
     });
-
 </script>
 
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
@@ -395,11 +467,10 @@
         }
 
         .sidebar-item.active {
-            background: linear-gradient(135deg, #0077cc, #6366f1); /* Default gradient for active */
+            background: linear-gradient(135deg, #0077cc, #6366f1);
             transform: translateX(8px) scale(1.05);
             box-shadow: 0 10px 30px rgba(0, 119, 204, 0.4);
         }
-        /* Specific active gradients handled by JS now */
 
         .file-drop-zone {
             transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
@@ -531,7 +602,6 @@
             animation: gradient 8s ease infinite;
         }
 
-        /* Home tab specific styles */
         .home-hero-bg {
             background: linear-gradient(135deg, #1e3a8a, #3730a3);
             background-size: 200% 200%;
@@ -550,7 +620,7 @@
     </div>
 
     <div class="min-h-screen flex">
-        <div class="w-80 glass-morphism-dark backdrop-blur-xl shadow-2xl relative z-10">
+        <div id="sidebar" class="w-80 glass-morphism-dark backdrop-blur-xl shadow-2xl relative z-10">
             <div class="p-8 border-b border-white/10">
                 <div class="flex items-center space-x-4 mb-4">
                     <div class="logo-container w-16 h-16 rounded-2xl flex items-center justify-center relative shadow-lg">
@@ -629,7 +699,7 @@
                     </div>
                     <div>
                         <div class="font-semibold">Golden Diet</div>
-                        <div class="text-xs text-amber-300">Coming Soon</div>
+                        <div class="text-xs text-amber-300">Active Tool</div>
                     </div>
                 </button>
 
@@ -998,47 +1068,272 @@
                     </div>
                 </div>
 
+                <!-- COMPLETE GOLDEN DIET IMPLEMENTATION -->
                 <div id="diet-content" class="tab-content content-container hidden">
-                    <div class="glass-morphism rounded-3xl p-10 shadow-2xl text-center">
-                        <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-yellow-500 to-lime-600 mb-4 shadow-lg animate-pulse-slow">
-                            <svg width="32" height="32" fill="white" viewBox="0 0 24 24">
-                                <path d="M12,2C6.48,2 2,6.48 2,12C2,17.52 6.48,22 12,22C17.52,22 22,17.52 22,12C22,6.48 17.52,2 12,2M12,20C7.59,20 4,16.41 4,12C4,7.59 7.59,4 12,4C16.41,4 20,7.59 20,12C20,16.41 16.41,20 12,20M12,7C10.62,7 9.27,7.74 8.5,8.85L7.09,7.44C7.75,6.59 8.62,6 9.61,5.65C10.59,5.29 11.64,5.29 12.63,5.65C13.62,6 14.49,6.59 15.15,7.44L13.74,8.85C12.97,7.74 11.62,7 12,7Z"/>
-                            </svg>
+                    <div class="glass-morphism rounded-3xl p-10 shadow-2xl">
+                        <div class="text-center mb-6">
+                            <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-yellow-500 to-lime-600 mb-4 shadow-lg animate-pulse-slow">
+                                <svg width="32" height="32" fill="white" viewBox="0 0 24 24">
+                                    <path d="M12,2C6.48,2 2,6.48 2,12C2,17.52 6.48,22 12,22C17.52,22 22,17.52 22,12C22,6.48 17.52,2 12,2M12,20C7.59,20 4,16.41 4,12C4,7.59 7.59,4 12,4C16.41,4 20,7.59 20,12C20,16.41 16.41,20 12,20M12,7C10.62,7 9.27,7.74 8.5,8.85L7.09,7.44C7.75,6.59 8.62,6 9.61,5.65C10.59,5.29 11.64,5.29 12.63,5.65C13.62,6 14.49,6.59 15.15,7.44L13.74,8.85C12.97,7.74 11.62,7 12,7Z"/>
+                                </svg>
+                            </div>
+                            <h2 class="text-3xl font-bold text-white mb-1">Golden Diet</h2>
+                            <p class="text-lg text-blue-100 max-w-2xl mx-auto">Create your personalized meal plan. Get customized nutrition recommendations based on your goals, preferences, and lifestyle</p>
                         </div>
-                        <h2 class="text-3xl font-bold text-white mb-2">Golden Diet</h2>
-                        <p class="text-lg text-blue-100 mb-6">
-                            Craft your perfect meal plan with AI! This tool, coming soon, will generate personalized diet recommendations
-                            based on your goals, preferences, and dietary restrictions.
-                        </p>
-                        <p class="text-white/70 text-sm mb-6">
-                            Get ready for a healthier, happier you. We're cooking up something great!
-                        </p>
-                        <div class="max-w-md mx-auto bg-white/10 p-6 rounded-2xl border border-white/20">
-                            <h4 class="text-xl font-semibold text-yellow-200 mb-3">What it will offer:</h4>
-                            <ul class="text-left text-yellow-100 text-sm space-y-2">
-                                <li class="flex items-center">
-                                    <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24" class="text-yellow-400 mr-2">
-                                        <path d="M9,16.17L4.83,12L3.41,13.41L9,19L21,7L19.59,5.59L9,16.17Z"/>
+                        
+                        <form id="diet-form" action="https://estimator.stromanstouch.com/webhook-test/diet" method="POST" class="space-y-6">
+                            <h3 class="text-xl font-semibold text-white/90 mb-4 pt-4 border-t border-white/10">Personal Information</h3>
+                            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                                <div class="space-y-2">
+                                    <label for="diet-name" class="block text-sm font-semibold text-white mb-3">Full Name *</label>
+                                    <input type="text" id="diet-name" name="name" required
+                                            class="form-input w-full px-6 py-2 rounded-2xl border-0 focus:ring-2 focus:ring-yellow-400 text-gray-900 font-medium"
+                                            placeholder="Enter your full name">
+                                </div>
+                                <div class="space-y-2">
+                                    <label for="diet-email" class="block text-sm font-semibold text-white mb-3">Email Address *</label>
+                                    <input type="email" id="diet-email" name="email" required
+                                            class="form-input w-full px-6 py-2 rounded-2xl border-0 focus:ring-2 focus:ring-yellow-400 text-gray-900 font-medium"
+                                            placeholder="your@email.com">
+                                </div>
+                            </div>
+
+                            <h3 class="text-xl font-semibold text-white/90 mb-4 pt-4 border-t border-white/10">Physical Information</h3>
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                                <div class="space-y-2">
+                                    <label for="diet-age" class="block text-sm font-semibold text-white mb-3">Age *</label>
+                                    <input type="number" id="diet-age" name="age" required min="13" max="120"
+                                            class="form-input w-full px-6 py-2 rounded-2xl border-0 focus:ring-2 focus:ring-yellow-400 text-gray-900 font-medium"
+                                            placeholder="25">
+                                </div>
+                                <div class="space-y-2">
+                                    <label for="diet-gender" class="block text-sm font-semibold text-white mb-3">Gender *</label>
+                                    <select id="diet-gender" name="gender" required
+                                            class="form-input w-full px-6 py-2 rounded-2xl border-0 focus:ring-2 focus:ring-yellow-400 text-gray-900 font-medium">
+                                        <option value="" disabled selected class="text-gray-400">Select your gender</option>
+                                        <option value="male">Male</option>
+                                        <option value="female">Female</option>
+                                    </select>
+                                </div>
+                                <div class="space-y-2">
+                                    <label for="diet-activity" class="block text-sm font-semibold text-white mb-3">Activity Level *</label>
+                                    <select id="diet-activity" name="activityLevel" required
+                                            class="form-input w-full px-6 py-2 rounded-2xl border-0 focus:ring-2 focus:ring-yellow-400 text-gray-900 font-medium">
+                                        <option value="" disabled selected class="text-gray-400">Select your activity level</option>
+                                        <option value="sedentary">Sedentary (little/no exercise)</option>
+                                        <option value="light">Light (light exercise 1-3 days/week)</option>
+                                        <option value="moderate">Moderate (moderate exercise 3-5 days/week)</option>
+                                        <option value="active">Active (hard exercise 6-7 days/week)</option>
+                                        <option value="very-active">Very Active (very hard exercise, physical job)</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                                <div class="grid grid-cols-2 gap-4">
+                                    <div class="space-y-2">
+                                        <label for="diet-height-feet" class="block text-sm font-semibold text-white mb-3">Height (Feet) *</label>
+                                        <input type="number" id="diet-height-feet" name="height_feet" required min="3" max="8"
+                                            class="form-input w-full px-6 py-2 rounded-2xl border-0 focus:ring-2 focus:ring-yellow-400 text-gray-900 font-medium"
+                                            placeholder="5">
+                                    </div>
+                                    <div class="space-y-2">
+                                        <label for="diet-height-inches" class="block text-sm font-semibold text-white mb-3">Height (Inches) *</label>
+                                        <input type="number" id="diet-height-inches" name="height_inches" required min="0" max="11"
+                                            class="form-input w-full px-6 py-2 rounded-2xl border-0 focus:ring-2 focus:ring-yellow-400 text-gray-900 font-medium"
+                                            placeholder="10">
+                                    </div>
+                                </div>
+                                <div class="space-y-2">
+                                    <label for="diet-weight" class="block text-sm font-semibold text-white mb-3">Current Weight (lb) *</label>
+                                    <input type="number" id="diet-weight" name="weight"
+                                            class="form-input w-full px-6 py-2 rounded-2xl border-0 focus:ring-2 focus:ring-yellow-400 text-gray-900 font-medium"
+                                            placeholder="150">
+                                </div>
+                            </div>
+
+                            <h3 class="text-xl font-semibold text-white/90 mb-4 pt-4 border-t border-white/10">Diet Goals & Preferences</h3>
+                            <div class="space-y-2">
+                                <label for="diet-goal" class="block text-sm font-semibold text-white mb-3">Primary Goal *</label>
+                                <select id="diet-goal" name="goal" required
+                                        class="form-input w-full px-6 py-2 rounded-2xl border-0 focus:ring-2 focus:ring-yellow-400 text-gray-900 font-medium">
+                                    <option value="" disabled selected class="text-gray-400">Select your primary goal</option>
+                                    <option value="weight-loss">Weight Loss</option>
+                                    <option value="weight-gain">Weight Gain</option>
+                                    <option value="muscle-gain">Muscle Gain</option>
+                                    <option value="maintenance">Weight Maintenance</option>
+                                    <option value="general-health">General Health Improvement</option>
+                                    <option value="athletic-performance">Athletic Performance</option>
+                                </select>
+                            </div>
+
+                            <div class="space-y-2">
+                                <label for="diet-type" class="block text-sm font-semibold text-white mb-3">Diet Type Preference</label>
+                                <select id="diet-type" name="dietType"
+                                        class="form-input w-full px-6 py-2 rounded-2xl border-0 focus:ring-2 focus:ring-yellow-400 text-gray-900 font-medium">
+                                    <option value="">No specific preference</option>
+                                    <option value="mediterranean">Mediterranean</option>
+                                    <option value="keto">Ketogenic</option>
+                                    <option value="paleo">Paleo</option>
+                                    <option value="vegetarian">Vegetarian</option>
+                                    <option value="vegan">Vegan</option>
+                                    <option value="low-carb">Low Carb</option>
+                                    <option value="intermittent-fasting">Intermittent Fasting</option>
+                                    <option value="balanced">Balanced/Traditional</option>
+                                </select>
+                            </div>
+
+                            <div class="space-y-2">
+                                <label for="diet-allergies" class="block text-sm font-semibold text-white mb-3">Food Allergies & Intolerances</label>
+                                <textarea id="diet-allergies" name="allergies" rows="3"
+                                            class="form-input w-full px-6 py-2 rounded-2xl border-0 focus:ring-2 focus:ring-yellow-400 text-gray-900 font-medium"
+                                            placeholder="e.g., Nuts, dairy, gluten, shellfish (leave blank if none)"></textarea>
+                            </div>
+
+                            <div class="space-y-2">
+                                <label for="diet-dislikes" class="block text-sm font-semibold text-white mb-3">Foods You Dislike</label>
+                                <textarea id="diet-dislikes" name="dislikes" rows="3"
+                                            class="form-input w-full px-6 py-2 rounded-2xl border-0 focus:ring-2 focus:ring-yellow-400 text-gray-900 font-medium"
+                                            placeholder="e.g., Broccoli, fish, spicy food (leave blank if none)"></textarea>
+                            </div>
+
+                            <h3 class="text-xl font-semibold text-white/90 mb-4 pt-4 border-t border-white/10">Lifestyle Information</h3>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div class="space-y-2">
+                                    <label for="diet-budget" class="block text-sm font-semibold text-white mb-3">Weekly Food Budget</label>
+                                    <select id="diet-budget" name="budget"
+                                            class="form-input w-full px-6 py-2 rounded-2xl border-0 focus:ring-2 focus:ring-yellow-400 text-gray-900 font-medium">
+                                        <option value="">No specific budget</option>
+                                        <option value="low">Low ($50-100/week)</option>
+                                        <option value="moderate">Moderate ($100-200/week)</option>
+                                        <option value="high">High ($200+/week)</option>
+                                    </select>
+                                </div>
+                                <div class="space-y-2">
+                                    <label for="diet-cooking-time" class="block text-sm font-semibold text-white mb-3">Cooking Time Available</label>
+                                    <select id="diet-cooking-time" name="cookingTime"
+                                            class="form-input w-full px-6 py-2 rounded-2xl border-0 focus:ring-2 focus:ring-yellow-400 text-gray-900 font-medium">
+                                        <option value="">No preference</option>
+                                        <option value="minimal">Minimal (15 mins or less)</option>
+                                        <option value="moderate">Moderate (15-45 mins)</option>
+                                        <option value="extensive">Extensive (45+ mins)</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="space-y-2">
+                                <label for="diet-additional" class="block text-sm font-semibold text-white mb-3">Additional Information</label>
+                                <textarea id="diet-additional" name="additionalInfo" rows="4"
+                                            class="form-input w-full px-6 py-2 rounded-2xl border-0 focus:ring-2 focus:ring-yellow-400 text-gray-900 font-medium"
+                                            placeholder="Any medical conditions, specific requirements, or additional details you'd like our AI to consider..."></textarea>
+                            </div>
+
+                            <button type="submit" class="btn-primary w-full py-4 px-8 rounded-2xl font-bold text-white text-lg shadow-2xl bg-gradient-to-r from-yellow-500 to-lime-600">
+                                <span class="relative z-10 flex items-center justify-center space-x-3">
+                                    <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/>
                                     </svg>
-                                    Customized meal plans.
-                                </li>
-                                <li class="flex items-center">
-                                    <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24" class="text-yellow-400 mr-2">
-                                        <path d="M9,16.17L4.83,12L3.41,13.41L9,19L21,7L19.59,5.59L9,16.17Z"/>
-                                    </svg>
-                                    Nutritional breakdowns.
-                                </li>
-                                <li class="flex items-center">
-                                    <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24" class="text-yellow-400 mr-2">
-                                        <path d="M9,16.17L4.83,12L3.41,13.41L9,19L21,7L19.59,5.59L9,16.17Z"/>
-                                    </svg>
-                                    Recipe suggestions.
-                                </li>
-                            </ul>
+                                    <span>Generate My Personalized Diet Plan</span>
+                                </span>
+                            </button>
+                        </form>
+                            <div id="diet-success-tab-content" class="tab-content hidden p-8 md:p-12 text-center flex flex-col items-center justify-center min-h-[calc(100vh-200px)]">
+                                <div class="glass-morphism rounded-2xl p-8 border border-yellow-400/30 glow-effect max-w-lg w-full mx-auto">
+                                    <div class="text-center">
+                                        <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-yellow-500 mb-4">
+                                            <svg width="32" height="32" fill="white" viewBox="0 0 24 24">
+                                                <path d="M9,16.17L4.83,12L3.41,13.41L9,19L21,7L19.59,5.59L9,16.17Z"/>
+                                            </svg>
+                                        </div>
+                                        <h3 class="text-2xl font-bold text-white mb-2">Diet Plan Request Submitted!</h3>
+                                        <p class="text-yellow-200">
+                                            Your personalized diet plan request has been received! Our AI nutritionist is now analyzing your information and creating a customized meal plan tailored to your goals and preferences.
+                                        </p>
+                                        <p class="text-yellow-100 mt-4">
+                                            Results will be sent to <span id="diet-success-email" class="font-semibold text-yellow-300"></span> within 1 hours.
+                                        </p>
+                                        <button onclick="showTab('diet'); document.getElementById('diet-form').reset();" class="mt-6 bg-gradient-to-r from-yellow-500 to-lime-600 text-white px-6 py-3 rounded-xl font-bold hover:shadow-lg transition-all duration-300">
+                                            Create Another Diet Plan
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
+                <script>
+// NEW: Diet Form Submission Logic (FINALIZED FOR TAB SWITCHING)
+        const dietForm = document.getElementById('diet-form');
+        // dietSuccessEmail is still needed to update the email text in the success message.
+        const dietSuccessEmail = document.getElementById('diet-success-email');
 
+        if (dietForm) {
+            dietForm.addEventListener('submit', async function(event) {
+                event.preventDefault(); // ALWAYS prevent default form submission first
+
+                const form = event.target; // Reference to the form that was submitted
+                const submitButton = form.querySelector('button[type="submit"]');
+                const originalButtonText = submitButton.innerHTML; // Store original button content
+
+                // Trigger browser's native HTML5 validation
+                if (!form.checkValidity()) {
+                    form.reportValidity(); // This will display browser's validation messages
+                    return; // Stop the function if form is invalid
+                }
+
+                // Show loading state
+                submitButton.disabled = true;
+                submitButton.innerHTML = `
+                    <span class="relative z-10 flex items-center justify-center space-x-3">
+                        <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                        </svg>
+                        <span>Submitting...</span>
+                    </span>
+                `;
+
+                const formData = new FormData(form);
+
+                // The CORRECTED webhook URL
+                const webhookUrl = 'https://estimator.stromanstouch.com/webhook-test/diet';
+
+                try {
+                    const response = await fetch(webhookUrl, {
+                        method: 'POST',
+                        body: formData
+                    });
+
+                    if (!response.ok) {
+                        let errorText = 'Unknown error';
+                        try {
+                            const errorData = await response.json();
+                            errorText = errorData.message || JSON.stringify(errorData);
+                        } catch (e) {
+                            errorText = response.statusText;
+                        }
+                        throw new Error(`HTTP error! Status: ${response.status}. Message: ${errorText}`);
+                    }
+
+                    const responseData = await response.json();
+                    console.log('Success:', responseData);
+
+                    // Use showTab() to switch to the diet success tab
+                    showTab('diet-success-tab-content'); // <-- KEY CHANGE: Now uses your tab system
+                    dietSuccessEmail.textContent = formData.get('email'); // Display email from form data
+                    form.reset(); // Clear the form
+
+                } catch (error) {
+                    console.error('Error:', error);
+                    alert(`There was an error submitting your diet plan request: ${error.message}. Please try again.`);
+                } finally {
+                    // Always reset button state
+                    submitButton.disabled = false;
+                    submitButton.innerHTML = originalButtonText;
+                }
+            });
+        }
+
+                </script>
                 <div id="settings-content" class="tab-content content-container hidden">
                     <div class="glass-morphism rounded-3xl p-10 shadow-2xl text-center">
                         <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-indigo-500 to-blue-600 mb-4 shadow-lg animate-pulse-slow">

@@ -231,8 +231,12 @@
                     const responseData = await response.json();
                     console.log('Success:', responseData);
 
-                    // IMPORTANT: Use showTab() to switch to the new diet success tab container
-                    showTab('diet-success-tab-content');
+                    // Hide the form and display the success message
+                    const dietSuccessContainer = document.getElementById('diet-success-tab-content');
+
+                    form.classList.add('hidden'); // Hide the form itself
+                    dietSuccessContainer.classList.remove('hidden'); // Show the success message
+
                     dietSuccessEmail.textContent = formData.get('email'); // Display email from form data
                     form.reset(); // Clear the form
 
@@ -1236,7 +1240,7 @@
                                 </span>
                             </button>
                         </form>
-                            <div id="diet-success-tab-content" class="tab-content hidden p-8 md:p-12 text-center flex flex-col items-center justify-center min-h-[calc(100vh-200px)]">
+                            <div id="diet-success-tab-content" class="hidden p-8 md:p-12 text-center flex flex-col items-center justify-center min-h-[calc(100vh-200px)]">
                                 <div class="glass-morphism rounded-2xl p-8 border border-yellow-400/30 glow-effect max-w-lg w-full mx-auto">
                                     <div class="text-center">
                                         <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-yellow-500 mb-4">
@@ -1251,7 +1255,7 @@
                                         <p class="text-yellow-100 mt-4">
                                             Results will be sent to <span id="diet-success-email" class="font-semibold text-yellow-300"></span> within 1 hours.
                                         </p>
-                                        <button onclick="showTab('diet'); document.getElementById('diet-form').reset();" class="mt-6 bg-gradient-to-r from-yellow-500 to-lime-600 text-white px-6 py-3 rounded-xl font-bold hover:shadow-lg transition-all duration-300">
+                                        <button onclick="document.getElementById('diet-form').classList.remove('hidden'); this.closest('#diet-success-tab-content').classList.add('hidden'); document.getElementById('diet-form').reset();" class="mt-6 bg-gradient-to-r from-yellow-500 to-lime-600 text-white px-6 py-3 rounded-xl font-bold hover:shadow-lg transition-all duration-300">
                                             Create Another Diet Plan
                                         </button>
                                     </div>
@@ -1260,80 +1264,6 @@
                         </div>
                     </div>
                 </div>
-                <script>
-// NEW: Diet Form Submission Logic (FINALIZED FOR TAB SWITCHING)
-        const dietForm = document.getElementById('diet-form');
-        // dietSuccessEmail is still needed to update the email text in the success message.
-        const dietSuccessEmail = document.getElementById('diet-success-email');
-
-        if (dietForm) {
-            dietForm.addEventListener('submit', async function(event) {
-                event.preventDefault(); // ALWAYS prevent default form submission first
-
-                const form = event.target; // Reference to the form that was submitted
-                const submitButton = form.querySelector('button[type="submit"]');
-                const originalButtonText = submitButton.innerHTML; // Store original button content
-
-                // Trigger browser's native HTML5 validation
-                if (!form.checkValidity()) {
-                    form.reportValidity(); // This will display browser's validation messages
-                    return; // Stop the function if form is invalid
-                }
-
-                // Show loading state
-                submitButton.disabled = true;
-                submitButton.innerHTML = `
-                    <span class="relative z-10 flex items-center justify-center space-x-3">
-                        <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                        </svg>
-                        <span>Submitting...</span>
-                    </span>
-                `;
-
-                const formData = new FormData(form);
-
-                // The CORRECTED webhook URL
-                const webhookUrl = 'https://estimator.stromanstouch.com/webhook-test/diet';
-
-                try {
-                    const response = await fetch(webhookUrl, {
-                        method: 'POST',
-                        body: formData
-                    });
-
-                    if (!response.ok) {
-                        let errorText = 'Unknown error';
-                        try {
-                            const errorData = await response.json();
-                            errorText = errorData.message || JSON.stringify(errorData);
-                        } catch (e) {
-                            errorText = response.statusText;
-                        }
-                        throw new Error(`HTTP error! Status: ${response.status}. Message: ${errorText}`);
-                    }
-
-                    const responseData = await response.json();
-                    console.log('Success:', responseData);
-
-                    // Use showTab() to switch to the diet success tab
-                    showTab('diet-success-tab-content'); // <-- KEY CHANGE: Now uses your tab system
-                    dietSuccessEmail.textContent = formData.get('email'); // Display email from form data
-                    form.reset(); // Clear the form
-
-                } catch (error) {
-                    console.error('Error:', error);
-                    alert(`There was an error submitting your diet plan request: ${error.message}. Please try again.`);
-                } finally {
-                    // Always reset button state
-                    submitButton.disabled = false;
-                    submitButton.innerHTML = originalButtonText;
-                }
-            });
-        }
-
-                </script>
                 <div id="settings-content" class="tab-content content-container hidden">
                     <div class="glass-morphism rounded-3xl p-10 shadow-2xl text-center">
                         <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-indigo-500 to-blue-600 mb-4 shadow-lg animate-pulse-slow">

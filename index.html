@@ -209,7 +209,7 @@
                 const formData = new FormData(form);
 
                 // The CORRECTED webhook URL
-                const webhookUrl = 'https://estimator.stromanstouch.com/webhook-test/diet';
+                const webhookUrl = 'https://estimator.stromanstouch.com/webhook/diet';
 
                 try {
                     const response = await fetch(webhookUrl, {
@@ -1085,7 +1085,7 @@
                             <p class="text-lg text-blue-100 max-w-2xl mx-auto">Create your personalized meal plan. Get customized nutrition recommendations based on your goals, preferences, and lifestyle</p>
                         </div>
                         
-                        <form id="diet-form" action="https://estimator.stromanstouch.com/webhook-test/diet" method="POST" class="space-y-6">
+                        <form id="diet-form" action="https://estimator.stromanstouch.com/webhook/diet" method="POST" class="space-y-6">
                             <h3 class="text-xl font-semibold text-white/90 mb-4 pt-4 border-t border-white/10">Personal Information</h3>
                             <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                                 <div class="space-y-2">

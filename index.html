@@ -1313,24 +1313,144 @@
                         </div>
                     </div>
                 </div>
-                <!-- LEGAL CONTENT -->
-                <div id="legal-content" class="tab-content content-container hidden">
-                    <div class="glass-morphism rounded-3xl p-10 shadow-2xl text-center neon-glow">
-                        <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-red-500 to-orange-600 mb-4 shadow-lg animate-pulse-slow neon-glow neural-pulse">
-                            <svg width="32" height="32" fill="white" viewBox="0 0 24 24">
-                                <path d="M13 14H11V9H13M13 18H11V16H13M1 21H23L12 2L1 21Z"/>
-                            </svg>
+<!-- LEGAL CONTENT -->
+<div id="legal-content" class="tab-content content-container hidden">
+    <div class="glass-morphism rounded-3xl p-10 shadow-2xl neon-glow">
+        <div class="text-center mb-6">
+            <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-red-500 to-orange-600 mb-4 shadow-lg animate-pulse-slow neon-glow neural-pulse">
+                <svg width="32" height="32" fill="white" viewBox="0 0 24 24">
+                    <path d="M13 14H11V9H13M13 18H11V16H13M1 21H23L12 2L1 21Z"/>
+                </svg>
+            </div>
+            <h2 class="text-3xl font-bold holographic-text mb-1">Legal Red Flag Detector</h2>
+            <p class="text-lg text-cyan-100 max-w-2xl mx-auto cyber-text">
+                Upload your contracts, terms of service, or legal documents for AI-powered analysis to identify potential red flags and concerning clauses
+            </p>
+        </div>
+
+        <form id="legal-form" class="space-y-6" action="https://estimator.stromanstouch.com/webhook-test/contract" method="POST" enctype="multipart/form-data">
+            <h3 class="text-xl font-semibold text-white/90 mb-4 pt-4 border-t border-cyan-500/20 cyber-text">Contact Information</h3>
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <div class="space-y-2">
+                    <label for="legal-name" class="block text-sm font-semibold text-cyan-100 mb-3">Full Name *</label>
+                    <input type="text" id="legal-name" name="name" required
+                            class="form-input w-full px-6 py-3 rounded-2xl border-0 focus:ring-2 focus:ring-red-400 text-white font-medium placeholder-gray-400"
+                            placeholder="Enter your full name">
+                </div>
+                <div class="space-y-2">
+                    <label for="legal-email" class="block text-sm font-semibold text-cyan-100 mb-3">Email Address *</label>
+                    <input type="email" id="legal-email" name="email" required
+                            class="form-input w-full px-6 py-3 rounded-2xl border-0 focus:ring-2 focus:ring-red-400 text-white font-medium placeholder-gray-400"
+                            placeholder="your@email.com">
+                </div>
+            </div>
+
+            <h3 class="text-xl font-semibold text-white/90 mb-4 pt-4 border-t border-cyan-500/20 cyber-text">Document Information</h3>
+            <div class="space-y-2">
+                <label for="document-type" class="block text-sm font-semibold text-cyan-100 mb-3">Document Type</label>
+                <select id="document-type" name="documentType"
+                        class="form-input w-full px-6 py-3 rounded-2xl border-0 focus:ring-2 focus:ring-red-400 text-white font-medium">
+                    <option value="" disabled selected class="bg-gray-800">Select document type (optional)</option>
+                    <option value="employment-contract" class="bg-gray-800">Employment Contract</option>
+                    <option value="service-agreement" class="bg-gray-800">Service Agreement</option>
+                    <option value="terms-of-service" class="bg-gray-800">Terms of Service</option>
+                    <option value="privacy-policy" class="bg-gray-800">Privacy Policy</option>
+                    <option value="lease-agreement" class="bg-gray-800">Lease Agreement</option>
+                    <option value="purchase-agreement" class="bg-gray-800">Purchase Agreement</option>
+                    <option value="partnership-agreement" class="bg-gray-800">Partnership Agreement</option>
+                    <option value="nda" class="bg-gray-800">Non-Disclosure Agreement (NDA)</option>
+                    <option value="licensing-agreement" class="bg-gray-800">Licensing Agreement</option>
+                    <option value="other" class="bg-gray-800">Other</option>
+                </select>
+            </div>
+
+            <div class="space-y-4">
+                <label class="block text-sm font-semibold text-cyan-100 mb-4">Legal Document *</label>
+                <div class="file-drop-zone glass-morphism border-2 border-dashed border-red-500/30 rounded-3xl p-8 text-center cursor-pointer hover:border-red-400" 
+                     id="legal-file-drop-zone" 
+                     tabindex="0"
+                     role="button"
+                     aria-label="Upload legal document">
+                    <div class="space-y-3">
+                        <div class="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-white/10 text-3xl">
+                            ⚖️
                         </div>
-                        <h2 class="text-3xl font-bold holographic-text mb-2">Legal Red Flag Detector</h2>
-                        <p class="text-lg text-cyan-100 mb-6 cyber-text max-w-2xl mx-auto">
-                            AI-powered legal document analysis to identify potential issues in contracts, terms of service, and legal agreements.
-                        </p>
-                        <div class="glass-morphism rounded-2xl p-6 border border-red-500/20">
-                            <p class="text-red-300 mb-4 cyber-text font-semibold">Coming Soon!</p>
-                            <p class="text-cyan-100">Our legal analysis tool is currently under development. Stay tuned for updates!</p>
+                        <div>
+                            <p class="text-lg font-semibold text-cyan-100 mb-1">Drop your legal document here</p>
+                            <p class="text-cyan-200 mb-4">or click to browse files</p>
+                            <div class="inline-flex items-center space-x-2 text-sm text-cyan-300">
+                                <span>Supports:</span>
+                                <span class="px-2 py-0.5 bg-white/10 rounded-full">PDF</span>
+                                <span class="px-2 py-0.5 bg-white/10 rounded-full">DOCX</span>
+                                <span class="px-2 py-0.5 bg-white/10 rounded-full">DOC</span>
+                                <span class="px-2 py-0.5 bg-white/10 rounded-full">TXT</span>
+                            </div>
+                        </div>
+                    </div>
+                    <input type="file" id="legal-file-input" name="file" accept=".pdf,.doc,.docx,.txt" required class="hidden">
+                </div>
+
+                <div id="legal-file-preview" class="hidden mt-6">
+                    <div class="glass-morphism rounded-2xl p-6">
+                        <div class="flex items-center space-x-4">
+                            <div class="w-12 h-12 rounded-xl bg-green-500 flex items-center justify-center">
+                                <svg width="24" height="24" fill="white" viewBox="0 0 24 24">
+                                    <path d="M9,16.17L4.83,12L3.41,13.41L9,19L21,7L19.59,5.59L9,16.17Z"/>
+                                </svg>
+                            </div>
+                            <div class="flex-1">
+                                <p class="font-semibold text-cyan-100" id="legal-file-name"></p>
+                                <p class="text-sm text-cyan-200" id="legal-file-size"></p>
+                            </div>
+                            <button type="button" onclick="removeLegalFile()" class="text-red-400 hover:text-red-300 font-medium transition-colors">
+                                Remove
+                            </button>
                         </div>
                     </div>
                 </div>
+            </div>
+
+            <div class="space-y-2">
+                <label for="specific-concerns" class="block text-sm font-semibold text-cyan-100 mb-3">Specific Concerns (Optional)</label>
+                <textarea id="specific-concerns" name="specificConcerns" rows="4"
+                            class="form-input w-full px-6 py-3 rounded-2xl border-0 focus:ring-2 focus:ring-red-400 text-white font-medium placeholder-gray-400"
+                            placeholder="Tell us if you have any specific concerns or areas you'd like us to focus on:
+• Termination clauses
+• Payment terms
+• Liability limitations
+• Intellectual property rights
+• Confidentiality requirements
+• etc."></textarea>
+            </div>
+
+            <button type="submit" class="btn-primary w-full py-4 px-8 rounded-2xl font-bold text-white text-lg shadow-2xl bg-gradient-to-r from-red-500 to-orange-600">
+                <span class="relative z-10 flex items-center justify-center space-x-3">
+                    <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24" class="neural-pulse">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 14H11V9H13M13 18H11V16H13M1 21H23L12 2L1 21Z"/>
+                    </svg>
+                    <span>Analyze Document for Red Flags</span>
+                </span>
+            </button>
+        </form>
+
+        <div id="legal-success-message" class="hidden mt-8">
+            <div class="glass-morphism rounded-2xl p-8 border border-green-400/30 glow-effect">
+                <div class="text-center">
+                    <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-green-500 mb-4">
+                        <svg width="32" height="32" fill="white" viewBox="0 0 24 24">
+                            <path d="M9,16.17L4.83,12L3.41,13.41L9,19L21,7L19.59,5.59L9,16.17Z"/>
+                        </svg>
+                    </div>
+                    <h3 class="text-2xl font-bold text-cyan-100 mb-2">Document Uploaded Successfully!</h3>
+                    <p class="text-green-200">Legal analysis in progress. Results will be sent to <span id="legal-success-email" class="font-semibold text-green-300"></span></p>
+                    <button onclick="resetLegalForm()" class="mt-6 bg-gradient-to-r from-green-500 to-emerald-600 text-white px-6 py-3 rounded-xl font-bold hover:shadow-lg transition-all duration-300">
+                        Analyze Another Document
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
                 <!-- DIET CONTENT -->
                 <div id="diet-content" class="tab-content content-container hidden">
@@ -2034,6 +2154,51 @@
                     }
                 });
             }
+            
+            // Legal form
+            const legalForm = document.getElementById('legal-form');
+            if (legalForm) {
+                legalForm.addEventListener('submit', async (e) => {
+                    e.preventDefault();
+
+                    const submitButton = e.target.querySelector('button[type="submit"]');
+                    const originalButtonContent = submitButton.innerHTML;
+                    
+                    // Show loading state
+                    submitButton.disabled = true;
+                    submitButton.innerHTML = `
+                        <span class="relative z-10 flex items-center justify-center space-x-3">
+                            <div class="loading-spinner"></div>
+                            <span>Analyzing Document...</span>
+                        </span>
+                    `;
+
+                    const formData = new FormData(legalForm);
+
+                    try {
+                        const response = await fetch(legalForm.action, {
+                            method: 'POST',
+                            body: formData
+                        });
+
+                        if (response.ok) {
+                            legalForm.classList.add('hidden');
+                            const successMessage = document.getElementById('legal-success-message');
+                            const successEmail = document.getElementById('legal-success-email');
+                            successMessage.classList.remove('hidden');
+                            successEmail.textContent = formData.get('email');
+                        } else {
+                            throw new Error('Submission failed');
+                        }
+                    } catch (error) {
+                        alert('Submission failed. Please try again.');
+                        console.error('Form submission error:', error);
+                    } finally {
+                        submitButton.disabled = false;
+                        submitButton.innerHTML = originalButtonContent;
+                    }
+                });
+            }
 
             // Diet form
             const dietForm = document.getElementById('diet-form');
@@ -2118,6 +2283,9 @@
             // Setup form handlers
             setupFormHandlers();
             
+            // Setup legal file upload handler
+            setupFileHandling('legal-file-drop-zone', 'legal-file-input', 'legal');
+
             // Initialize resume form
             toggleResumeFormSections();
             
@@ -2172,6 +2340,28 @@
             console.error('Unhandled promise rejection:', event.reason);
             alert('An unexpected error occurred. Please refresh the page and try again.');
         });
+        // Remove legal file function
+        window.removeLegalFile = function() {
+            const fileInput = document.getElementById('legal-file-input');
+            if (fileInput) fileInput.value = '';
+            const preview = document.getElementById('legal-file-preview');
+            if (preview) preview.classList.add('hidden');
+        };
+
+        // Reset legal form function
+        window.resetLegalForm = function() {
+            const successMessage = document.getElementById('legal-success-message');
+            const form = document.getElementById('legal-form');
+            
+            successMessage.classList.add('hidden');
+            form.classList.remove('hidden');
+            form.reset();
+            
+            const fileInput = document.getElementById('legal-file-input');
+            if (fileInput) fileInput.value = '';
+            const filePreview = document.getElementById('legal-file-preview');
+            if (filePreview) filePreview.classList.add('hidden');
+        };
     </script>
 </body>
 </html>

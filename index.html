@@ -3,21 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My AI Buffet — Curated AI Intelligence for Professionals</title>
-    <meta name="description" content="Expert-curated AI insights for business leaders and tech professionals. Daily analysis of AI tools, market trends, and strategic implications you can't find elsewhere.">
+    <title>My AI Buffet — AI insights & tools served fresh daily</title>
+    <meta name="description" content="Stay ahead of the curve with breaking AI news, tool reviews, strategies, and future trends. Premium AI insights served daily.">
     <link rel="canonical" href="https://myaibuffet.com/">
     
     <!-- Open Graph -->
-    <meta property="og:title" content="My AI Buffet — Expert AI Intelligence for Professionals">
-    <meta property="og:description" content="Beyond the hype: strategic AI insights for business leaders who need to separate signal from noise.">
+    <meta property="og:title" content="My AI Buffet — AI insights & tools served fresh daily">
+    <meta property="og:description" content="Premium AI news, tool reviews, and strategies for staying ahead in the AI revolution.">
     <meta property="og:image" content="https://myaibuffet.com/og-image.jpg">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://myaibuffet.com/">
     
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="My AI Buffet — Expert AI Intelligence">
-    <meta name="twitter:description" content="Strategic AI insights beyond the hype for business leaders and tech professionals.">
+    <meta name="twitter:title" content="My AI Buffet — Premium AI insights served daily">
+    <meta name="twitter:description" content="Breaking AI news, tool reviews, and strategies for professionals.">
     <meta name="twitter:image" content="https://myaibuffet.com/og-image.jpg">
     
     <!-- JSON-LD Structured Data -->
@@ -30,11 +30,7 @@
                 "name": "My AI Buffet",
                 "url": "https://myaibuffet.com",
                 "logo": "https://myaibuffet.com/logo.png",
-                "sameAs": ["https://www.linkedin.com/company/myaibuffet"],
-                "founder": {
-                    "@type": "Person",
-                    "name": "AI Industry Analyst"
-                }
+                "sameAs": ["https://www.linkedin.com/", "https://x.com/"]
             },
             {
                 "@type": "WebSite",
@@ -52,24 +48,23 @@
 
     <style>
         :root {
-            /* Colors */
-            --bg: #0B0F14;
-            --surface: #121825;
-            --card: #171E2E;
-            --text-primary: #E8EEF8;
-            --text-muted: #A8B3C7;
+            /* Brand Colors */
+            --bg: #0A0F14;
+            --surface: #121821;
+            --card: #1A2130;
+            --text-primary: #EAEFF7;
+            --text-secondary: #AAB4C8;
             --accent: #6C8CFF;
             --accent-alt: #7B61FF;
-            --success: #23C55E;
+            --border: #2A3445;
+            --success: #22D3EE;
             --warning: #F59E0B;
             --danger: #EF4444;
-            --border: #263248;
-            --premium: #FFD700;
             
             /* Typography */
             --font-family: Inter, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
             --base-size: 16px;
-            --h1-scale: 2.1;
+            --h1-scale: 2.2;
             --h2-scale: 1.6;
             --h3-scale: 1.25;
             
@@ -81,14 +76,14 @@
             --space-xl: 3rem;
             --space-2xl: 4rem;
             
-            /* Component styles */
-            --card-radius: 16px;
-            --button-radius: 12px;
-            --input-radius: 12px;
-            --card-shadow: 0 8px 24px rgba(0,0,0,0.35);
+            /* Layout */
+            --border-radius: 12px;
+            --border-radius-lg: 16px;
+            --shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+            --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.25);
         }
 
-        /* Reset and base styles */
+        /* Reset & Base */
         * {
             margin: 0;
             padding: 0;
@@ -97,11 +92,11 @@
 
         html {
             scroll-behavior: smooth;
+            font-size: var(--base-size);
         }
 
         body {
             font-family: var(--font-family);
-            font-size: var(--base-size);
             line-height: 1.6;
             color: var(--text-primary);
             background-color: var(--bg);
@@ -109,18 +104,19 @@
             -moz-osx-font-smoothing: grayscale;
         }
 
-        /* Skip to content link */
+        /* Skip Link */
         .skip-link {
             position: absolute;
             top: -40px;
             left: 6px;
             background: var(--accent);
             color: white;
-            padding: 8px;
+            padding: 8px 12px;
             text-decoration: none;
-            border-radius: 4px;
+            border-radius: 6px;
             font-weight: 600;
             z-index: 1000;
+            transition: top 0.3s ease;
         }
 
         .skip-link:focus {
@@ -149,7 +145,7 @@
             margin-bottom: var(--space-sm);
         }
 
-        /* Focus styles */
+        /* Focus Management */
         *:focus {
             outline: 2px solid var(--accent);
             outline-offset: 2px;
@@ -158,6 +154,7 @@
         /* Header */
         .header {
             background: var(--surface);
+            backdrop-filter: blur(20px);
             border-bottom: 1px solid var(--border);
             position: sticky;
             top: 0;
@@ -176,10 +173,11 @@
             align-items: center;
             justify-content: space-between;
             padding: var(--space-sm) var(--space-md);
+            gap: var(--space-lg);
         }
 
         .logo {
-            font-size: 1.25rem;
+            font-size: 1.375rem;
             font-weight: 700;
             color: var(--text-primary);
             text-decoration: none;
@@ -189,7 +187,7 @@
         }
 
         .logo::before {
-            content: "🧠";
+            content: "🍽️";
             font-size: 1.5rem;
         }
 
@@ -201,10 +199,11 @@
         }
 
         .nav-link {
-            color: var(--text-muted);
+            color: var(--text-secondary);
             text-decoration: none;
             font-weight: 500;
-            transition: color 0.2s ease;
+            transition: all 0.2s ease;
+            padding: var(--space-xs) 0;
             position: relative;
         }
 
@@ -216,8 +215,8 @@
         .nav-link.emphasized {
             background: linear-gradient(135deg, var(--accent) 0%, var(--accent-alt) 100%);
             color: white;
-            padding: 8px 16px;
-            border-radius: var(--button-radius);
+            padding: 10px 16px;
+            border-radius: var(--border-radius);
             font-weight: 600;
         }
 
@@ -228,43 +227,54 @@
 
         .search-container {
             position: relative;
-            margin-left: var(--space-md);
+            margin-left: auto;
         }
 
         .search-input {
             background: var(--card);
             border: 1px solid var(--border);
-            border-radius: var(--input-radius);
-            padding: 8px 12px 8px 36px;
+            border-radius: var(--border-radius);
+            padding: 10px 14px 10px 40px;
             color: var(--text-primary);
             font-size: 0.9rem;
-            width: 240px;
+            width: 250px;
             transition: all 0.2s ease;
         }
 
         .search-input:focus {
             border-color: var(--accent);
             box-shadow: 0 0 0 3px rgba(108, 140, 255, 0.1);
-            width: 280px;
+            width: 300px;
         }
 
         .search-container::before {
             content: "🔍";
             position: absolute;
-            left: 10px;
+            left: 12px;
             top: 50%;
             transform: translateY(-50%);
+            color: var(--text-secondary);
             pointer-events: none;
         }
 
         .search-input::placeholder {
-            color: var(--text-muted);
+            color: var(--text-secondary);
         }
 
-        /* Mobile navigation */
+        /* Mobile Navigation */
         @media (max-width: 768px) {
+            .nav {
+                flex-wrap: wrap;
+                gap: var(--space-md);
+            }
+            
             .nav-links {
-                display: none;
+                order: 3;
+                width: 100%;
+                justify-content: center;
+                padding-top: var(--space-sm);
+                border-top: 1px solid var(--border);
+                margin-top: var(--space-sm);
             }
             
             .search-container {
@@ -272,39 +282,40 @@
             }
             
             .search-input {
-                width: 180px;
+                width: 200px;
             }
             
             .search-input:focus {
-                width: 200px;
+                width: 220px;
             }
         }
 
-        /* Main layout */
+        /* Container */
         .container {
             max-width: 1200px;
             margin: 0 auto;
             padding: 0 var(--space-md);
         }
 
+        /* Main Layout */
         .main-content {
             display: grid;
-            grid-template-columns: 1fr 320px;
-            gap: var(--space-xl);
+            grid-template-columns: 1fr 300px;
+            gap: var(--space-2xl);
             margin-top: var(--space-xl);
         }
 
         @media (max-width: 1024px) {
             .main-content {
                 grid-template-columns: 1fr;
-                gap: var(--space-lg);
+                gap: var(--space-xl);
             }
         }
 
-        /* Hero section */
+        /* Hero Section */
         .hero {
             background: linear-gradient(135deg, var(--surface) 0%, var(--card) 100%);
-            border-radius: var(--card-radius);
+            border-radius: var(--border-radius-lg);
             padding: var(--space-2xl);
             margin-bottom: var(--space-xl);
             text-align: center;
@@ -316,12 +327,18 @@
         .hero::before {
             content: '';
             position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: radial-gradient(circle at 70% 30%, rgba(108, 140, 255, 0.1) 0%, transparent 50%);
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(108, 140, 255, 0.05) 0%, transparent 70%);
+            animation: rotate 20s linear infinite;
             pointer-events: none;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
         }
 
         .hero-content {
@@ -329,28 +346,17 @@
             z-index: 1;
         }
 
-        .hero-badge {
-            background: var(--premium);
-            color: var(--bg);
-            padding: 6px 16px;
-            border-radius: 20px;
-            font-size: 0.85rem;
-            font-weight: 700;
-            margin-bottom: var(--space-md);
-            display: inline-block;
-        }
-
         .hero-headline {
             background: linear-gradient(135deg, var(--accent) 0%, var(--accent-alt) 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
-            margin-bottom: var(--space-sm);
+            margin-bottom: var(--space-md);
         }
 
         .hero-subheadline {
             font-size: 1.125rem;
-            color: var(--text-muted);
+            color: var(--text-secondary);
             margin-bottom: var(--space-xl);
             max-width: 600px;
             margin-left: auto;
@@ -364,59 +370,37 @@
             flex-wrap: wrap;
         }
 
-        .value-props {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: var(--space-md);
-            margin-top: var(--space-lg);
-            text-align: left;
-        }
-
-        .value-prop {
-            display: flex;
-            align-items: center;
-            gap: var(--space-sm);
-            color: var(--text-muted);
-            font-size: 0.9rem;
-        }
-
-        .value-prop::before {
-            content: "✓";
-            color: var(--success);
-            font-weight: bold;
-            font-size: 1.1rem;
-        }
-
         /* Buttons */
         .btn {
             display: inline-flex;
             align-items: center;
             gap: var(--space-xs);
-            padding: 12px 18px;
-            border-radius: var(--button-radius);
+            padding: 12px 20px;
+            border-radius: var(--border-radius);
             text-decoration: none;
             font-weight: 600;
             font-size: 0.9rem;
             transition: all 0.2s ease;
             border: none;
             cursor: pointer;
+            white-space: nowrap;
         }
 
         .btn-primary {
             background: linear-gradient(135deg, var(--accent) 0%, var(--accent-alt) 100%);
             color: white;
-            box-shadow: 0 4px 12px rgba(108, 140, 255, 0.3);
+            box-shadow: var(--shadow);
         }
 
         .btn-primary:hover,
         .btn-primary:focus {
             transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(108, 140, 255, 0.4);
+            box-shadow: var(--shadow-lg);
         }
 
         .btn-secondary {
             background: transparent;
-            color: var(--text-muted);
+            color: var(--text-secondary);
             border: 1px solid var(--border);
         }
 
@@ -431,206 +415,137 @@
         .card {
             background: var(--card);
             border: 1px solid var(--border);
-            border-radius: var(--card-radius);
+            border-radius: var(--border-radius-lg);
             padding: var(--space-lg);
-            box-shadow: var(--card-shadow);
+            box-shadow: var(--shadow);
             transition: all 0.3s ease;
         }
 
         .card:hover {
             transform: translateY(-4px);
-            border-color: var(--accent);
-            box-shadow: 0 12px 32px rgba(0,0,0,0.4);
+            box-shadow: var(--shadow-lg);
+            border-color: rgba(108, 140, 255, 0.3);
         }
 
-        /* Real-time data section */
-        .live-data {
-            background: linear-gradient(135deg, var(--surface) 0%, var(--card) 100%);
-            border: 1px solid var(--success);
-            border-radius: var(--card-radius);
-            padding: var(--space-lg);
+        /* Top Stories */
+        .top-stories {
             margin-bottom: var(--space-xl);
-            position: relative;
         }
 
-        .live-indicator {
-            position: absolute;
-            top: -8px;
-            right: var(--space-lg);
-            background: var(--success);
-            color: white;
-            padding: 4px 12px;
-            border-radius: 12px;
-            font-size: 0.8rem;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        .live-indicator::before {
-            content: "";
-            width: 8px;
-            height: 8px;
-            background: white;
-            border-radius: 50%;
-            animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.5; }
-        }
-
-        .data-grid {
+        .stories-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: var(--space-md);
-            margin-top: var(--space-md);
-        }
-
-        .data-item {
-            text-align: center;
-            padding: var(--space-md);
-            background: rgba(255, 255, 255, 0.02);
-            border-radius: 8px;
-        }
-
-        .data-value {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: var(--accent);
-            margin-bottom: var(--space-xs);
-        }
-
-        .data-label {
-            font-size: 0.9rem;
-            color: var(--text-muted);
-        }
-
-        /* Analysis section */
-        .analysis-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: var(--space-lg);
             margin-top: var(--space-md);
         }
 
-        .analysis-card {
-            border-left: 4px solid var(--accent);
-            transition: all 0.2s ease;
+        .story-card {
+            cursor: pointer;
         }
 
-        .analysis-card:hover {
-            border-left-color: var(--accent-alt);
-        }
-
-        .analysis-meta {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: var(--space-sm);
-            font-size: 0.85rem;
-        }
-
-        .analysis-type {
-            background: var(--accent);
-            color: white;
-            padding: 4px 8px;
-            border-radius: 4px;
-            font-weight: 600;
-        }
-
-        .analysis-time {
-            color: var(--text-muted);
-        }
-
-        .analysis-title {
+        .story-title {
             font-size: 1.1rem;
             font-weight: 600;
             margin-bottom: var(--space-xs);
             color: var(--text-primary);
         }
 
-        .analysis-title a {
+        .story-title a {
             color: inherit;
             text-decoration: none;
+            transition: color 0.2s ease;
         }
 
-        .analysis-title a:hover {
+        .story-title a:hover {
             color: var(--accent);
         }
 
-        .analysis-excerpt {
-            color: var(--text-muted);
+        .story-excerpt {
+            color: var(--text-secondary);
             font-size: 0.9rem;
             line-height: 1.5;
-            margin-bottom: var(--space-sm);
         }
 
-        .analysis-footer {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-size: 0.8rem;
-        }
-
-        .read-time {
-            color: var(--text-muted);
-        }
-
-        .analysis-source {
-            color: var(--accent);
-            font-weight: 500;
-        }
-
-        /* Premium content teaser */
-        .premium-teaser {
-            background: linear-gradient(135deg, var(--premium) 0%, #FFE55C 100%);
-            color: var(--bg);
-            border-radius: var(--card-radius);
-            padding: var(--space-lg);
-            margin: var(--space-xl) 0;
-            text-align: center;
+        /* Buffet Pick */
+        .buffet-pick {
+            background: linear-gradient(135deg, var(--accent) 0%, var(--accent-alt) 100%);
+            color: white;
+            margin-bottom: var(--space-xl);
             position: relative;
             overflow: hidden;
         }
 
-        .premium-teaser::before {
-            content: "⭐";
+        .buffet-pick::before {
+            content: "🍽️";
             position: absolute;
-            top: 10px;
-            right: 10px;
-            font-size: 1.5rem;
+            top: 20px;
+            right: 20px;
+            font-size: 3rem;
+            opacity: 0.2;
         }
 
-        .premium-teaser h3 {
-            color: var(--bg);
-            margin-bottom: var(--space-sm);
+        .buffet-pick h2,
+        .buffet-pick p {
+            color: white;
+            position: relative;
+            z-index: 1;
         }
 
-        .premium-teaser p {
-            color: var(--bg);
-            opacity: 0.8;
-            margin-bottom: var(--space-md);
+        .buffet-pick .btn {
+            background: white;
+            color: var(--accent);
+            margin-top: var(--space-md);
         }
 
-        .premium-teaser .btn {
-            background: var(--bg);
-            color: var(--premium);
-            border: none;
-        }
-
-        .premium-teaser .btn:hover {
-            background: var(--surface);
+        .buffet-pick .btn:hover {
+            background: rgba(255, 255, 255, 0.95);
             transform: translateY(-2px);
         }
 
-        /* Newsletter section */
+        /* Latest Articles */
+        .latest-articles {
+            margin-bottom: var(--space-xl);
+        }
+
+        .articles-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: var(--space-lg);
+            margin-top: var(--space-md);
+        }
+
+        .article-card {
+            cursor: pointer;
+        }
+
+        .article-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: var(--space-xs);
+            color: var(--text-primary);
+        }
+
+        .article-title a {
+            color: inherit;
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+
+        .article-title a:hover {
+            color: var(--accent);
+        }
+
+        .article-excerpt {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        /* Newsletter */
         .newsletter {
             background: var(--surface);
             border: 1px solid var(--border);
-            border-radius: var(--card-radius);
+            border-radius: var(--border-radius-lg);
             padding: var(--space-xl);
             text-align: center;
             margin: var(--space-xl) 0;
@@ -648,35 +563,21 @@
             font-size: 1.5rem;
         }
 
-        .newsletter-stats {
-            display: flex;
-            justify-content: center;
-            gap: var(--space-lg);
-            margin: var(--space-md) 0;
-            font-size: 0.9rem;
-            color: var(--text-muted);
-        }
-
-        .newsletter-stat {
-            display: flex;
-            align-items: center;
-            gap: var(--space-xs);
-        }
-
         .newsletter-form {
             display: flex;
             gap: var(--space-sm);
             max-width: 400px;
-            margin: var(--space-md) auto 0;
+            margin: var(--space-lg) auto 0;
         }
 
         .newsletter-input {
             flex: 1;
-            padding: 12px 14px;
+            padding: 12px 16px;
             border: 1px solid var(--border);
-            border-radius: var(--input-radius);
+            border-radius: var(--border-radius);
             background: var(--card);
             color: var(--text-primary);
+            font-size: 0.9rem;
             transition: all 0.2s ease;
         }
 
@@ -686,24 +587,57 @@
         }
 
         .newsletter-input::placeholder {
-            color: var(--text-muted);
+            color: var(--text-secondary);
         }
 
         .privacy-note {
             font-size: 0.8rem;
-            color: var(--text-muted);
-            margin-top: var(--space-xs);
+            color: var(--text-secondary);
+            margin-top: var(--space-sm);
         }
 
         @media (max-width: 480px) {
             .newsletter-form {
                 flex-direction: column;
             }
-            
-            .newsletter-stats {
-                flex-direction: column;
-                gap: var(--space-sm);
-            }
+        }
+
+        /* Donations */
+        .donations {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--border-radius-lg);
+            padding: var(--space-lg);
+            text-align: center;
+            margin-bottom: var(--space-xl);
+        }
+
+        .donation-options {
+            display: flex;
+            gap: var(--space-md);
+            justify-content: center;
+            margin-top: var(--space-md);
+            flex-wrap: wrap;
+        }
+
+        .donation-link {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-xs);
+            padding: 10px 16px;
+            background: var(--card);
+            color: var(--text-secondary);
+            text-decoration: none;
+            border-radius: var(--border-radius);
+            border: 1px solid var(--border);
+            transition: all 0.2s ease;
+            font-weight: 500;
+        }
+
+        .donation-link:hover {
+            color: var(--text-primary);
+            border-color: var(--accent);
+            transform: translateY(-1px);
         }
 
         /* Sidebar */
@@ -716,84 +650,59 @@
         .sidebar-card {
             background: var(--surface);
             border: 1px solid var(--border);
-            border-radius: var(--card-radius);
+            border-radius: var(--border-radius-lg);
             padding: var(--space-lg);
         }
 
-        .trending-tools {
+        .sidebar-card h3 {
+            color: var(--text-primary);
+            margin-bottom: var(--space-md);
+            font-size: 1.1rem;
+        }
+
+        .buffet-tools {
             background: linear-gradient(135deg, var(--accent) 0%, var(--accent-alt) 100%);
             color: white;
         }
 
-        .trending-tools h3 {
+        .buffet-tools h3 {
             color: white;
-            margin-bottom: var(--space-md);
         }
 
-        .tool-list {
+        .tool-links {
             list-style: none;
-        }
-
-        .tool-item {
             display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: var(--space-sm) 0;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            flex-direction: column;
+            gap: var(--space-sm);
         }
 
-        .tool-item:last-child {
-            border-bottom: none;
-        }
-
-        .tool-name {
-            font-weight: 600;
+        .tool-link {
             color: white;
+            text-decoration: none;
+            padding: var(--space-xs) 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.2s ease;
         }
 
-        .tool-category {
-            font-size: 0.8rem;
-            opacity: 0.8;
+        .tool-link:hover {
+            color: rgba(255, 255, 255, 0.8);
+            padding-left: var(--space-xs);
         }
 
-        .tool-trend {
-            font-size: 0.8rem;
-            color: var(--success);
-            font-weight: 600;
-        }
-
-        .quick-insights {
-            border-left: 3px solid var(--warning);
-        }
-
-        .insight-list {
-            list-style: none;
-        }
-
-        .insight-item {
-            padding: var(--space-sm) 0;
-            border-bottom: 1px solid var(--border);
-            font-size: 0.9rem;
-        }
-
-        .insight-item:last-child {
+        .tool-link:last-child {
             border-bottom: none;
         }
 
-        .insight-item a {
-            color: var(--text-muted);
-            text-decoration: none;
-            transition: color 0.2s ease;
-        }
-
-        .insight-item a:hover {
-            color: var(--accent);
-        }
-
-        .insight-time {
-            font-size: 0.8rem;
-            color: var(--text-muted);
-            margin-top: var(--space-xs);
+        .sponsor-card {
+            background: var(--card);
+            border: 2px dashed var(--border);
+            text-align: center;
+            color: var(--text-secondary);
+            min-height: 200px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
         }
 
         /* Footer */
@@ -813,20 +722,19 @@
 
         .footer-column h3 {
             color: var(--text-primary);
-            margin-bottom: var(--space-sm);
+            margin-bottom: var(--space-md);
             font-size: 1rem;
         }
 
         .footer-links {
             list-style: none;
-        }
-
-        .footer-links li {
-            margin-bottom: var(--space-xs);
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-xs);
         }
 
         .footer-link {
-            color: var(--text-muted);
+            color: var(--text-secondary);
             text-decoration: none;
             transition: color 0.2s ease;
         }
@@ -837,13 +745,13 @@
 
         .footer-legal {
             text-align: center;
-            color: var(--text-muted);
+            color: var(--text-secondary);
             font-size: 0.9rem;
             padding-top: var(--space-lg);
             border-top: 1px solid var(--border);
         }
 
-        /* Utility classes */
+        /* Utility Classes */
         .hidden {
             display: none;
         }
@@ -860,27 +768,16 @@
             border: 0;
         }
 
-        /* Loading states */
+        /* Loading States */
         .loading {
             opacity: 0.6;
             pointer-events: none;
         }
 
-        .skeleton {
-            background: linear-gradient(90deg, var(--surface) 25%, var(--card) 50%, var(--surface) 75%);
-            background-size: 200% 100%;
-            animation: loading 1.5s infinite;
-        }
-
-        @keyframes loading {
-            0% { background-position: 200% 0; }
-            100% { background-position: -200% 0; }
-        }
-
-        /* Responsive adjustments */
+        /* Responsive Adjustments */
         @media (max-width: 768px) {
             .hero {
-                padding: var(--space-lg);
+                padding: var(--space-xl) var(--space-lg);
             }
 
             .hero-actions {
@@ -894,17 +791,70 @@
                 justify-content: center;
             }
 
-            .analysis-grid {
+            .stories-grid,
+            .articles-grid {
                 grid-template-columns: 1fr;
             }
 
-            .data-grid {
-                grid-template-columns: repeat(2, 1fr);
+            .donation-options {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+
+        @media (max-width: 480px) {
+            :root {
+                --space-md: 1rem;
+                --space-lg: 1.5rem;
+                --space-xl: 2rem;
+                --space-2xl: 2.5rem;
             }
 
-            .value-props {
-                grid-template-columns: 1fr;
+            .container {
+                padding: 0 var(--space-sm);
             }
+
+            .hero {
+                padding: var(--space-lg);
+            }
+
+            h1 {
+                font-size: calc(var(--base-size) * 1.8);
+            }
+
+            h2 {
+                font-size: calc(var(--base-size) * 1.4);
+            }
+        }
+
+        /* Animation Classes */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.6s ease;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--border);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--accent);
         }
     </style>
 </head>
@@ -918,19 +868,19 @@
             <a href="/" class="logo" aria-label="My AI Buffet homepage">My AI Buffet</a>
             
             <ul class="nav-links">
-                <li><a href="/" class="nav-link">Intelligence</a></li>
-                <li><a href="/analysis" class="nav-link">Deep Analysis</a></li>
-                <li><a href="/tools" class="nav-link">Tool Intel</a></li>
-                <li><a href="/market" class="nav-link">Market Data</a></li>
-                <li><a href="/premium" class="nav-link emphasized">Premium Access</a></li>
+                <li><a href="/" class="nav-link" aria-current="page">Home</a></li>
+                <li><a href="/blog" class="nav-link">News</a></li>
+                <li><a href="/projects" class="nav-link">Tools</a></li>
+                <li><a href="/resume" class="nav-link emphasized">Resume Builder</a></li>
+                <li><a href="/about" class="nav-link">About</a></li>
             </ul>
 
             <div class="search-container">
                 <input 
                     type="search" 
                     class="search-input" 
-                    placeholder="Search insights..."
-                    aria-label="Search AI insights and analysis"
+                    placeholder="Search articles..."
+                    aria-label="Search articles"
                     id="search-input"
                 >
             </div>
@@ -943,289 +893,134 @@
             <!-- Hero section -->
             <section class="hero" aria-labelledby="hero-headline">
                 <div class="hero-content">
-                    <div class="hero-badge">Expert AI Intelligence</div>
-                    <h1 id="hero-headline" class="hero-headline">Beyond the AI hype. Strategic insights that matter.</h1>
-                    <p class="hero-subheadline">Curated intelligence for business leaders who need to separate signal from noise in the AI revolution. No fluff, just actionable insights.</p>
+                    <h1 id="hero-headline" class="hero-headline">AI insights & tools — served fresh daily.</h1>
+                    <p class="hero-subheadline">Stay ahead of the curve with breaking AI news, tool reviews, strategies, and future trends.</p>
                     <div class="hero-actions">
-                        <a href="#newsletter" class="btn btn-primary">Get Weekly Intelligence Brief</a>
-                        <a href="/analysis" class="btn btn-secondary">Read Latest Analysis</a>
-                    </div>
-                    <div class="value-props">
-                        <div class="value-prop">Expert curation, not just aggregation</div>
-                        <div class="value-prop">Strategic business implications</div>
-                        <div class="value-prop">Early access to emerging tools</div>
-                        <div class="value-prop">Data-driven market analysis</div>
+                        <a href="/resume" class="btn btn-primary">Explore Resume Builder</a>
+                        <a href="#newsletter" class="btn btn-secondary">Subscribe to AI Digest</a>
                     </div>
                 </div>
             </section>
 
             <div class="main-content">
                 <div class="content-area">
-                    <!-- Live market data -->
-                    <section class="live-data" aria-labelledby="live-data-title">
-                        <div class="live-indicator">LIVE DATA</div>
-                        <h2 id="live-data-title">AI Market Pulse</h2>
-                        <p style="color: var(--text-muted); margin-bottom: var(--space-md);">Real-time indicators of AI market activity and sentiment</p>
+                    <!-- Top Stories -->
+                    <section class="top-stories" aria-labelledby="top-stories-title">
+                        <h2 id="top-stories-title">Top AI Stories</h2>
                         
-                        <div class="data-grid">
-                            <div class="data-item">
-                                <div class="data-value">$2.1B</div>
-                                <div class="data-label">AI Funding (7 days)</div>
-                            </div>
-                            <div class="data-item">
-                                <div class="data-value">47</div>
-                                <div class="data-label">New Tools Launched</div>
-                            </div>
-                            <div class="data-item">
-                                <div class="data-value">156%</div>
-                                <div class="data-label">Job Posting Growth</div>
-                            </div>
-                            <div class="data-item">
-                                <div class="data-value">92</div>
-                                <div class="data-label">Research Papers</div>
-                            </div>
+                        <div class="stories-grid">
+                            <article class="card story-card">
+                                <h3 class="story-title">
+                                    <a href="/blog/openai-release">OpenAI's Latest Release Explained</a>
+                                </h3>
+                                <p class="story-excerpt">What the new model means for developers and everyday users.</p>
+                            </article>
+                            
+                            <article class="card story-card">
+                                <h3 class="story-title">
+                                    <a href="/blog/scary-ai-2025">The Scary Side of AI in 2025</a>
+                                </h3>
+                                <p class="story-excerpt">From deepfakes to job disruption — a reality check.</p>
+                            </article>
+                            
+                            <article class="card story-card">
+                                <h3 class="story-title">
+                                    <a href="/blog/ai-tools-roundup">Best New AI Tools This Week</a>
+                                </h3>
+                                <p class="story-excerpt">Hand-picked tools to boost your productivity and creativity.</p>
+                            </article>
                         </div>
                     </section>
 
-                    <!-- Expert Analysis -->
-                    <section aria-labelledby="analysis-title">
-                        <h2 id="analysis-title">Strategic Analysis</h2>
-                        <p style="color: var(--text-muted); margin-bottom: var(--space-md);">Deep-dive analysis with business implications you won't find elsewhere</p>
+                    <!-- Buffet Pick -->
+                    <section class="card buffet-pick" aria-labelledby="buffet-pick-title">
+                        <h2 id="buffet-pick-title">🍽️ Buffet Pick</h2>
+                        <p>Our featured tool from the buffet. This week: Resume Builder — tailor your resume to any job description, beat ATS filters, and land interviews.</p>
+                        <a href="/resume" class="btn">Try Resume Builder Free</a>
+                    </section>
+
+                    <!-- Latest Articles -->
+                    <section class="latest-articles" aria-labelledby="latest-articles-title">
+                        <h2 id="latest-articles-title">Latest Articles</h2>
                         
-                        <div class="analysis-grid">
-                            <article class="card analysis-card">
-                                <div class="analysis-meta">
-                                    <span class="analysis-type">Market Intel</span>
-                                    <span class="analysis-time">Updated 2h ago</span>
-                                </div>
-                                <h3 class="analysis-title">
-                                    <a href="/analysis/enterprise-ai-adoption-patterns">Enterprise AI Adoption: The Hidden Patterns</a>
+                        <div class="articles-grid" id="articles-grid">
+                            <article class="card article-card" data-title="How to Beat ATS Bots">
+                                <h3 class="article-title">
+                                    <a href="/blog/ats-guide">How to Beat ATS Bots</a>
                                 </h3>
-                                <p class="analysis-excerpt">Why 73% of Fortune 500 companies are quietly pivoting their AI strategies. Exclusive data from 200+ enterprise deployments reveals the real adoption drivers.</p>
-                                <div class="analysis-footer">
-                                    <span class="read-time">12 min analysis</span>
-                                    <span class="analysis-source">Exclusive Research</span>
-                                </div>
+                                <p class="article-excerpt">A practical guide for job seekers in 2025.</p>
                             </article>
                             
-                            <article class="card analysis-card">
-                                <div class="analysis-meta">
-                                    <span class="analysis-type">Tool Analysis</span>
-                                    <span class="analysis-time">Updated 4h ago</span>
-                                </div>
-                                <h3 class="analysis-title">
-                                    <a href="/analysis/ai-recruitment-stack">The AI Recruitment Stack: What Actually Works</a>
+                            <article class="card article-card" data-title="LLM Prompts That Actually Work">
+                                <h3 class="article-title">
+                                    <a href="/blog/prompt-patterns">LLM Prompts That Actually Work</a>
                                 </h3>
-                                <p class="analysis-excerpt">We tested 15 AI recruitment tools with real job placements. Here's the definitive ranking and ROI analysis for talent acquisition teams.</p>
-                                <div class="analysis-footer">
-                                    <span class="read-time">8 min analysis</span>
-                                    <span class="analysis-source">Lab Testing</span>
-                                </div>
+                                <p class="article-excerpt">Effective prompt patterns for everyday use.</p>
                             </article>
                             
-                            <article class="card analysis-card">
-                                <div class="analysis-meta">
-                                    <span class="analysis-type">Trend Analysis</span>
-                                    <span class="analysis-time">Updated 6h ago</span>
-                                </div>
-                                <h3 class="analysis-title">
-                                    <a href="/analysis/multimodal-ai-business-impact">Multimodal AI: Beyond the Demo Videos</a>
+                            <article class="card article-card" data-title="AI Scandals This Month">
+                                <h3 class="article-title">
+                                    <a href="/blog/ai-scandals">AI Scandals This Month</a>
                                 </h3>
-                                <p class="analysis-excerpt">GPT-4V, Gemini Pro Vision, and Claude 3 in real business workflows. Cost analysis, accuracy benchmarks, and implementation roadmaps.</p>
-                                <div class="analysis-footer">
-                                    <span class="read-time">15 min analysis</span>
-                                    <span class="analysis-source">Comparative Study</span>
-                                </div>
-                            </article>
-
-                            <article class="card analysis-card">
-                                <div class="analysis-meta">
-                                    <span class="analysis-type">Industry Intel</span>
-                                    <span class="analysis-time">Updated 8h ago</span>
-                                </div>
-                                <h3 class="analysis-title">
-                                    <a href="/analysis/ai-regulation-business-implications">AI Regulation: The Business Translation</a>
-                                </h3>
-                                <p class="analysis-excerpt">EU AI Act, China's draft measures, and US executive orders. What enterprise leaders need to know about compliance costs and market access.</p>
-                                <div class="analysis-footer">
-                                    <span class="read-time">10 min analysis</span>
-                                    <span class="analysis-source">Policy Analysis</span>
-                                </div>
-                            </article>
-
-                            <article class="card analysis-card">
-                                <div class="analysis-meta">
-                                    <span class="analysis-type">Tool Spotlight</span>
-                                    <span class="analysis-time">Updated 12h ago</span>
-                                </div>
-                                <h3 class="analysis-title">
-                                    <a href="/tools/resume-optimization-comparative">Resume AI Tools: Enterprise-Grade Testing</a>
-                                </h3>
-                                <p class="analysis-excerpt">Comprehensive analysis of AI resume optimization platforms. ATS compatibility, accuracy rates, and ROI data from 500+ job applications.</p>
-                                <div class="analysis-footer">
-                                    <span class="read-time">20 min analysis</span>
-                                    <span class="analysis-source">Tool Research</span>
-                                </div>
-                            </article>
-
-                            <article class="card analysis-card">
-                                <div class="analysis-meta">
-                                    <span class="analysis-type">Market Data</span>
-                                    <span class="analysis-time">Updated 1d ago</span>
-                                </div>
-                                <h3 class="analysis-title">
-                                    <a href="/analysis/ai-startup-valuation-metrics">AI Startup Valuations: The New Metrics</a>
-                                </h3>
-                                <p class="analysis-excerpt">Beyond revenue multiples: How VCs are valuing AI companies in 2025. Data from 150+ funding rounds reveals the new valuation framework.</p>
-                                <div class="analysis-footer">
-                                    <span class="read-time">14 min analysis</span>
-                                    <span class="analysis-source">Market Research</span>
-                                </div>
+                                <p class="article-excerpt">When AI goes wrong — real cases that matter.</p>
                             </article>
                         </div>
                         
                         <div style="text-align: center; margin-top: var(--space-lg);">
-                            <a href="/analysis" class="btn btn-secondary">View All Strategic Analysis</a>
+                            <a href="/blog" class="btn btn-secondary">View All Articles</a>
                         </div>
                     </section>
 
-                    <!-- Premium content teaser -->
-                    <section class="premium-teaser" aria-labelledby="premium-title">
-                        <h3 id="premium-title">Premium Intelligence Access</h3>
-                        <p>Get exclusive market data, early tool access, and strategic frameworks used by Fortune 500 AI teams. Join 2,000+ enterprise leaders.</p>
-                        <a href="/premium" class="btn">Unlock Premium Intelligence</a>
-                    </section>
-
-                    <!-- Newsletter section -->
+                    <!-- Newsletter -->
                     <section class="newsletter" id="newsletter" aria-labelledby="newsletter-title">
-                        <h2 id="newsletter-title">Weekly AI Intelligence Brief</h2>
-                        <p>Strategic insights delivered every Monday. Market analysis, tool reviews, and business implications.</p>
-                        
-                        <div class="newsletter-stats">
-                            <div class="newsletter-stat">
-                                <span>📊</span>
-                                <span>8,500+ executives</span>
-                            </div>
-                            <div class="newsletter-stat">
-                                <span>⭐</span>
-                                <span>4.9/5 rating</span>
-                            </div>
-                            <div class="newsletter-stat">
-                                <span>🎯</span>
-                                <span>67% open rate</span>
-                            </div>
-                        </div>
+                        <h2 id="newsletter-title">Get the Weekly AI Digest</h2>
+                        <p>1 email, 5 minutes: top AI news, tool reviews, and strategies.</p>
                         
                         <form class="newsletter-form" method="POST" action="/newsletter/subscribe" aria-label="Newsletter signup">
                             <input 
                                 type="email" 
                                 name="email" 
                                 class="newsletter-input" 
-                                placeholder="your@company.com" 
+                                placeholder="you@example.com" 
                                 required
                                 aria-label="Email address"
                             >
-                            <button type="submit" class="btn btn-primary">Get Intelligence Brief</button>
+                            <button type="submit" class="btn btn-primary">Subscribe</button>
                         </form>
-                        <p class="privacy-note">Trusted by leaders at Google, Microsoft, OpenAI. Unsubscribe anytime.</p>
+                        <p class="privacy-note">No spam. Unsubscribe anytime.</p>
+                    </section>
+
+                    <!-- Donations -->
+                    <section class="donations" aria-labelledby="donations-title">
+                        <h2 id="donations-title">Support the Buffet</h2>
+                        <p>Enjoying the blog? Help keep it free and growing.</p>
+                        
+                        <div class="donation-options">
+                            <a href="https://buymeacoffee.com" class="donation-link" target="_blank" rel="noopener">
+                                ☕ Buy me a coffee
+                            </a>
+                            <a href="https://patreon.com" class="donation-link" target="_blank" rel="noopener">
+                                🎯 Patreon
+                            </a>
+                        </div>
                     </section>
                 </div>
 
                 <!-- Sidebar -->
                 <aside class="sidebar" role="complementary" aria-label="Sidebar">
-                    <!-- Trending Tools -->
-                    <div class="sidebar-card trending-tools">
-                        <h3>🔥 Trending AI Tools</h3>
-                        <ul class="tool-list">
-                            <li class="tool-item">
-                                <div>
-                                    <div class="tool-name">Claude 3.5 Sonnet</div>
-                                    <div class="tool-category">Reasoning</div>
-                                </div>
-                                <div class="tool-trend">+245%</div>
-                            </li>
-                            <li class="tool-item">
-                                <div>
-                                    <div class="tool-name">Cursor IDE</div>
-                                    <div class="tool-category">Coding</div>
-                                </div>
-                                <div class="tool-trend">+189%</div>
-                            </li>
-                            <li class="tool-item">
-                                <div>
-                                    <div class="tool-name">Perplexity Pro</div>
-                                    <div class="tool-category">Research</div>
-                                </div>
-                                <div class="tool-trend">+156%</div>
-                            </li>
-                            <li class="tool-item">
-                                <div>
-                                    <div class="tool-name">Resume Builder AI</div>
-                                    <div class="tool-category">Career</div>
-                                </div>
-                                <div class="tool-trend">+134%</div>
-                            </li>
+                    <!-- Buffet Tools -->
+                    <div class="sidebar-card buffet-tools">
+                        <h3>Buffet Tools</h3>
+                        <ul class="tool-links">
+                            <li><a href="/resume" class="tool-link">Resume Builder →</a></li>
+                            <li><a href="/projects" class="tool-link">Future Tools Coming Soon</a></li>
                         </ul>
                     </div>
 
-                    <!-- Quick Insights -->
-                    <div class="sidebar-card quick-insights">
-                        <h3>💡 Quick Insights</h3>
-                        <ul class="insight-list">
-                            <li class="insight-item">
-                                <a href="/insights/openai-pricing-strategy">OpenAI's pricing strategy signals market maturation</a>
-                                <div class="insight-time">2 hours ago</div>
-                            </li>
-                            <li class="insight-item">
-                                <a href="/insights/enterprise-ai-budgets">Enterprise AI budgets up 340% in Q4</a>
-                                <div class="insight-time">4 hours ago</div>
-                            </li>
-                            <li class="insight-item">
-                                <a href="/insights/ai-talent-shortage">AI talent shortage reaching critical levels</a>
-                                <div class="insight-time">6 hours ago</div>
-                            </li>
-                            <li class="insight-item">
-                                <a href="/insights/regulation-compliance-costs">Regulation compliance costs: $2M average</a>
-                                <div class="insight-time">8 hours ago</div>
-                            </li>
-                            <li class="insight-item">
-                                <a href="/insights/multimodal-adoption">Multimodal AI adoption accelerating in Q1</a>
-                                <div class="insight-time">12 hours ago</div>
-                            </li>
-                        </ul>
-                    </div>
-
-                    <!-- Market Indicators -->
-                    <div class="sidebar-card">
-                        <h3>📈 Market Indicators</h3>
-                        <div style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.6;">
-                            <div style="display: flex; justify-content: space-between; margin-bottom: var(--space-xs);">
-                                <span>AI Index Score:</span>
-                                <span style="color: var(--success); font-weight: 600;">847 ↗</span>
-                            </div>
-                            <div style="display: flex; justify-content: space-between; margin-bottom: var(--space-xs);">
-                                <span>Funding Velocity:</span>
-                                <span style="color: var(--success); font-weight: 600;">High ↗</span>
-                            </div>
-                            <div style="display: flex; justify-content: space-between; margin-bottom: var(--space-xs);">
-                                <span>Talent Demand:</span>
-                                <span style="color: var(--danger); font-weight: 600;">Critical ↗</span>
-                            </div>
-                            <div style="display: flex; justify-content: space-between; margin-bottom: var(--space-xs);">
-                                <span>Regulation Risk:</span>
-                                <span style="color: var(--warning); font-weight: 600;">Medium →</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- About Author -->
-                    <div class="sidebar-card">
-                        <h3>👨‍💼 About the Analyst</h3>
-                        <p style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.6;">
-                            Former AI strategy lead at Fortune 100 company. 12+ years analyzing technology markets. 
-                            Featured in WSJ, Bloomberg, TechCrunch.
-                        </p>
-                        <a href="/about" style="color: var(--accent); font-size: 0.9rem; text-decoration: none;">Read full bio →</a>
+                    <!-- Sponsor Card -->
+                    <div class="sidebar-card sponsor-card">
+                        <h3>Sponsor</h3>
+                        <p>Ad placement for future monetization.</p>
                     </div>
                 </aside>
             </div>
@@ -1237,74 +1032,62 @@
         <div class="container">
             <div class="footer-content">
                 <div class="footer-column">
-                    <h3>Intelligence</h3>
+                    <h3>Explore</h3>
                     <ul class="footer-links">
-                        <li><a href="/analysis" class="footer-link">Strategic Analysis</a></li>
-                        <li><a href="/market-data" class="footer-link">Market Data</a></li>
-                        <li><a href="/tools" class="footer-link">Tool Intelligence</a></li>
-                        <li><a href="/trends" class="footer-link">Trend Reports</a></li>
+                        <li><a href="/blog" class="footer-link">Blog</a></li>
+                        <li><a href="/projects" class="footer-link">Tools</a></li>
+                        <li><a href="/resume" class="footer-link">Resume Builder</a></li>
                     </ul>
                 </div>
                 <div class="footer-column">
-                    <h3>Premium</h3>
+                    <h3>Company</h3>
                     <ul class="footer-links">
-                        <li><a href="/premium" class="footer-link">Premium Access</a></li>
-                        <li><a href="/enterprise" class="footer-link">Enterprise Intel</a></li>
-                        <li><a href="/consulting" class="footer-link">Strategic Consulting</a></li>
-                        <li><a href="/research" class="footer-link">Custom Research</a></li>
+                        <li><a href="/about" class="footer-link">About</a></li>
+                        <li><a href="/contact" class="footer-link">Contact</a></li>
+                        <li><a href="https://buymeacoffee.com" class="footer-link">Donate</a></li>
                     </ul>
                 </div>
                 <div class="footer-column">
-                    <h3>Resources</h3>
+                    <h3>Follow</h3>
                     <ul class="footer-links">
-                        <li><a href="/newsletter" class="footer-link">Intelligence Brief</a></li>
-                        <li><a href="/methodology" class="footer-link">Our Methodology</a></li>
-                        <li><a href="/data-sources" class="footer-link">Data Sources</a></li>
-                        <li><a href="/contact" class="footer-link">Contact Analyst</a></li>
-                    </ul>
-                </div>
-                <div class="footer-column">
-                    <h3>Connect</h3>
-                    <ul class="footer-links">
-                        <li><a href="https://linkedin.com/company/myaibuffet" class="footer-link">LinkedIn</a></li>
-                        <li><a href="https://twitter.com/myaibuffet" class="footer-link">Twitter/X</a></li>
+                        <li><a href="https://www.linkedin.com" class="footer-link">LinkedIn</a></li>
+                        <li><a href="https://x.com" class="footer-link">Twitter/X</a></li>
                         <li><a href="/rss" class="footer-link">RSS Feed</a></li>
-                        <li><a href="/api" class="footer-link">Data API</a></li>
                     </ul>
                 </div>
             </div>
             <div class="footer-legal">
-                © 2025 My AI Buffet. Professional AI market intelligence. • 
-                <a href="/terms" style="color: var(--text-muted);">Terms</a> • 
-                <a href="/privacy" style="color: var(--text-muted);">Privacy</a> • 
-                <a href="/disclaimer" style="color: var(--text-muted);">Investment Disclaimer</a>
+                © 2025 My AI Buffet. All rights reserved.
             </div>
         </div>
     </footer>
 
     <!-- JavaScript -->
     <script>
-        // Enhanced search with categories
+        // Search functionality
         const searchInput = document.getElementById('search-input');
-        const analysisCards = document.querySelectorAll('.analysis-card');
+        const articlesGrid = document.getElementById('articles-grid');
         
-        searchInput.addEventListener('input', function(e) {
-            const searchTerm = e.target.value.toLowerCase();
+        if (searchInput && articlesGrid) {
+            const articles = articlesGrid.querySelectorAll('.article-card');
             
-            analysisCards.forEach(card => {
-                const title = card.querySelector('.analysis-title').textContent.toLowerCase();
-                const excerpt = card.querySelector('.analysis-excerpt').textContent.toLowerCase();
-                const type = card.querySelector('.analysis-type').textContent.toLowerCase();
+            searchInput.addEventListener('input', function(e) {
+                const searchTerm = e.target.value.toLowerCase();
                 
-                if (title.includes(searchTerm) || excerpt.includes(searchTerm) || type.includes(searchTerm)) {
-                    card.style.display = 'block';
-                } else {
-                    card.style.display = searchTerm === '' ? 'block' : 'none';
-                }
+                articles.forEach(article => {
+                    const title = article.getAttribute('data-title').toLowerCase();
+                    const excerpt = article.querySelector('.article-excerpt').textContent.toLowerCase();
+                    
+                    if (title.includes(searchTerm) || excerpt.includes(searchTerm)) {
+                        article.style.display = 'block';
+                    } else {
+                        article.style.display = searchTerm === '' ? 'block' : 'none';
+                    }
+                });
             });
-        });
+        }
 
-        // Dynamic header with scroll behavior
+        // Header scroll behavior
         let lastScrollTop = 0;
         const header = document.querySelector('.header');
         
@@ -1320,106 +1103,114 @@
             lastScrollTop = scrollTop;
         });
 
-        // Live data updates simulation
-        function updateLiveData() {
-            const dataValues = document.querySelectorAll('.data-value');
-            dataValues.forEach(value => {
-                const currentValue = parseFloat(value.textContent.replace(/[^0-9.]/g, ''));
-                const variation = (Math.random() - 0.5) * 0.1; // ±5% variation
-                const newValue = currentValue * (1 + variation);
-                
-                if (value.textContent.includes(')) {
-                    value.textContent = ' + newValue.toFixed(1) + 'B';
-                } else if (value.textContent.includes('%')) {
-                    value.textContent = Math.round(newValue) + '%';
-                } else {
-                    value.textContent = Math.round(newValue);
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
                 }
+            });
+        });
+
+        // Newsletter form handling
+        const newsletterForm = document.querySelector('.newsletter-form');
+        if (newsletterForm) {
+            newsletterForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const email = this.querySelector('input[type="email"]').value;
+                const button = this.querySelector('button');
+                const originalText = button.textContent;
+                
+                // Basic email validation
+                if (!email || !email.includes('@')) {
+                    alert('Please enter a valid email address.');
+                    return;
+                }
+                
+                button.textContent = 'Subscribing...';
+                button.disabled = true;
+                button.classList.add('loading');
+                
+                // Simulate API call
+                setTimeout(() => {
+                    button.textContent = 'Subscribed!';
+                    button.style.background = 'var(--success)';
+                    
+                    setTimeout(() => {
+                        button.textContent = originalText;
+                        button.disabled = false;
+                        button.classList.remove('loading');
+                        button.style.background = '';
+                        this.reset();
+                    }, 2000);
+                }, 1000);
             });
         }
 
-        // Update live data every 30 seconds
-        setInterval(updateLiveData, 30000);
-
-        // Newsletter form with validation
-        const newsletterForm = document.querySelector('.newsletter-form');
-        newsletterForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            const email = this.querySelector('input[type="email"]').value;
-            const button = this.querySelector('button');
-            const originalText = button.textContent;
-            
-            // Validate email domain for business emails
-            if (!email.includes('@') || email.endsWith('@gmail.com') || email.endsWith('@yahoo.com')) {
-                alert('Please use your business email address for professional intelligence updates.');
-                return;
-            }
-            
-            button.textContent = 'Processing...';
-            button.disabled = true;
-            button.classList.add('loading');
-            
-            // Simulate API call
-            setTimeout(() => {
-                button.textContent = 'Intelligence Brief Activated';
-                button.style.background = 'var(--success)';
-                
-                setTimeout(() => {
-                    button.textContent = originalText;
-                    button.disabled = false;
-                    button.classList.remove('loading');
-                    button.style.background = '';
-                    this.reset();
-                }, 3000);
-            }, 1500);
-        });
-
-        // Enhanced card interactions
-        document.querySelectorAll('.analysis-card').forEach(card => {
+        // Add click handlers to article cards
+        const articleCards = document.querySelectorAll('.article-card, .story-card');
+        articleCards.forEach(card => {
             card.addEventListener('click', function(e) {
                 if (e.target.tagName !== 'A') {
-                    const link = this.querySelector('.analysis-title a');
+                    const link = this.querySelector('a');
                     if (link) {
                         window.location.href = link.href;
                     }
                 }
             });
-
-            // Add read tracking
-            card.addEventListener('mouseenter', function() {
-                const title = this.querySelector('.analysis-title').textContent;
-                console.log('Viewed:', title); // Analytics tracking point
+            
+            // Add keyboard support
+            card.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    const link = this.querySelector('a');
+                    if (link) {
+                        window.location.href = link.href;
+                    }
+                }
             });
+            
+            // Add tabindex for keyboard navigation
+            card.setAttribute('tabindex', '0');
+            card.setAttribute('role', 'button');
+            card.setAttribute('aria-label', 'Read article: ' + card.querySelector('h3').textContent);
         });
 
-        // Intersection Observer for analytics and animations
+        // Intersection Observer for fade-in animations
         const observerOptions = {
             root: null,
-            rootMargin: '20px',
+            rootMargin: '50px',
             threshold: 0.1
         };
 
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
-                    entry.target.classList.add('in-view');
-                    
-                    // Analytics tracking
-                    if (entry.target.classList.contains('analysis-card')) {
-                        const title = entry.target.querySelector('.analysis-title').textContent;
-                        console.log('Card in view:', title); // Analytics tracking point
-                    }
+                    entry.target.classList.add('visible');
                 }
             });
         }, observerOptions);
 
-        // Observe all cards and sections
-        document.querySelectorAll('.card, .live-data, .newsletter').forEach(element => {
-            observer.observe(element);
+        // Add fade-in animation to cards
+        document.querySelectorAll('.card').forEach(card => {
+            card.classList.add('fade-in');
+            observer.observe(card);
         });
 
-        // Professional keyboard shortcuts
+        // Initialize cards as visible immediately for better UX
+        setTimeout(() => {
+            document.querySelectorAll('.fade-in').forEach(element => {
+                element.classList.add('visible');
+            });
+        }, 100);
+
+        // Keyboard shortcuts
         document.addEventListener('keydown', function(e) {
             // Ctrl/Cmd + K for search
             if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
@@ -1431,58 +1222,93 @@
             if (e.key === 'Escape' && document.activeElement === searchInput) {
                 searchInput.value = '';
                 searchInput.blur();
-                // Reset all cards
-                analysisCards.forEach(card => {
-                    card.style.display = 'block';
-                });
+                // Reset all articles
+                if (articlesGrid) {
+                    const articles = articlesGrid.querySelectorAll('.article-card');
+                    articles.forEach(card => {
+                        card.style.display = 'block';
+                    });
+                }
             }
         });
 
-        // Add professional loading animations
-        const style = document.createElement('style');
-        style.textContent = `
-            .card, .live-data, .newsletter {
-                opacity: 0;
-                transform: translateY(30px);
-                transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-            }
-            
-            .card.in-view, .live-data.in-view, .newsletter.in-view {
-                opacity: 1;
-                transform: translateY(0);
-            }
-            
-            .card:nth-child(even) {
-                transition-delay: 0.1s;
-            }
-            
-            .card:nth-child(3n) {
-                transition-delay: 0.2s;
-            }
-        `;
-        document.head.appendChild(style);
+        // Performance optimization: Preload critical pages
+        const criticalLinks = ['/resume', '/blog'];
+        criticalLinks.forEach(link => {
+            const linkElement = document.createElement('link');
+            linkElement.rel = 'prefetch';
+            linkElement.href = link;
+            document.head.appendChild(linkElement);
+        });
 
-        // Initialize with staggered animations
-        setTimeout(() => {
-            document.querySelectorAll('.card, .live-data, .newsletter').forEach((element, index) => {
-                setTimeout(() => {
-                    element.classList.add('in-view');
-                }, index * 100);
-            });
-        }, 200);
-
-        // Professional error handling
+        // Error handling
         window.addEventListener('error', function(e) {
-            console.log('Professional site error logged:', e.message);
+            console.log('Site error:', e.message);
             // In production, this would send to analytics
         });
 
-        // Performance monitoring
+        // Load time tracking
         window.addEventListener('load', function() {
             const loadTime = performance.timing.loadEventEnd - performance.timing.navigationStart;
-            console.log('Professional site loaded in:', loadTime + 'ms');
+            console.log('Site loaded in:', loadTime + 'ms');
             // In production, this would send to analytics
         });
+
+        // Focus management for accessibility
+        const focusableElements = 'a, button, input, select, textarea, [tabindex]:not([tabindex="-1"])';
+        
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Tab') {
+                const focusable = Array.from(document.querySelectorAll(focusableElements));
+                const currentIndex = focusable.indexOf(document.activeElement);
+                
+                if (e.shiftKey) {
+                    // Shift + Tab (backward)
+                    if (currentIndex <= 0) {
+                        focusable[focusable.length - 1].focus();
+                        e.preventDefault();
+                    }
+                } else {
+                    // Tab (forward)
+                    if (currentIndex >= focusable.length - 1) {
+                        focusable[0].focus();
+                        e.preventDefault();
+                    }
+                }
+            }
+        });
+
+        // Enhanced mobile menu handling
+        function handleMobileMenu() {
+            const nav = document.querySelector('.nav');
+            const navLinks = document.querySelector('.nav-links');
+            
+            if (window.innerWidth <= 768) {
+                navLinks.style.display = navLinks.style.display === 'none' ? 'flex' : 'flex';
+            } else {
+                navLinks.style.display = 'flex';
+            }
+        }
+
+        window.addEventListener('resize', handleMobileMenu);
+        handleMobileMenu(); // Initial call
+
+        // Lazy loading for images (when added)
+        if ('IntersectionObserver' in window) {
+            const lazyImages = document.querySelectorAll('img[data-src]');
+            const imageObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const img = entry.target;
+                        img.src = img.dataset.src;
+                        img.classList.remove('lazy');
+                        imageObserver.unobserve(img);
+                    }
+                });
+            });
+
+            lazyImages.forEach(img => imageObserver.observe(img));
+        }
     </script>
 </body>
 </html>

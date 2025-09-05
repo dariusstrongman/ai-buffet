@@ -1377,31 +1377,36 @@
     }
 
         function updateTopStories(stories) {
-        const grid = document.querySelector('.stories-grid');
-        if (grid && stories.length > 0) {
-            grid.innerHTML = stories.map(story => `
-            <article class="card story-card">
-                <h3 class="story-title">
-                <a href="${story.link}" target="_blank">${story.title}</a>
-                </h3>
-                <p class="story-excerpt">${story.ai_summary}</p>
-            </article>
-            `).join('');
+            const grid = document.querySelector('.stories-grid');
+            if (grid) {
+                if (stories.length > 0) {
+                    grid.innerHTML = stories.map(story => `
+                        <article class="card story-card">
+                            <h3 class="story-title">
+                                <a href="${story.link}" target="_blank" rel="noopener">${story.title}</a>
+                            </h3>
+                            <p class="story-excerpt">${story.ai_summary || 'No summary available'}</p>
+                        </article>
+                    `).join('');
+                } else {
+                    // If no featured articles, use the first 3 articles
+                    console.log('No featured articles found, using latest articles for top stories');
+                }
+            }
         }
-        }
-
+        
         function updateLatestArticles(articles) {
-        const grid = document.querySelector('.articles-grid');
-        if (grid && articles.length > 0) {
-            grid.innerHTML = articles.map(article => `
-            <article class="card article-card">
-                <h3 class="article-title">
-                <a href="${article.link}" target="_blank">${article.title}</a>
-                </h3>
-                <p class="article-excerpt">${article.ai_summary}</p>
-            </article>
-            `).join('');
-        }
+            const grid = document.querySelector('.articles-grid');
+            if (grid && articles.length > 0) {
+                grid.innerHTML = articles.map(article => `
+                    <article class="card article-card">
+                        <h3 class="article-title">
+                            <a href="${article.link}" target="_blank" rel="noopener">${article.title}</a>
+                        </h3>
+                        <p class="article-excerpt">${article.ai_summary || 'No summary available'}</p>
+                    </article>
+                `).join('');
+            }
         }
 
         // Load real data when page loads
@@ -1409,6 +1414,3 @@
     </script>
 </body>
 </html>
-
-
-

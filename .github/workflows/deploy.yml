@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - main
-  workflow_dispatch:  # (optional) allows manual deploy from GitHub UI
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -17,18 +17,22 @@ concurrency:
 
 jobs:
   deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     steps:
       - name: 📦 Checkout repo
         uses: actions/checkout@v4
 
-      - name: 🔧 Setup Pages
-        uses: actions/configure-pages@v3
+      - name: 🛠 Setup Pages
+        uses: actions/configure-pages@v4
 
-      - name: 📂 Upload static files
-        uses: actions/upload-pages-artifact@v2
+      - name: 📤 Upload site
+        uses: actions/upload-pages-artifact@v3
         with:
-          path: .  # deploy from root of your repo
+          path: .
 
       - name: 🚀 Deploy to GitHub Pages
-        uses: actions/deploy-pages@v2
+        id: deployment
+        uses: actions/deploy-pages@v4

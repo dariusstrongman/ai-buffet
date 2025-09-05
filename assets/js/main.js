@@ -56,7 +56,6 @@ document.addEventListener('DOMContentLoaded', function() {
     initializeSmoothScrolling();
     initializeLazyLoading();
     initializeSearch();
-    initializeScrollBehavior();
     initializeNewsletterForm();
     initializeKeyboardShortcuts();
     initializeMobileMenu();
@@ -444,28 +443,6 @@ function clearSearch() {
     announceToScreenReader('Search cleared, showing all articles');
 }
 
-/**
- * Header Scroll Behavior
- */
-function initializeScrollBehavior() {
-    if (!Elements.header) return;
-    
-    window.addEventListener('scroll', throttle(handleScroll, 16)); // ~60fps
-}
-
-function handleScroll() {
-    const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-    const scrollingDown = scrollTop > AppState.lastScrollTop;
-    const scrollThreshold = 100;
-    
-    if (scrollTop > scrollThreshold && scrollingDown) {
-        Elements.header.classList.add('hidden');
-    } else if (!scrollingDown) {
-        Elements.header.classList.remove('hidden');
-    }
-    
-    AppState.lastScrollTop = scrollTop;
-}
 
 /**
  * Newsletter Form

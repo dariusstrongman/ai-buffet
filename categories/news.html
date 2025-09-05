@@ -308,36 +308,70 @@
     </main>
 
     <!-- Footer -->
-    <footer class="footer" role="contentinfo">
+   <footer class="footer" role="contentinfo">
         <div class="container">
-            <div class="footer-content">
-                <div class="footer-column">
-                    <h3>Explore</h3>
-                    <ul class="footer-links">
-                        <li><a href="/categories/news.html" class="footer-link">AI News</a></li>
-                        <li><a href="/categories/tools.html" class="footer-link">Tool Reviews</a></li>
-                        <li><a href="https://ai-buffet.com/tools" class="footer-link">Free Templates</a></li>
+            <div class="footer__content">
+                <div class="footer__section footer__section--brand">
+                    <div class="footer__brand">
+                        <div class="footer__logo">
+                            <span class="logo-icon" aria-hidden="true">🍽️</span>
+                            AI Buffet
+                        </div>
+                        <p class="footer__tagline">
+                            Premium AI insights served fresh daily
+                        </p>
+                    </div>
+                    <div class="social-links" aria-label="Follow us on social media">
+                        <a href="https://www.linkedin.com/company/aibuffet" class="social-link" target="_blank" rel="noopener" aria-label="Follow us on LinkedIn">
+                            <span aria-hidden="true">💼</span>
+                        </a>
+                        <a href="https://x.com/aibuffet" class="social-link" target="_blank" rel="noopener" aria-label="Follow us on X (Twitter)">
+                            <span aria-hidden="true">🐦</span>
+                        </a>
+                        <a href="../rss" class="social-link" aria-label="Subscribe to RSS feed">
+                            <span aria-hidden="true">📡</span>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="footer__section">
+                    <h3 class="footer__heading">Explore</h3>
+                    <ul class="footer__links">
+                        <li><a href="news.html" class="footer__link">AI News</a></li>
+                        <li><a href="tools.html" class="footer__link">Tool Reviews</a></li>
+                        <li><a href="https://ai-buffet.com/tools" class="footer__link">Free Templates</a></li>
+                        <li><a href="../categories/" class="footer__link">All Categories</a></li>
                     </ul>
                 </div>
-                <div class="footer-column">
-                    <h3>Company</h3>
-                    <ul class="footer-links">
-                        <li><a href="../about" class="footer-link">About</a></li>
-                        <li><a href="../contact" class="footer-link">Contact</a></li>
-                        <li><a href="https://buymeacoffee.com/aibuffet" class="footer-link">Support Us</a></li>
+
+                <div class="footer__section">
+                    <h3 class="footer__heading">Resources</h3>
+                    <ul class="footer__links">
+                        <li><a href="../about" class="footer__link">About</a></li>
+                        <li><a href="../contact" class="footer__link">Contact</a></li>
+                        <li><a href="../privacy" class="footer__link">Privacy Policy</a></li>
+                        <li><a href="../terms" class="footer__link">Terms of Service</a></li>
                     </ul>
                 </div>
-                <div class="footer-column">
-                    <h3>Follow</h3>
-                    <ul class="footer-links">
-                        <li><a href="https://www.linkedin.com/company/aibuffet" class="footer-link">LinkedIn</a></li>
-                        <li><a href="https://x.com/aibuffet" class="footer-link">Twitter/X</a></li>
-                        <li><a href="../rss" class="footer-link">RSS Feed</a></li>
-                    </ul>
+
+                <div class="footer__section">
+                    <h3 class="footer__heading">Newsletter</h3>
+                    <p class="footer__newsletter-text">
+                        Get weekly AI insights delivered to your inbox
+                    </p>
+                    <a href="../#newsletter" class="btn btn-secondary btn-sm">
+                        Subscribe Now
+                    </a>
                 </div>
             </div>
-            <div class="footer-legal">
-                © 2025 My AI Buffet. All rights reserved.
+
+            <div class="footer__bottom">
+                <div class="footer__legal">
+                    <p>&copy; 2025 AI Buffet. All rights reserved.</p>
+                </div>
+                <div class="footer__credits">
+                    <p>Made with care for the AI community</p>
+                </div>
             </div>
         </div>
     </footer>

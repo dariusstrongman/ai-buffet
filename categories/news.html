@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI News & Updates | My AI Buffet</title>
+    <meta name="description" content="Stay updated with the latest AI news, breakthroughs, and industry developments. Curated AI news from trusted sources, delivered with expert analysis.">
+    <link rel="canonical" href="https://myaibuffet.com/categories/news">
+    
+    <!-- Open Graph -->
+    <meta property="og:title" content="Latest AI News & Updates | My AI Buffet">
+    <meta property="og:description" content="Stay updated with the latest AI news, breakthroughs, and industry developments.">
+    <meta property="og:image" content="https://myaibuffet.com/assets/img/ai-news-category.jpg">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://myaibuffet.com/categories/news">
+    
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Latest AI News & Updates | My AI Buffet">
+    <meta name="twitter:description" content="Curated AI news from trusted sources, delivered with expert analysis.">
+    <meta name="twitter:image" content="https://myaibuffet.com/assets/img/ai-news-category.jpg">
+    
+    <!-- JSON-LD Structured Data -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "CollectionPage",
+        "name": "AI News & Updates",
+        "description": "Latest AI news, breakthroughs, and industry developments curated by My AI Buffet",
+        "url": "https://myaibuffet.com/categories/news",
+        "mainEntity": {
+            "@type": "ItemList",
+            "name": "AI News Articles",
+            "itemListElement": []
+        },
+        "breadcrumb": {
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+                {
+                    "@type": "ListItem",
+                    "position": 1,
+                    "name": "Home",
+                    "item": "https://myaibuffet.com"
+                },
+                {
+                    "@type": "ListItem",
+                    "position": 2,
+                    "name": "AI News",
+                    "item": "https://myaibuffet.com/categories/news"
+                }
+            ]
+        }
+    }
+    </script>
+
+    <!-- Preconnect to external resources -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://npetaroffoyjohjiwssf.supabase.co">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=DM+Serif+Display:wght@400&display=swap" rel="stylesheet">
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="../assets/css/main.css">
+    <link rel="stylesheet" href="../assets/css/components.css">
+    
+    <!-- Critical CSS -->
+    <style>
+        /* Prevent FOUC - Keep minimal critical styles only */
+        body { 
+            font-family: Inter, system-ui, sans-serif; 
+            background: var(--color-bg, #0B1020); 
+            color: var(--color-text-primary, #E5E7EB);
+            margin: 0;
+            line-height: 1.6;
+        }
+    </style>
+</head>
+<body>
+    <!-- Skip to content link -->
+    <a href="#main" class="skip-link">Skip to main content</a>
+
+    <!-- Header -->
+    <header class="header" role="banner">
+        <div class="container">
+            <nav class="nav" role="navigation" aria-label="Main navigation">
+                <a href="../" class="logo" aria-label="AI Buffet homepage">
+                    <span class="logo-icon" aria-hidden="true">🍽️</span>
+                    AI Buffet
+                </a>
+                
+                <ul class="nav-links" role="menubar">
+                    <li role="none"><a href="../index.html" class="nav-link" role="menuitem">Home</a></li>
+                    <li role="none"><a href="news.html" class="nav-link" role="menuitem" aria-current="page">News</a></li>
+                    <li role="none"><a href="tools.html" class="nav-link" role="menuitem">Tools</a></li>
+                    <li role="none"><a href="../about.html" class="nav-link" role="menuitem">About</a></li>
+                </ul>
+
+                <div class="nav-actions">
+                    <div class="search-container">
+                        <label for="search-input" class="sr-only">Search articles</label>
+                        <input 
+                            type="search" 
+                            class="search-input" 
+                            placeholder="Search news... (Ctrl+K)"
+                            aria-label="Search AI news articles"
+                            id="search-input"
+                            autocomplete="off"
+                        >
+                        <span class="search-icon" aria-hidden="true">🔍</span>
+                    </div>
+
+                    <!-- Theme toggle -->
+                    <button 
+                        id="theme-toggle" 
+                        class="theme-toggle" 
+                        aria-label="Toggle dark/light theme"
+                        title="Toggle theme"
+                    >
+                        <span class="theme-toggle-icon" aria-hidden="true">🌓</span>
+                    </button>
+
+                    <!-- Mobile menu button -->
+                    <button class="mobile-menu-toggle" aria-label="Toggle mobile menu" aria-expanded="false">
+                        <span class="hamburger"></span>
+                    </button>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main content -->
+    <main id="main" role="main">
+        <div class="container">
+            <!-- Breadcrumbs -->
+            <nav aria-label="Breadcrumb">
+                <ol style="display: flex; gap: 0.5rem; margin: 1rem 0; color: var(--text-secondary); font-size: 0.9rem;">
+                    <li><a href="../" style="color: var(--text-secondary); text-decoration: none;">Home</a></li>
+                    <li aria-hidden="true">/</li>
+                    <li aria-current="page" style="color: var(--text-primary);">AI News</li>
+                </ol>
+            </nav>
+
+            <!-- Category Hero -->
+            <section class="category-hero" aria-labelledby="category-title">
+                <h1 id="category-title">📰 AI News & Updates</h1>
+                <p>Stay ahead of the curve with breaking AI developments, industry insights, and expert analysis. We curate the most important AI news so you don't miss what matters.</p>
+            </section>
+
+            <!-- News Filters -->
+            <section class="news-filters">
+                <div class="filter-buttons">
+                    <button class="filter-btn active" data-filter="all">All News</button>
+                    <button class="filter-btn" data-filter="breaking">Breaking</button>
+                    <button class="filter-btn" data-filter="research">Research</button>
+                    <button class="filter-btn" data-filter="business">Business</button>
+                    <button class="filter-btn" data-filter="regulation">Regulation</button>
+                </div>
+            </section>
+
+            <div class="main-content">
+                <div class="content-area">
+                    <!-- Featured News -->
+                    <section class="featured-news" aria-labelledby="featured-title">
+                        <h2 id="featured-title">🔥 Breaking Stories</h2>
+                        <div class="featured-grid">
+                            <!-- Featured news will be loaded by JavaScript -->
+                            <article class="article-card article-card--featured article-card--large article-card--interactive" data-category="breaking">
+                                <div class="article-card__content">
+                                    <div class="article-card__category article-card__category--breaking">BREAKING</div>
+                                    <h3 class="article-card__title article-card__title--large">
+                                        <a href="#" target="_blank" rel="noopener">Loading featured AI news...</a>
+                                    </h3>
+                                    <p class="article-card__excerpt">Please wait while we fetch the latest breaking AI developments for you.</p>
+                                    <div class="article-card__meta">
+                                        <span class="article-card__date">Loading...</span>
+                                        <div class="article-card__meta-separator"></div>
+                                        <span class="article-card__source">AI News</span>
+                                    </div>
+                                </div>
+                            </article>
+                        </div>
+                    </section>
+
+                    <!-- Latest News Grid -->
+                    <section class="latest-news" aria-labelledby="latest-title">
+                        <h2 id="latest-title">Latest AI News</h2>
+                        
+                        <div class="news-grid" id="news-grid">
+                            <!-- Placeholder articles - will be replaced by JavaScript -->
+                            <article class="article-card article-card--interactive article-card--loading" data-category="research">
+                                <div class="article-card__content">
+                                    <div class="article-card__category article-card__category--research">RESEARCH</div>
+                                    <h3 class="article-card__title">
+                                        <a href="#" target="_blank" rel="noopener">Loading latest AI research...</a>
+                                    </h3>
+                                    <p class="article-card__excerpt">Please wait while we load the most recent AI news articles and analysis.</p>
+                                    <div class="article-card__meta">
+                                        <span class="article-card__date">Loading...</span>
+                                        <div class="article-card__meta-separator"></div>
+                                        <span class="article-card__source">AI Research</span>
+                                    </div>
+                                </div>
+                            </article>
+                            
+                            <article class="article-card article-card--interactive" data-category="business">
+                                <div class="article-card__content">
+                                    <div class="article-card__category article-card__category--business">BUSINESS</div>
+                                    <h3 class="article-card__title">
+                                        <a href="#" target="_blank" rel="noopener">Loading AI business news...</a>
+                                    </h3>
+                                    <p class="article-card__excerpt">Fetching the latest business developments and corporate AI initiatives.</p>
+                                    <div class="article-card__meta">
+                                        <span class="article-card__date">Loading...</span>
+                                        <div class="article-card__meta-separator"></div>
+                                        <span class="article-card__source">Business</span>
+                                        <div class="article-card__meta-separator"></div>
+                                        <span class="article-card__reading-time">5 min read</span>
+                                    </div>
+                                </div>
+                            </article>
+                            
+                            <article class="article-card article-card--interactive" data-category="regulation">
+                                <div class="article-card__content">
+                                    <div class="article-card__category article-card__category--regulation">REGULATION</div>
+                                    <h3 class="article-card__title">
+                                        <a href="#" target="_blank" rel="noopener">AI Policy Updates...</a>
+                                    </h3>
+                                    <p class="article-card__excerpt">Latest developments in AI governance and regulatory frameworks worldwide.</p>
+                                    <div class="article-card__meta">
+                                        <span class="article-card__date">Loading...</span>
+                                        <div class="article-card__meta-separator"></div>
+                                        <span class="article-card__source">Policy Watch</span>
+                                        <div class="article-card__meta-separator"></div>
+                                        <span class="article-card__reading-time">3 min read</span>
+                                    </div>
+                                </div>
+                            </article>
+                        </div>
+
+                        <!-- Load More Button -->
+                        <div style="text-align: center; margin-top: var(--space-xl);">
+                            <button class="btn btn-secondary" id="load-more-btn">Load More Articles</button>
+                        </div>
+                    </section>
+
+                    <!-- CTA Section -->
+                    <section class="cta-section" style="margin: var(--space-2xl) 0;">
+                        <h2>🚀 Stay Ahead of AI Trends</h2>
+                        <p>Get our exclusive AI insights and analysis delivered to your inbox. Plus access to free templates and automation workflows.</p>
+                        <a href="https://ai-buffet.com/tools" class="btn">Get Free AI Tools</a>
+                    </section>
+                </div>
+
+                <!-- Sidebar -->
+                <aside class="sidebar" style="display: none;">
+                    <!-- Trending Topics -->
+                    <div class="sidebar-card">
+                        <h3>🔥 Trending Topics</h3>
+                        <ul style="list-style: none; padding: 0;">
+                            <li style="margin-bottom: var(--space-sm);">
+                                <a href="#" style="color: var(--text-secondary); text-decoration: none; transition: color 0.2s;">#GPT-5 Release</a>
+                            </li>
+                            <li style="margin-bottom: var(--space-sm);">
+                                <a href="#" style="color: var(--text-secondary); text-decoration: none; transition: color 0.2s;">#AI Regulation</a>
+                            </li>
+                            <li style="margin-bottom: var(--space-sm);">
+                                <a href="#" style="color: var(--text-secondary); text-decoration: none; transition: color 0.2s;">#AGI Progress</a>
+                            </li>
+                            <li style="margin-bottom: var(--space-sm);">
+                                <a href="#" style="color: var(--text-secondary); text-decoration: none; transition: color 0.2s;">#AI Safety</a>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- Newsletter Signup -->
+                    <div class="sidebar-card newsletter">
+                        <h3>📧 AI News Digest</h3>
+                        <p style="font-size: 0.9rem; margin-bottom: var(--space-md);">Get the week's top AI stories delivered every Monday.</p>
+                        <form class="newsletter-form" style="display: flex; flex-direction: column; gap: var(--space-sm);">
+                            <input type="email" class="newsletter-input" placeholder="your@email.com" required>
+                            <button type="submit" class="btn btn-primary">Subscribe</button>
+                        </form>
+                    </div>
+                </aside>
+            </div>
+
+            <!-- Newsletter Section -->
+            <section class="newsletter" id="newsletter" aria-labelledby="newsletter-title">
+                <h2 id="newsletter-title">Never Miss Important AI News</h2>
+                <p>Get our curated weekly digest with the most important AI developments, delivered every Monday morning.</p>
+                
+                <form class="newsletter-form" method="POST" action="/newsletter/subscribe" aria-label="Newsletter signup">
+                    <input 
+                        type="email" 
+                        name="email" 
+                        class="newsletter-input" 
+                        placeholder="you@example.com" 
+                        required
+                        aria-label="Email address"
+                    >
+                    <button type="submit" class="btn btn-primary">Subscribe Free</button>
+                </form>
+                <p class="privacy-note">No spam, just the AI news that matters. Unsubscribe anytime.</p>
+            </section>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer" role="contentinfo">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>Explore</h3>
+                    <ul class="footer-links">
+                        <li><a href="/categories/news.html" class="footer-link">AI News</a></li>
+                        <li><a href="/categories/tools.html" class="footer-link">Tool Reviews</a></li>
+                        <li><a href="https://ai-buffet.com/tools" class="footer-link">Free Templates</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Company</h3>
+                    <ul class="footer-links">
+                        <li><a href="../about" class="footer-link">About</a></li>
+                        <li><a href="../contact" class="footer-link">Contact</a></li>
+                        <li><a href="https://buymeacoffee.com/aibuffet" class="footer-link">Support Us</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Follow</h3>
+                    <ul class="footer-links">
+                        <li><a href="https://www.linkedin.com/company/aibuffet" class="footer-link">LinkedIn</a></li>
+                        <li><a href="https://x.com/aibuffet" class="footer-link">Twitter/X</a></li>
+                        <li><a href="../rss" class="footer-link">RSS Feed</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-legal">
+                © 2025 My AI Buffet. All rights reserved.
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="../assets/js/main.js" defer></script>
+    <script defer>
+        // Category-specific JavaScript
+        document.addEventListener('DOMContentLoaded', function() {
+            // Filter functionality
+            const filterButtons = document.querySelectorAll('.filter-btn');
+            const articles = document.querySelectorAll('.news-article, .featured-article');
+            
+            filterButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const filter = this.dataset.filter;
+                    
+                    // Update active button
+                    filterButtons.forEach(btn => {
+                        btn.classList.remove('active');
+                        btn.style.background = 'var(--card)';
+                        btn.style.color = 'var(--text-secondary)';
+                    });
+                    
+                    this.classList.add('active');
+                    this.style.background = 'var(--primary)';
+                    this.style.color = 'white';
+                    
+                    // Filter articles
+                    articles.forEach(article => {
+                        if (filter === 'all' || article.dataset.category === filter) {
+                            article.style.display = 'block';
+                        } else {
+                            article.style.display = 'none';
+                        }
+                    });
+                });
+            });
+            
+            // Load more functionality
+            const loadMoreBtn = document.getElementById('load-more-btn');
+            if (loadMoreBtn) {
+                loadMoreBtn.addEventListener('click', function() {
+                    this.textContent = 'Loading...';
+                    this.disabled = true;
+                    
+                    // Simulate loading more articles
+                    setTimeout(() => {
+                        this.textContent = 'Load More Articles';
+                        this.disabled = false;
+                        // In a real app, this would load more articles from the API
+                    }, 1000);
+                });
+            }
+        });
+    </script>
+</body>
+</html>

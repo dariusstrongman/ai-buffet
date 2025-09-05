@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Tools Rankings & Reviews | AI Buffet</title>
+    <meta name="description" content="Discover and compare the top AI tools ranked by market performance, user ratings, and real-world effectiveness. Find the perfect AI solution for your needs.">
+    <link rel="canonical" href="https://myaibuffet.com/categories/tools">
+    
+    <!-- Open Graph -->
+    <meta property="og:title" content="Top AI Tools Rankings & Reviews | AI Buffet">
+    <meta property="og:description" content="Discover the best AI tools ranked by performance, popularity, and market data.">
+    <meta property="og:image" content="https://myaibuffet.com/assets/img/ai-tools-category.jpg">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://myaibuffet.com/categories/tools">
+    
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Top AI Tools Rankings & Reviews | AI Buffet">
+    <meta name="twitter:description" content="Compare and discover the best AI tools with real-time market rankings.">
+    <meta name="twitter:image" content="https://myaibuffet.com/assets/img/ai-tools-category.jpg">
+    
+    <!-- JSON-LD Structured Data -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "CollectionPage",
+        "name": "AI Tools Rankings & Reviews",
+        "description": "Top AI tools ranked by market performance, user ratings, and effectiveness",
+        "url": "https://myaibuffet.com/categories/tools",
+        "mainEntity": {
+            "@type": "ItemList",
+            "name": "AI Tools Rankings",
+            "itemListElement": []
+        },
+        "breadcrumb": {
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+                {
+                    "@type": "ListItem",
+                    "position": 1,
+                    "name": "Home",
+                    "item": "https://myaibuffet.com"
+                },
+                {
+                    "@type": "ListItem",
+                    "position": 2,
+                    "name": "AI Tools",
+                    "item": "https://myaibuffet.com/categories/tools"
+                }
+            ]
+        }
+    }
+    </script>
+
+    <!-- Preconnect to external resources -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://api.coingecko.com">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=DM+Serif+Display:wght@400&display=swap" rel="stylesheet">
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="../assets/css/main.css">
+    <link rel="stylesheet" href="../assets/css/components.css">
+    
+    <!-- Critical CSS -->
+    <style>
+        /* Prevent FOUC - Keep minimal critical styles only */
+        body { 
+            font-family: Inter, system-ui, sans-serif; 
+            background: var(--color-bg, #0B1020); 
+            color: var(--color-text-primary, #E5E7EB);
+            margin: 0;
+            line-height: 1.6;
+        }
+    </style>
+</head>
+<body>
+    <!-- Skip to content link -->
+    <a href="#main" class="skip-link">Skip to main content</a>
+
+    <!-- Header -->
+    <header class="header" role="banner">
+        <div class="container">
+            <nav class="nav" role="navigation" aria-label="Main navigation">
+                <a href="../" class="logo" aria-label="AI Buffet homepage">
+                    <span class="logo-icon" aria-hidden="true">🍽️</span>
+                    AI Buffet
+                </a>
+                
+                <ul class="nav-links" role="menubar">
+                    <li role="none"><a href="../index.html" class="nav-link" role="menuitem">Home</a></li>
+                    <li role="none"><a href="news.html" class="nav-link" role="menuitem">News</a></li>
+                    <li role="none"><a href="tools.html" class="nav-link" role="menuitem" aria-current="page">Tools</a></li>
+                    <li role="none"><a href="../about.html" class="nav-link" role="menuitem">About</a></li>
+                </ul>
+
+                <div class="nav-actions">
+                    <div class="search-container">
+                        <label for="search-input" class="sr-only">Search tools</label>
+                        <input 
+                            type="search" 
+                            class="search-input" 
+                            placeholder="Search AI tools... (Ctrl+K)"
+                            aria-label="Search AI tools"
+                            id="search-input"
+                            autocomplete="off"
+                        >
+                        <span class="search-icon" aria-hidden="true">🔍</span>
+                    </div>
+
+                    <!-- Theme toggle -->
+                    <button 
+                        id="theme-toggle" 
+                        class="theme-toggle" 
+                        aria-label="Toggle dark/light theme"
+                        title="Toggle theme"
+                    >
+                        <span class="theme-toggle-icon" aria-hidden="true">🌓</span>
+                    </button>
+
+                    <!-- Mobile menu button -->
+                    <button class="mobile-menu-toggle" aria-label="Toggle mobile menu" aria-expanded="false">
+                        <span class="hamburger"></span>
+                    </button>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main content -->
+    <main id="main" role="main">
+        <div class="container">
+            <!-- Category Hero -->
+            <section class="category-hero" aria-labelledby="category-title">
+                <h1 id="category-title">🚀 AI Tools Rankings</h1>
+                <p>Discover the top AI tools ranked by market performance, user adoption, and real-world effectiveness. Our rankings update automatically based on market data, user reviews, and industry trends.</p>
+                <div class="ranking-stats">
+                    <div class="stat">
+                        <span class="stat-number" id="total-tools">15+</span>
+                        <span class="stat-label">Tools Tracked</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-number" id="last-update">Live</span>
+                        <span class="stat-label">Data Updates</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-number" id="categories-count">12</span>
+                        <span class="stat-label">Categories</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Tools Filters -->
+            <section class="tools-filters">
+                <div class="filter-section">
+                    <h2 class="filter-title">Filter by Category</h2>
+                    <div class="filter-buttons">
+                        <button class="filter-btn active" data-category="all">All Tools</button>
+                        <button class="filter-btn" data-category="writing">Writing & Content</button>
+                        <button class="filter-btn" data-category="coding">Coding & Development</button>
+                        <button class="filter-btn" data-category="design">Design & Creative</button>
+                        <button class="filter-btn" data-category="business">Business & Analytics</button>
+                        <button class="filter-btn" data-category="research">Research & Analysis</button>
+                        <button class="filter-btn" data-category="productivity">Productivity</button>
+                    </div>
+                </div>
+                
+                <div class="sort-section">
+                    <label for="sort-select" class="sort-label">Sort by:</label>
+                    <select id="sort-select" class="sort-select">
+                        <option value="rank">Market Ranking</option>
+                        <option value="popularity">Popularity</option>
+                        <option value="rating">User Rating</option>
+                        <option value="price">Price (Low to High)</option>
+                        <option value="newest">Newest First</option>
+                    </select>
+                </div>
+            </section>
+
+            <!-- Top Tools Section -->
+            <section class="top-tools" aria-labelledby="top-tools-title">
+                <div class="section-header">
+                    <h2 id="top-tools-title">🏆 Top Ranked AI Tools</h2>
+                    <p class="section-subtitle">The highest-performing AI tools based on market data and user feedback</p>
+                </div>
+                
+                <div class="tools-grid" id="top-tools-grid">
+                    <!-- Top 3 tools with featured styling -->
+                    <article class="tool-card tool-card--featured tool-card--rank-1" data-category="writing" data-rank="1">
+                        <div class="tool-card__rank">
+                            <span class="rank-number">1</span>
+                            <span class="rank-badge">🏆</span>
+                        </div>
+                        <div class="tool-card__header">
+                            <div class="tool-card__icon">
+                                <img src="https://openai.com/favicon.ico" alt="ChatGPT" width="48" height="48" loading="lazy">
+                            </div>
+                            <div class="tool-card__title-area">
+                                <h3 class="tool-card__title">
+                                    <a href="https://chat.openai.com" target="_blank" rel="noopener" class="tool-card__link">ChatGPT</a>
+                                </h3>
+                                <div class="tool-card__category">Writing & Content</div>
+                            </div>
+                        </div>
+                        <p class="tool-card__description">Revolutionary AI assistant for writing, coding, analysis, and creative tasks with human-like conversation.</p>
+                        <div class="tool-card__metrics">
+                            <div class="metric">
+                                <span class="metric-value" data-rating="4.8">4.8</span>
+                                <span class="metric-label">Rating</span>
+                            </div>
+                            <div class="metric">
+                                <span class="metric-value" data-users="100M+">100M+</span>
+                                <span class="metric-label">Users</span>
+                            </div>
+                            <div class="metric">
+                                <span class="metric-value trend-up" data-trend="↗ 15%">↗ 15%</span>
+                                <span class="metric-label">Growth</span>
+                            </div>
+                        </div>
+                        <div class="tool-card__pricing">
+                            <span class="price-badge">Free + Pro</span>
+                            <span class="price-details">$20/mo</span>
+                        </div>
+                        <div class="tool-card__tags">
+                            <span class="tag">GPT-4</span>
+                            <span class="tag">Multimodal</span>
+                            <span class="tag">API</span>
+                        </div>
+                    </article>
+
+                    <article class="tool-card tool-card--featured tool-card--rank-2" data-category="design" data-rank="2">
+                        <div class="tool-card__rank">
+                            <span class="rank-number">2</span>
+                            <span class="rank-badge">🥈</span>
+                        </div>
+                        <div class="tool-card__header">
+                            <div class="tool-card__icon">
+                                <img src="https://www.midjourney.com/favicon.ico" alt="Midjourney" width="48" height="48" loading="lazy">
+                            </div>
+                            <div class="tool-card__title-area">
+                                <h3 class="tool-card__title">
+                                    <a href="https://www.midjourney.com" target="_blank" rel="noopener" class="tool-card__link">Midjourney</a>
+                                </h3>
+                                <div class="tool-card__category">Design & Creative</div>
+                            </div>
+                        </div>
+                        <p class="tool-card__description">Premier AI art generator creating stunning, professional-quality images from text descriptions.</p>
+                        <div class="tool-card__metrics">
+                            <div class="metric">
+                                <span class="metric-value" data-rating="4.7">4.7</span>
+                                <span class="metric-label">Rating</span>
+                            </div>
+                            <div class="metric">
+                                <span class="metric-value" data-users="20M+">20M+</span>
+                                <span class="metric-label">Users</span>
+                            </div>
+                            <div class="metric">
+                                <span class="metric-value trend-up" data-trend="↗ 25%">↗ 25%</span>
+                                <span class="metric-label">Growth</span>
+                            </div>
+                        </div>
+                        <div class="tool-card__pricing">
+                            <span class="price-badge">Subscription</span>
+                            <span class="price-details">$10-60/mo</span>
+                        </div>
+                        <div class="tool-card__tags">
+                            <span class="tag">V6</span>
+                            <span class="tag">Discord</span>
+                            <span class="tag">Commercial</span>
+                        </div>
+                    </article>
+
+                    <article class="tool-card tool-card--featured tool-card--rank-3" data-category="coding" data-rank="3">
+                        <div class="tool-card__rank">
+                            <span class="rank-number">3</span>
+                            <span class="rank-badge">🥉</span>
+                        </div>
+                        <div class="tool-card__header">
+                            <div class="tool-card__icon">
+                                <img src="https://github.com/favicon.ico" alt="GitHub Copilot" width="48" height="48" loading="lazy">
+                            </div>
+                            <div class="tool-card__title-area">
+                                <h3 class="tool-card__title">
+                                    <a href="https://github.com/features/copilot" target="_blank" rel="noopener" class="tool-card__link">GitHub Copilot</a>
+                                </h3>
+                                <div class="tool-card__category">Coding & Development</div>
+                            </div>
+                        </div>
+                        <p class="tool-card__description">AI pair programmer that suggests code completions and entire functions as you type.</p>
+                        <div class="tool-card__metrics">
+                            <div class="metric">
+                                <span class="metric-value" data-rating="4.6">4.6</span>
+                                <span class="metric-label">Rating</span>
+                            </div>
+                            <div class="metric">
+                                <span class="metric-value" data-users="5M+">5M+</span>
+                                <span class="metric-label">Users</span>
+                            </div>
+                            <div class="metric">
+                                <span class="metric-value trend-up" data-trend="↗ 30%">↗ 30%</span>
+                                <span class="metric-label">Growth</span>
+                            </div>
+                        </div>
+                        <div class="tool-card__pricing">
+                            <span class="price-badge">Subscription</span>
+                            <span class="price-details">$10-19/mo</span>
+                        </div>
+                        <div class="tool-card__tags">
+                            <span class="tag">VSCode</span>
+                            <span class="tag">Multi-lang</span>
+                            <span class="tag">Real-time</span>
+                        </div>
+                    </article>
+                </div>
+            </section>
+
+            <!-- All Tools Section -->
+            <section class="all-tools" aria-labelledby="all-tools-title">
+                <div class="section-header">
+                    <h2 id="all-tools-title">📋 Complete AI Tools Directory</h2>
+                    <p class="section-subtitle">Comprehensive rankings of AI tools across all categories</p>
+                </div>
+                
+                <div class="tools-list" id="all-tools-grid">
+                    <!-- Loading placeholder -->
+                    <div class="tools-loading" id="tools-loading">
+                        <div class="loading-spinner"></div>
+                        <p>Loading latest tool rankings...</p>
+                    </div>
+                    <!-- Tools will be populated by JavaScript -->
+                </div>
+                
+                <div class="load-more-section">
+                    <button class="btn btn-secondary" id="load-more-btn">
+                        <span class="btn-icon">📊</span>
+                        Load More Tools
+                    </button>
+                </div>
+            </section>
+
+            <!-- Market Insights -->
+            <section class="market-insights" aria-labelledby="insights-title">
+                <div class="section-header">
+                    <h2 id="insights-title">📈 Market Insights</h2>
+                    <p class="section-subtitle">Real-time trends and data from the AI tools market</p>
+                </div>
+                
+                <div class="insights-grid">
+                    <div class="insight-card">
+                        <div class="insight-header">
+                            <h3>🔥 Trending Now</h3>
+                        </div>
+                        <ul class="trending-list" id="trending-tools">
+                            <li class="trending-item">
+                                <span class="trending-name">Claude 3 Sonnet</span>
+                                <span class="trending-change trend-up">↗ 45%</span>
+                            </li>
+                            <li class="trending-item">
+                                <span class="trending-name">Perplexity AI</span>
+                                <span class="trending-change trend-up">↗ 32%</span>
+                            </li>
+                            <li class="trending-item">
+                                <span class="trending-name">RunwayML</span>
+                                <span class="trending-change trend-up">↗ 28%</span>
+                            </li>
+                        </ul>
+                    </div>
+                    
+                    <div class="insight-card">
+                        <div class="insight-header">
+                            <h3>💰 Pricing Trends</h3>
+                        </div>
+                        <div class="pricing-stats">
+                            <div class="price-stat">
+                                <span class="price-value">$23</span>
+                                <span class="price-label">Avg. Monthly Cost</span>
+                            </div>
+                            <div class="price-stat">
+                                <span class="price-value">67%</span>
+                                <span class="price-label">Offer Free Tiers</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="insight-card">
+                        <div class="insight-header">
+                            <h3>🏢 Enterprise Adoption</h3>
+                        </div>
+                        <div class="adoption-chart">
+                            <div class="chart-bar" style="height: 85%;">
+                                <span class="chart-label">Writing</span>
+                            </div>
+                            <div class="chart-bar" style="height: 75%;">
+                                <span class="chart-label">Coding</span>
+                            </div>
+                            <div class="chart-bar" style="height: 60%;">
+                                <span class="chart-label">Design</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer" role="contentinfo">
+        <div class="container">
+            <div class="footer__content">
+                <div class="footer__section footer__section--brand">
+                    <div class="footer__brand">
+                        <div class="footer__logo">
+                            <span class="logo-icon" aria-hidden="true">🍽️</span>
+                            AI Buffet
+                        </div>
+                        <p class="footer__tagline">
+                            Premium AI insights served fresh daily
+                        </p>
+                    </div>
+                    <div class="social-links" aria-label="Follow us on social media">
+                        <a href="https://www.linkedin.com/company/aibuffet" class="social-link" target="_blank" rel="noopener" aria-label="Follow us on LinkedIn">
+                            <span aria-hidden="true">💼</span>
+                        </a>
+                        <a href="https://x.com/aibuffet" class="social-link" target="_blank" rel="noopener" aria-label="Follow us on X (Twitter)">
+                            <span aria-hidden="true">🐦</span>
+                        </a>
+                        <a href="../rss" class="social-link" aria-label="Subscribe to RSS feed">
+                            <span aria-hidden="true">📡</span>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="footer__section">
+                    <h3 class="footer__heading">Explore</h3>
+                    <ul class="footer__links">
+                        <li><a href="news.html" class="footer__link">AI News</a></li>
+                        <li><a href="tools.html" class="footer__link">Tool Reviews</a></li>
+                        <li><a href="https://ai-buffet.com/tools" class="footer__link">Free Templates</a></li>
+                        <li><a href="../categories/" class="footer__link">All Categories</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer__section">
+                    <h3 class="footer__heading">Resources</h3>
+                    <ul class="footer__links">
+                        <li><a href="../about" class="footer__link">About</a></li>
+                        <li><a href="../contact" class="footer__link">Contact</a></li>
+                        <li><a href="../privacy" class="footer__link">Privacy Policy</a></li>
+                        <li><a href="../terms" class="footer__link">Terms of Service</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer__section">
+                    <h3 class="footer__heading">Newsletter</h3>
+                    <p class="footer__newsletter-text">
+                        Get weekly AI insights delivered to your inbox
+                    </p>
+                    <a href="../#newsletter" class="btn btn-secondary btn-sm">
+                        Subscribe Now
+                    </a>
+                </div>
+            </div>
+
+            <div class="footer__bottom">
+                <div class="footer__legal">
+                    <p>&copy; 2025 AI Buffet. All rights reserved.</p>
+                </div>
+                <div class="footer__credits">
+                    <p>Made with care for the AI community</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="../assets/js/main.js" defer></script>
+    <script src="../assets/js/tools-ranking.js" defer></script>
+</body>
+</html>

@@ -1367,7 +1367,7 @@
             console.log('SUCCESS:', articles);
             
             // Replace placeholder content with real data
-            const featuredArticles = articles.filter(a => a.featured);
+            const featuredArticles = articles.filter(a => a.featured === true || a.featured === 'TRUE' || a.featured === 'true');
             if (featuredArticles.length > 0) {
                 updateTopStories(featuredArticles.slice(0, 3));
             } else {
@@ -1421,4 +1421,5 @@
     </script>
 </body>
 </html>
+
 

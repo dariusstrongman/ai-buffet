@@ -640,13 +640,6 @@
             transform: translateY(-1px);
         }
 
-        /* Sidebar */
-        .sidebar {
-            display: flex;
-            flex-direction: column;
-            gap: var(--space-lg);
-        }
-
         .sidebar-card {
             background: var(--surface);
             border: 1px solid var(--border);
@@ -908,28 +901,7 @@
                     <section class="top-stories" aria-labelledby="top-stories-title">
                         <h2 id="top-stories-title">Top AI Stories</h2>
                         
-                        <div class="stories-grid">
-                            <article class="card story-card">
-                                <h3 class="story-title">
-                                    <a href="/blog/openai-release">OpenAI's Latest Release Explained</a>
-                                </h3>
-                                <p class="story-excerpt">What the new model means for developers and everyday users.</p>
-                            </article>
-                            
-                            <article class="card story-card">
-                                <h3 class="story-title">
-                                    <a href="/blog/scary-ai-2025">The Scary Side of AI in 2025</a>
-                                </h3>
-                                <p class="story-excerpt">From deepfakes to job disruption — a reality check.</p>
-                            </article>
-                            
-                            <article class="card story-card">
-                                <h3 class="story-title">
-                                    <a href="/blog/ai-tools-roundup">Best New AI Tools This Week</a>
-                                </h3>
-                                <p class="story-excerpt">Hand-picked tools to boost your productivity and creativity.</p>
-                            </article>
-                        </div>
+                        <div class="stories-grid"></div>
                     </section>
 
                     <!-- Buffet Pick -->
@@ -943,28 +915,7 @@
                     <section class="latest-articles" aria-labelledby="latest-articles-title">
                         <h2 id="latest-articles-title">Latest Articles</h2>
                         
-                        <div class="articles-grid" id="articles-grid">
-                            <article class="card article-card" data-title="How to Beat ATS Bots">
-                                <h3 class="article-title">
-                                    <a href="/blog/ats-guide">How to Beat ATS Bots</a>
-                                </h3>
-                                <p class="article-excerpt">A practical guide for job seekers in 2025.</p>
-                            </article>
-                            
-                            <article class="card article-card" data-title="LLM Prompts That Actually Work">
-                                <h3 class="article-title">
-                                    <a href="/blog/prompt-patterns">LLM Prompts That Actually Work</a>
-                                </h3>
-                                <p class="article-excerpt">Effective prompt patterns for everyday use.</p>
-                            </article>
-                            
-                            <article class="card article-card" data-title="AI Scandals This Month">
-                                <h3 class="article-title">
-                                    <a href="/blog/ai-scandals">AI Scandals This Month</a>
-                                </h3>
-                                <p class="article-excerpt">When AI goes wrong — real cases that matter.</p>
-                            </article>
-                        </div>
+                        <div class="articles-grid" id="articles-grid"></div>
                         
                         <div style="text-align: center; margin-top: var(--space-lg);">
                             <a href="/blog" class="btn btn-secondary">View All Articles</a>
@@ -1005,24 +956,6 @@
                         </div>
                     </section>
                 </div>
-
-                <!-- Sidebar -->
-                <aside class="sidebar" role="complementary" aria-label="Sidebar">
-                    <!-- Buffet Tools -->
-                    <div class="sidebar-card buffet-tools">
-                        <h3>Buffet Tools</h3>
-                        <ul class="tool-links">
-                            <li><a href="/resume" class="tool-link">Resume Builder →</a></li>
-                            <li><a href="/projects" class="tool-link">Future Tools Coming Soon</a></li>
-                        </ul>
-                    </div>
-
-                    <!-- Sponsor Card -->
-                    <div class="sidebar-card sponsor-card">
-                        <h3>Sponsor</h3>
-                        <p>Ad placement for future monetization.</p>
-                    </div>
-                </aside>
             </div>
         </div>
     </main>
@@ -1064,7 +997,9 @@
 
     <!-- JavaScript -->
     <script>
+        
         // Search functionality
+        function initSearch() {
         const searchInput = document.getElementById('search-input');
         const articlesGrid = document.getElementById('articles-grid');
         
@@ -1072,20 +1007,23 @@
             const articles = articlesGrid.querySelectorAll('.article-card');
             
             searchInput.addEventListener('input', function(e) {
-                const searchTerm = e.target.value.toLowerCase();
+            const searchTerm = e.target.value.toLowerCase();
+            
+            articles.forEach(article => {
+                const title = article.textContent.toLowerCase();
+                const excerpt = article.querySelector('.article-excerpt')?.textContent.toLowerCase() || '';
                 
-                articles.forEach(article => {
-                    const title = article.getAttribute('data-title').toLowerCase();
-                    const excerpt = article.querySelector('.article-excerpt').textContent.toLowerCase();
-                    
-                    if (title.includes(searchTerm) || excerpt.includes(searchTerm)) {
-                        article.style.display = 'block';
-                    } else {
-                        article.style.display = searchTerm === '' ? 'block' : 'none';
-                    }
-                });
+                if (title.includes(searchTerm) || excerpt.includes(searchTerm)) {
+                article.style.display = 'block';
+                } else {
+                article.style.display = searchTerm === '' ? 'block' : 'none';
+                }
+            });
             });
         }
+        }
+
+
 
         // Header scroll behavior
         let lastScrollTop = 0;
@@ -1153,35 +1091,6 @@
             });
         }
 
-        // Add click handlers to article cards
-        const articleCards = document.querySelectorAll('.article-card, .story-card');
-        articleCards.forEach(card => {
-            card.addEventListener('click', function(e) {
-                if (e.target.tagName !== 'A') {
-                    const link = this.querySelector('a');
-                    if (link) {
-                        window.location.href = link.href;
-                    }
-                }
-            });
-            
-            // Add keyboard support
-            card.addEventListener('keypress', function(e) {
-                if (e.key === 'Enter' || e.key === ' ') {
-                    e.preventDefault();
-                    const link = this.querySelector('a');
-                    if (link) {
-                        window.location.href = link.href;
-                    }
-                }
-            });
-            
-            // Add tabindex for keyboard navigation
-            card.setAttribute('tabindex', '0');
-            card.setAttribute('role', 'button');
-            card.setAttribute('aria-label', 'Read article: ' + card.querySelector('h3').textContent);
-        });
-
         // Intersection Observer for fade-in animations
         const observerOptions = {
             root: null,
@@ -1198,10 +1107,12 @@
         }, observerOptions);
 
         // Add fade-in animation to cards
-        document.querySelectorAll('.card').forEach(card => {
-            card.classList.add('fade-in');
-            observer.observe(card);
-        });
+        function initAnimations() {
+            document.querySelectorAll('.card').forEach(card => {
+                card.classList.add('fade-in');
+                observer.observe(card);
+            });
+            }
 
         // Initialize cards as visible immediately for better UX
         setTimeout(() => {
@@ -1384,38 +1295,67 @@
         }
 
         function updateTopStories(stories) {
-            const grid = document.querySelector('.stories-grid');
-            if (grid && stories.length > 0) {
-                grid.innerHTML = stories.map(story => `
-                    <article class="card story-card">
-                        <h3 class="story-title">
-                            <a href="${story.link}" target="_blank" rel="noopener">${story.title}</a>
-                        </h3>
-                        <p class="story-excerpt">${story.ai_summary || 'No summary available'}</p>
-                    </article>
-                `).join('');
+        const grid = document.querySelector('.stories-grid');
+        if (grid && stories.length > 0) {
+            grid.innerHTML = stories.map(story => `
+            <article class="card story-card">
+                <h3 class="story-title">
+                <a href="${story.link}" target="_blank" rel="noopener">${story.title}</a>
+                </h3>
+                <p class="story-excerpt">${story.ai_summary || 'No summary available'}</p>
+            </article>
+            `).join('');
+            initCards();
+            initSearch();
+            initAnimations()
             }
         }
 
         function updateLatestArticles(articles) {
-            const grid = document.querySelector('.articles-grid');
-            if (grid && articles.length > 0) {
-                grid.innerHTML = articles.map(article => `
-                    <article class="card article-card">
-                        <h3 class="article-title">
-                            <a href="${article.link}" target="_blank" rel="noopener">${article.title}</a>
-                        </h3>
-                        <p class="article-excerpt">${article.ai_summary || 'No summary available'}</p>
-                    </article>
-                `).join('');
+        const grid = document.querySelector('.articles-grid');
+        if (grid && articles.length > 0) {
+            grid.innerHTML = articles.map(article => `
+            <article class="card article-card">
+                <h3 class="article-title">
+                <a href="${article.link}" target="_blank" rel="noopener">${article.title}</a>
+                </h3>
+                <p class="article-excerpt">${article.ai_summary || 'No summary available'}</p>
+            </article>
+            `).join('');
+            initCards();  
+            initSearch();
+            initAnimations();
             }
         }
+        function initCards() {
+            const articleCards = document.querySelectorAll('.article-card, .story-card');
+            articleCards.forEach(card => {
+                // Click handling
+                card.addEventListener('click', function(e) {
+                if (e.target.tagName !== 'A') {
+                    const link = this.querySelector('a');
+                    if (link) window.location.href = link.href;
+                }
+                });
+
+                // Keyboard support
+                card.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    const link = this.querySelector('a');
+                    if (link) window.location.href = link.href;
+                }
+                });
+
+                // Accessibility
+                card.setAttribute('tabindex', '0');
+                card.setAttribute('role', 'button');
+                card.setAttribute('aria-label', 'Read article: ' + card.querySelector('h3').textContent);
+            });
+            }
 
         // Load real data when page loads
         document.addEventListener('DOMContentLoaded', loadRealArticles);
     </script>
 </body>
 </html>
-
-
-

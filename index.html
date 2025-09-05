@@ -1367,7 +1367,14 @@
             console.log('SUCCESS:', articles);
             
             // Replace placeholder content with real data
-            updateTopStories(articles.filter(a => a.featured).slice(0, 3));
+            const featuredArticles = articles.filter(a => a.featured);
+            if (featuredArticles.length > 0) {
+                updateTopStories(featuredArticles.slice(0, 3));
+            } else {
+                // Use highest relevance_score articles as "top stories"
+                const topArticles = articles.sort((a, b) => (b.relevance_score || 0) - (a.relevance_score || 0)).slice(0, 3);
+                updateTopStories(topArticles);
+            }
             updateLatestArticles(articles.slice(0, 6));
             
         } catch (error) {
@@ -1414,3 +1421,4 @@
     </script>
 </body>
 </html>
+

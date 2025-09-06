@@ -1051,9 +1051,16 @@ function enhanceCtaButtons() {
  */
 function validateLinks() {
     Elements.allLinks.forEach(link => {
+        // Skip navigation links - they should navigate normally
+        if (link.classList.contains('nav-link') || link.closest('.nav-links')) {
+            return;
+        }
+        
         // Ensure external links have proper attributes
         if (link.href && (link.href.startsWith('http') || link.href.startsWith('//'))) {
-            if (!link.hasAttribute('target')) {
+            // Only add target="_blank" to actual external domains, not same-site links
+            const currentDomain = window.location.origin;
+            if (!link.href.startsWith(currentDomain) && !link.hasAttribute('target')) {
                 link.setAttribute('target', '_blank');
             }
             if (!link.hasAttribute('rel')) {

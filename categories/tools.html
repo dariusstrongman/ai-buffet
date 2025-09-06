@@ -172,146 +172,24 @@
                         <option value="rank">Market Ranking</option>
                         <option value="popularity">Popularity</option>
                         <option value="rating">User Rating</option>
+                        <option value="growth">Growth Rate</option>
+                        <option value="trending">Trending Score</option>
                         <option value="price">Price (Low to High)</option>
                         <option value="newest">Newest First</option>
+                        <option value="alphabetical">Alphabetical</option>
                     </select>
                 </div>
             </section>
 
-            <!-- Top Tools Section -->
-            <section class="top-tools" aria-labelledby="top-tools-title">
+            <!-- Top Tools Section (Static fallback, will be replaced by dynamic system) -->
+            <section class="top-tools" aria-labelledby="top-tools-title" style="display: none;">
                 <div class="section-header">
                     <h2 id="top-tools-title">🏆 Top Ranked AI Tools</h2>
                     <p class="section-subtitle">The highest-performing AI tools based on market data and user feedback</p>
                 </div>
                 
-                <div class="tools-grid" id="top-tools-grid">
-                    <!-- Top 3 tools with featured styling -->
-                    <article class="tool-card tool-card--featured tool-card--rank-1" data-category="writing" data-rank="1">
-                        <div class="tool-card__rank">
-                            <span class="rank-number">1</span>
-                            <span class="rank-badge">🏆</span>
-                        </div>
-                        <div class="tool-card__header">
-                            <div class="tool-card__icon">
-                                <img src="https://openai.com/favicon.ico" alt="ChatGPT" width="48" height="48" loading="lazy">
-                            </div>
-                            <div class="tool-card__title-area">
-                                <h3 class="tool-card__title">
-                                    <a href="https://chat.openai.com" target="_blank" rel="noopener" class="tool-card__link">ChatGPT</a>
-                                </h3>
-                                <div class="tool-card__category">Writing & Content</div>
-                            </div>
-                        </div>
-                        <p class="tool-card__description">Revolutionary AI assistant for writing, coding, analysis, and creative tasks with human-like conversation.</p>
-                        <div class="tool-card__metrics">
-                            <div class="metric">
-                                <span class="metric-value" data-rating="4.8">4.8</span>
-                                <span class="metric-label">Rating</span>
-                            </div>
-                            <div class="metric">
-                                <span class="metric-value" data-users="100M+">100M+</span>
-                                <span class="metric-label">Users</span>
-                            </div>
-                            <div class="metric">
-                                <span class="metric-value trend-up" data-trend="↗ 15%">↗ 15%</span>
-                                <span class="metric-label">Growth</span>
-                            </div>
-                        </div>
-                        <div class="tool-card__pricing">
-                            <span class="price-badge">Free + Pro</span>
-                            <span class="price-details">$20/mo</span>
-                        </div>
-                        <div class="tool-card__tags">
-                            <span class="tag">GPT-4</span>
-                            <span class="tag">Multimodal</span>
-                            <span class="tag">API</span>
-                        </div>
-                    </article>
-
-                    <article class="tool-card tool-card--featured tool-card--rank-2" data-category="design" data-rank="2">
-                        <div class="tool-card__rank">
-                            <span class="rank-number">2</span>
-                            <span class="rank-badge">🥈</span>
-                        </div>
-                        <div class="tool-card__header">
-                            <div class="tool-card__icon">
-                                <img src="https://www.midjourney.com/favicon.ico" alt="Midjourney" width="48" height="48" loading="lazy">
-                            </div>
-                            <div class="tool-card__title-area">
-                                <h3 class="tool-card__title">
-                                    <a href="https://www.midjourney.com" target="_blank" rel="noopener" class="tool-card__link">Midjourney</a>
-                                </h3>
-                                <div class="tool-card__category">Design & Creative</div>
-                            </div>
-                        </div>
-                        <p class="tool-card__description">Premier AI art generator creating stunning, professional-quality images from text descriptions.</p>
-                        <div class="tool-card__metrics">
-                            <div class="metric">
-                                <span class="metric-value" data-rating="4.7">4.7</span>
-                                <span class="metric-label">Rating</span>
-                            </div>
-                            <div class="metric">
-                                <span class="metric-value" data-users="20M+">20M+</span>
-                                <span class="metric-label">Users</span>
-                            </div>
-                            <div class="metric">
-                                <span class="metric-value trend-up" data-trend="↗ 25%">↗ 25%</span>
-                                <span class="metric-label">Growth</span>
-                            </div>
-                        </div>
-                        <div class="tool-card__pricing">
-                            <span class="price-badge">Subscription</span>
-                            <span class="price-details">$10-60/mo</span>
-                        </div>
-                        <div class="tool-card__tags">
-                            <span class="tag">V6</span>
-                            <span class="tag">Discord</span>
-                            <span class="tag">Commercial</span>
-                        </div>
-                    </article>
-
-                    <article class="tool-card tool-card--featured tool-card--rank-3" data-category="coding" data-rank="3">
-                        <div class="tool-card__rank">
-                            <span class="rank-number">3</span>
-                            <span class="rank-badge">🥉</span>
-                        </div>
-                        <div class="tool-card__header">
-                            <div class="tool-card__icon">
-                                <img src="https://github.com/favicon.ico" alt="GitHub Copilot" width="48" height="48" loading="lazy">
-                            </div>
-                            <div class="tool-card__title-area">
-                                <h3 class="tool-card__title">
-                                    <a href="https://github.com/features/copilot" target="_blank" rel="noopener" class="tool-card__link">GitHub Copilot</a>
-                                </h3>
-                                <div class="tool-card__category">Coding & Development</div>
-                            </div>
-                        </div>
-                        <p class="tool-card__description">AI pair programmer that suggests code completions and entire functions as you type.</p>
-                        <div class="tool-card__metrics">
-                            <div class="metric">
-                                <span class="metric-value" data-rating="4.6">4.6</span>
-                                <span class="metric-label">Rating</span>
-                            </div>
-                            <div class="metric">
-                                <span class="metric-value" data-users="5M+">5M+</span>
-                                <span class="metric-label">Users</span>
-                            </div>
-                            <div class="metric">
-                                <span class="metric-value trend-up" data-trend="↗ 30%">↗ 30%</span>
-                                <span class="metric-label">Growth</span>
-                            </div>
-                        </div>
-                        <div class="tool-card__pricing">
-                            <span class="price-badge">Subscription</span>
-                            <span class="price-details">$10-19/mo</span>
-                        </div>
-                        <div class="tool-card__tags">
-                            <span class="tag">VSCode</span>
-                            <span class="tag">Multi-lang</span>
-                            <span class="tag">Real-time</span>
-                        </div>
-                    </article>
+                <div class="tools-grid" id="top-tools-grid-static">
+                    <!-- This will be hidden and replaced by the dynamic system -->
                 </div>
             </section>
 
@@ -320,23 +198,34 @@
                 <div class="section-header">
                     <h2 id="all-tools-title">📋 Complete AI Tools Directory</h2>
                     <p class="section-subtitle">Comprehensive rankings of AI tools across all categories</p>
+                    <div class="tools-meta" id="tools-meta">
+                        <span class="tools-count">Showing <span id="visible-count">0</span> of <span id="total-count">0</span> tools</span>
+                        <span class="last-updated">Last updated: <span id="last-update-time">Loading...</span></span>
+                    </div>
                 </div>
                 
-                <div class="tools-list" id="all-tools-grid">
+                <!-- Dynamic Tools Grid -->
+                <div class="tools-container">
                     <!-- Loading placeholder -->
                     <div class="tools-loading" id="tools-loading">
                         <div class="loading-spinner"></div>
                         <p>Loading latest tool rankings...</p>
                     </div>
-                    <!-- Tools will be populated by JavaScript -->
+                    
+                    <!-- Tools Grid -->
+                    <div class="dynamic-tools-grid" id="dynamic-tools-grid" aria-live="polite">
+                        <!-- Tools will be populated dynamically -->
+                    </div>
+                    
+                    <!-- Empty State -->
+                    <div class="empty-state" id="empty-state" style="display: none;">
+                        <div class="empty-state-icon">🔍</div>
+                        <h3>No tools found</h3>
+                        <p>Try adjusting your filters or search terms</p>
+                        <button class="btn btn-primary" onclick="clearAllFilters()">Clear Filters</button>
+                    </div>
                 </div>
                 
-                <div class="load-more-section">
-                    <button class="btn btn-secondary" id="load-more-btn">
-                        <span class="btn-icon">📊</span>
-                        Load More Tools
-                    </button>
-                </div>
             </section>
 
             <!-- Market Insights -->
@@ -475,6 +364,8 @@
 
     <!-- JavaScript -->
     <script src="../assets/js/main.js" defer></script>
-    <script src="../assets/js/tools-ranking.js" defer></script>
+    <script src="../assets/js/tools-database.js"></script>
+    <script src="../assets/js/tools-fix.js" defer></script>
+    <script src="../assets/js/dynamic-tools.js" defer></script>
 </body>
 </html>

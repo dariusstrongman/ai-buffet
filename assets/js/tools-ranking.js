@@ -343,12 +343,18 @@ const Elements = {
  * Initialize Tools Ranking System
  */
 document.addEventListener('DOMContentLoaded', function() {
+    // Only initialize if we're on the tools page
+    if (!document.querySelector('.tools-grid, .tools-list')) {
+        return;
+    }
+    
     initializeElements();
     initializeEventListeners();
     updateMarketData();
     renderAllTools();
     updateTrendingTools();
     startRealTimeUpdates();
+    initializeToolsInteractivity();
     
     console.log('AI Tools Ranking System initialized');
 });
@@ -373,24 +379,49 @@ function initializeElements() {
  * Initialize Event Listeners
  */
 function initializeEventListeners() {
-    // Filter buttons
+    // Filter buttons with enhanced interactivity
     Elements.filterButtons.forEach(button => {
         button.addEventListener('click', handleFilterChange);
+        button.addEventListener('keydown', function(event) {
+            if (event.key === 'Enter' || event.key === ' ') {
+                event.preventDefault();
+                handleFilterChange.call(this, event);
+            }
+        });
     });
     
-    // Sort dropdown
+    // Sort dropdown with change feedback
     if (Elements.sortSelect) {
         Elements.sortSelect.addEventListener('change', handleSortChange);
+        Elements.sortSelect.addEventListener('focus', function() {
+            this.setAttribute('data-focused', 'true');
+        });
+        Elements.sortSelect.addEventListener('blur', function() {
+            this.removeAttribute('data-focused');
+        });
     }
     
-    // Load more button
+    // Load more button with loading state
     if (Elements.loadMoreBtn) {
-        Elements.loadMoreBtn.addEventListener('click', handleLoadMore);
+        Elements.loadMoreBtn.addEventListener('click', handleLoadMoreWithFeedback);
     }
     
-    // Search functionality
+    // Enhanced search functionality
     if (Elements.searchInput) {
         Elements.searchInput.addEventListener('input', debounce(handleSearch, 300));
+        Elements.searchInput.addEventListener('focus', function() {
+            this.parentElement.classList.add('search-focused');
+        });
+        Elements.searchInput.addEventListener('blur', function() {
+            this.parentElement.classList.remove('search-focused');
+        });
+        Elements.searchInput.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                this.value = '';
+                handleSearch({ target: this });
+                this.blur();
+            }
+        });
     }
 }
 
@@ -424,6 +455,143 @@ function handleSortChange(event) {
 function handleLoadMore() {
     AppState.visibleCount += 6;
     renderAllTools();
+}
+
+/**
+ * Handle Load More with Visual Feedback
+ */
+function handleLoadMoreWithFeedback() {
+    const button = Elements.loadMoreBtn;
+    const originalText = button.innerHTML;
+    
+    // Add loading state
+    button.innerHTML = '<span class="loading-spinner"></span> Loading more tools...';
+    button.disabled = true;
+    
+    // Simulate loading delay for better UX
+    setTimeout(() => {
+        handleLoadMore();
+        
+        // Reset button after brief delay
+        setTimeout(() => {
+            if (button.parentNode) {
+                button.innerHTML = originalText;
+                button.disabled = false;
+            }
+        }, 500);
+    }, 800);
+}
+
+/**
+ * Initialize Tools-Specific Interactivity
+ */
+function initializeToolsInteractivity() {
+    // Add hover effects to tool cards
+    addToolCardHoverEffects();
+    
+    // Initialize tool card click tracking
+    initializeToolCardTracking();
+    
+    // Add keyboard navigation for tool cards
+    addToolCardKeyboardNavigation();
+    
+    console.log('Tools interactivity initialized');
+}
+
+/**
+ * Add Hover Effects to Tool Cards
+ */
+function addToolCardHoverEffects() {
+    const style = document.createElement('style');
+    style.textContent = `
+        .tool-card {
+            transition: all var(--transition-base, 0.3s ease);
+            cursor: pointer;
+        }
+        
+        .tool-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-xl, 0 20px 25px -5px rgba(0, 0, 0, 0.1));
+        }
+        
+        .tool-card:focus {
+            outline: 2px solid var(--color-primary, #4F46E5);
+            outline-offset: 2px;
+        }
+        
+        .search-focused {
+            box-shadow: 0 0 0 2px var(--color-primary, #4F46E5);
+        }
+        
+        .loading-spinner {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid transparent;
+            border-top: 2px solid currentColor;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    `;
+    
+    if (!document.querySelector('#tools-interactivity-styles')) {
+        style.id = 'tools-interactivity-styles';
+        document.head.appendChild(style);
+    }
+}
+
+/**
+ * Initialize Tool Card Click Tracking
+ */
+function initializeToolCardTracking() {
+    document.addEventListener('click', function(event) {
+        const toolCard = event.target.closest('.tool-card');
+        if (toolCard) {
+            const toolName = toolCard.querySelector('.tool-card__title a')?.textContent;
+            const toolRank = toolCard.getAttribute('data-rank');
+            const toolCategory = toolCard.getAttribute('data-category');
+            
+            // Track tool card clicks (for analytics)
+            console.log('Tool clicked:', {
+                name: toolName,
+                rank: toolRank,
+                category: toolCategory,
+                timestamp: new Date().toISOString()
+            });
+            
+            // Add visual feedback
+            toolCard.style.transform = 'scale(0.98)';
+            setTimeout(() => {
+                if (toolCard.parentNode) {
+                    toolCard.style.transform = '';
+                }
+            }, 150);
+        }
+    });
+}
+
+/**
+ * Add Keyboard Navigation for Tool Cards
+ */
+function addToolCardKeyboardNavigation() {
+    document.addEventListener('keydown', function(event) {
+        const toolCard = event.target.closest('.tool-card');
+        if (toolCard && (event.key === 'Enter' || event.key === ' ')) {
+            event.preventDefault();
+            const link = toolCard.querySelector('.tool-card__title a');
+            if (link) {
+                // Add visual feedback before navigation
+                toolCard.style.transform = 'scale(0.98)';
+                setTimeout(() => {
+                    link.click();
+                }, 100);
+            }
+        }
+    });
 }
 
 /**
@@ -594,7 +762,7 @@ function renderAllTools() {
         Elements.toolsLoading.style.display = 'block';
     }
     
-    // Simulate API delay
+    // Simulate API delay with user feedback
     setTimeout(() => {
         const filteredTools = filterTools(TOOLS_DATABASE);
         const sortedTools = sortTools(filteredTools, AppState.currentSort);
@@ -602,12 +770,21 @@ function renderAllTools() {
         
         AppState.displayedTools = visibleTools;
         
-        // Render tools
+        // Render tools with enhanced accessibility
         const toolsHTML = visibleTools.map((tool, index) => 
             renderToolCard(tool, index + 1)
         ).join('');
         
         Elements.allToolsGrid.innerHTML = toolsHTML;
+        
+        // Add tabindex to tool cards for keyboard navigation
+        Elements.allToolsGrid.querySelectorAll('.tool-card').forEach((card, index) => {
+            card.setAttribute('tabindex', '0');
+            card.setAttribute('role', 'button');
+            card.setAttribute('aria-label', 
+                `View ${card.querySelector('.tool-card__title a')?.textContent} - Rank ${index + 1}`
+            );
+        });
         
         // Hide loading
         if (Elements.toolsLoading) {
@@ -616,14 +793,45 @@ function renderAllTools() {
         
         // Update load more button
         if (Elements.loadMoreBtn) {
-            Elements.loadMoreBtn.style.display = 
-                visibleTools.length < filteredTools.length ? 'block' : 'none';
+            const hasMore = visibleTools.length < filteredTools.length;
+            Elements.loadMoreBtn.style.display = hasMore ? 'block' : 'none';
+            
+            if (hasMore) {
+                const remainingCount = filteredTools.length - visibleTools.length;
+                Elements.loadMoreBtn.querySelector('.btn-icon').textContent = '📊';
+                Elements.loadMoreBtn.childNodes[1].textContent = 
+                    ` Load ${Math.min(6, remainingCount)} More Tools`;
+            }
         }
         
         // Update stats
         updateStats();
         
+        // Announce to screen readers
+        const resultCount = visibleTools.length;
+        const totalCount = filteredTools.length;
+        announceResults(`Showing ${resultCount} of ${totalCount} tools`);
+        
     }, 500);
+}
+
+/**
+ * Announce Results to Screen Readers
+ */
+function announceResults(message) {
+    const announcement = document.createElement('div');
+    announcement.setAttribute('aria-live', 'polite');
+    announcement.setAttribute('aria-atomic', 'true');
+    announcement.className = 'sr-only';
+    announcement.textContent = message;
+    
+    document.body.appendChild(announcement);
+    
+    setTimeout(() => {
+        if (announcement.parentNode) {
+            document.body.removeChild(announcement);
+        }
+    }, 1000);
 }
 
 /**
@@ -685,24 +893,43 @@ function updateMarketData() {
  * Start Real-Time Updates
  */
 function startRealTimeUpdates() {
-    // Update market data every 30 seconds
-    setInterval(() => {
-        updateMarketData();
-        if (AppState.currentSort === 'rank') {
-            renderAllTools();
+    // Only start updates if user is actively viewing the page
+    let isPageVisible = !document.hidden;
+    
+    document.addEventListener('visibilitychange', function() {
+        isPageVisible = !document.hidden;
+        if (isPageVisible) {
+            // Refresh data when user returns to page
+            updateMarketData();
+            if (AppState.currentSort === 'rank') {
+                renderAllTools();
+            }
+            updateTrendingTools();
         }
-        updateTrendingTools();
+    });
+    
+    // Update market data every 30 seconds (only when page is visible)
+    setInterval(() => {
+        if (isPageVisible) {
+            updateMarketData();
+            if (AppState.currentSort === 'rank') {
+                renderAllTools();
+            }
+            updateTrendingTools();
+        }
     }, 30000);
     
     // Update "last update" timestamp every second
     setInterval(() => {
-        if (Elements.lastUpdateCounter) {
+        if (Elements.lastUpdateCounter && isPageVisible) {
             const now = new Date();
             const diff = Math.floor((now - AppState.lastUpdate) / 1000);
             if (diff < 60) {
                 Elements.lastUpdateCounter.textContent = 'Live';
-            } else {
+            } else if (diff < 3600) {
                 Elements.lastUpdateCounter.textContent = `${Math.floor(diff / 60)}m ago`;
+            } else {
+                Elements.lastUpdateCounter.textContent = `${Math.floor(diff / 3600)}h ago`;
             }
         }
     }, 1000);

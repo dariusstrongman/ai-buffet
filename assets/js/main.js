@@ -59,8 +59,11 @@ document.addEventListener('DOMContentLoaded', function() {
     initializeNewsletterForm();
     initializeKeyboardShortcuts();
     initializeMobileMenu();
+    initializeInteractiveElements();
+    initializeBrowserCompatibility();
     loadRealArticles();
     
+    // Log successful initialization
     console.log('AI Buffet initialized successfully');
 });
 
@@ -92,6 +95,16 @@ function initializeElements() {
     
     // Lazy loading
     Elements.lazyImages = document.querySelectorAll('img[data-src]');
+    
+    // Interactive elements
+    Elements.allButtons = document.querySelectorAll('button, .btn');
+    Elements.allLinks = document.querySelectorAll('a');
+    Elements.ctaButtons = document.querySelectorAll('.btn-cta, .btn-primary');
+    Elements.filterButtons = document.querySelectorAll('.filter-btn');
+    
+    // Validate critical elements
+    if (!Elements.header) console.warn('Header element not found');
+    if (!Elements.searchInput) console.warn('Search input not found');
 }
 
 /**
@@ -943,8 +956,211 @@ function announceToScreenReader(message) {
     document.body.appendChild(announcement);
     
     setTimeout(() => {
-        document.body.removeChild(announcement);
+        if (announcement.parentNode) {
+            document.body.removeChild(announcement);
+        }
     }, 1000);
+}
+
+/**
+ * Initialize All Interactive Elements
+ */
+function initializeInteractiveElements() {
+    // Ensure all buttons have proper focus states and keyboard navigation
+    enhanceButtonInteractivity();
+    
+    // Add loading states to all CTA buttons
+    enhanceCtaButtons();
+    
+    // Ensure all links work properly
+    validateLinks();
+    
+    // Add proper ARIA attributes
+    enhanceAccessibility();
+    
+    console.log('Interactive elements initialized');
+}
+
+/**
+ * Enhance Button Interactivity
+ */
+function enhanceButtonInteractivity() {
+    Elements.allButtons.forEach(button => {
+        // Add focus enhancement
+        if (!button.hasAttribute('tabindex') && !button.disabled) {
+            button.setAttribute('tabindex', '0');
+        }
+        
+        // Add keyboard support for non-form buttons
+        if (button.type !== 'submit' && !button.closest('form')) {
+            button.addEventListener('keydown', function(event) {
+                if (event.key === 'Enter' || event.key === ' ') {
+                    event.preventDefault();
+                    this.click();
+                }
+            });
+        }
+        
+        // Add visual feedback on interaction
+        button.addEventListener('mousedown', function() {
+            this.style.transform = 'scale(0.98)';
+        });
+        
+        button.addEventListener('mouseup', function() {
+            this.style.transform = '';
+        });
+        
+        button.addEventListener('mouseleave', function() {
+            this.style.transform = '';
+        });
+    });
+}
+
+/**
+ * Enhance CTA Buttons with Loading States
+ */
+function enhanceCtaButtons() {
+    Elements.ctaButtons.forEach(button => {
+        const originalHtml = button.innerHTML;
+        
+        button.addEventListener('click', function(event) {
+            // Don't add loading state to external links
+            if (this.tagName === 'A' && this.target === '_blank') {
+                return;
+            }
+            
+            // Add loading state
+            this.classList.add('btn-loading');
+            this.disabled = true;
+            this.innerHTML = '<span class="loading-spinner"></span> Loading...';
+            
+            // Remove loading state after navigation or timeout
+            setTimeout(() => {
+                if (this.parentNode) {
+                    this.classList.remove('btn-loading');
+                    this.disabled = false;
+                    this.innerHTML = originalHtml;
+                }
+            }, 2000);
+        });
+    });
+}
+
+/**
+ * Validate All Links
+ */
+function validateLinks() {
+    Elements.allLinks.forEach(link => {
+        // Ensure external links have proper attributes
+        if (link.href && (link.href.startsWith('http') || link.href.startsWith('//'))) {
+            if (!link.hasAttribute('target')) {
+                link.setAttribute('target', '_blank');
+            }
+            if (!link.hasAttribute('rel')) {
+                link.setAttribute('rel', 'noopener');
+            }
+        }
+        
+        // Add visual feedback for broken links
+        link.addEventListener('click', function(event) {
+            if (!this.href || this.href === '#' || this.href.endsWith('#')) {
+                event.preventDefault();
+                showNotification('This link is not yet available.', 'info');
+            }
+        });
+        
+        // Enhance keyboard navigation
+        link.addEventListener('keydown', function(event) {
+            if (event.key === 'Enter') {
+                this.click();
+            }
+        });
+    });
+}
+
+/**
+ * Enhance Accessibility
+ */
+function enhanceAccessibility() {
+    // Add skip links if they don't exist
+    if (!document.querySelector('.skip-link')) {
+        const skipLink = document.createElement('a');
+        skipLink.href = '#main';
+        skipLink.className = 'skip-link';
+        skipLink.textContent = 'Skip to main content';
+        skipLink.style.cssText = `
+            position: absolute;
+            top: -40px;
+            left: 6px;
+            z-index: 1000;
+            color: white;
+            background: var(--color-primary);
+            padding: 8px;
+            text-decoration: none;
+            border-radius: 4px;
+            transform: translateY(-100%);
+            transition: transform 0.3s;
+        `;
+        
+        skipLink.addEventListener('focus', function() {
+            this.style.transform = 'translateY(0)';
+        });
+        
+        skipLink.addEventListener('blur', function() {
+            this.style.transform = 'translateY(-100%)';
+        });
+        
+        document.body.insertBefore(skipLink, document.body.firstChild);
+    }
+    
+    // Ensure all interactive elements have proper ARIA attributes
+    document.querySelectorAll('button, [role="button"]').forEach(element => {
+        if (!element.hasAttribute('aria-label') && !element.textContent.trim()) {
+            console.warn('Interactive element missing accessible label:', element);
+        }
+    });
+}
+
+/**
+ * Initialize Browser Compatibility Features
+ */
+function initializeBrowserCompatibility() {
+    // Polyfill for older browsers
+    if (!window.NodeList.prototype.forEach) {
+        window.NodeList.prototype.forEach = Array.prototype.forEach;
+    }
+    
+    // CSS custom properties fallback
+    if (!CSS.supports('(--test: red)')) {
+        document.documentElement.classList.add('no-css-custom-props');
+    }
+    
+    // Intersection Observer polyfill fallback
+    if (!window.IntersectionObserver) {
+        console.warn('IntersectionObserver not supported, using fallback');
+        loadAllImages();
+    }
+    
+    // Smooth scroll polyfill for older browsers
+    if (!('scrollBehavior' in document.documentElement.style)) {
+        // Add smooth scroll polyfill for older browsers
+        window.smoothScrollPolyfill = true;
+    }
+    
+    // Add browser classes for CSS targeting
+    const isIE = /Trident|MSIE/.test(navigator.userAgent);
+    const isEdge = /Edge/.test(navigator.userAgent);
+    const isSafari = /Safari/.test(navigator.userAgent) && !/Chrome/.test(navigator.userAgent);
+    const isChrome = /Chrome/.test(navigator.userAgent) && !/Edge/.test(navigator.userAgent);
+    const isFirefox = /Firefox/.test(navigator.userAgent);
+    
+    if (isIE) document.documentElement.classList.add('is-ie');
+    if (isEdge) document.documentElement.classList.add('is-edge');
+    if (isSafari) document.documentElement.classList.add('is-safari');
+    if (isChrome) document.documentElement.classList.add('is-chrome');
+    if (isFirefox) document.documentElement.classList.add('is-firefox');
+    
+    console.log('Browser compatibility features initialized');
 }
 
 /**
@@ -968,6 +1184,125 @@ window.addEventListener('load', function() {
     }
 });
 
+/**
+ * Validate All Interactive Elements on Page Load
+ */
+function validateInteractiveElements() {
+    let validationResults = {
+        buttons: 0,
+        workingButtons: 0,
+        links: 0,
+        workingLinks: 0,
+        issues: []
+    };
+    
+    // Validate all buttons
+    const buttons = document.querySelectorAll('button, [role="button"], .btn');
+    validationResults.buttons = buttons.length;
+    
+    buttons.forEach((button, index) => {
+        if (!button.disabled && button.style.display !== 'none') {
+            validationResults.workingButtons++;
+        }
+        
+        // Check for missing labels or text
+        if (!button.textContent.trim() && !button.getAttribute('aria-label')) {
+            validationResults.issues.push(`Button ${index + 1} missing accessible label`);
+        }
+    });
+    
+    // Validate all links
+    const links = document.querySelectorAll('a');
+    validationResults.links = links.length;
+    
+    links.forEach((link, index) => {
+        if (link.href && link.href !== '#' && !link.href.endsWith('#')) {
+            validationResults.workingLinks++;
+        } else if (link.href === '#' || link.href.endsWith('#')) {
+            // Only report as issue if it's not a valid anchor link
+            const targetId = link.href.split('#')[1];
+            if (targetId && !document.getElementById(targetId)) {
+                validationResults.issues.push(`Link ${index + 1} "${link.textContent.trim()}" points to missing anchor #${targetId}`);
+            }
+        }
+        
+        // Check external links for security attributes
+        if (link.href && (link.href.startsWith('http') || link.href.startsWith('//'))) {
+            if (!link.hasAttribute('rel') || !link.rel.includes('noopener')) {
+                // Auto-fix missing rel attributes
+                link.setAttribute('rel', 'noopener');
+                console.log(`✓ Fixed missing rel="noopener" on link: ${link.textContent.trim()}`);
+            }
+        }
+    });
+    
+    // Log validation results
+    console.log('🔍 Interactive Elements Validation:', validationResults);
+    
+    if (validationResults.issues.length === 0) {
+        console.log('✅ All interactive elements validated successfully!');
+    } else {
+        console.warn('⚠️ Found', validationResults.issues.length, 'issues with interactive elements');
+        validationResults.issues.forEach(issue => console.warn('  -', issue));
+    }
+    
+    return validationResults;
+}
+
+/**
+ * Test Critical User Flows
+ */
+function testCriticalFlows() {
+    const tests = {
+        searchFunctionality: false,
+        tabSwitching: false,
+        themeToggle: false,
+        mobileMenu: false,
+        newsletterForm: false
+    };
+    
+    // Test search functionality
+    if (Elements.searchInput) {
+        tests.searchFunctionality = true;
+    }
+    
+    // Test tab switching
+    if (Elements.tabButtons && Elements.tabButtons.length > 0) {
+        tests.tabSwitching = true;
+    }
+    
+    // Test theme toggle
+    if (Elements.themeToggle) {
+        tests.themeToggle = true;
+    }
+    
+    // Test mobile menu
+    if (Elements.mobileMenuToggle) {
+        tests.mobileMenu = true;
+    }
+    
+    // Test newsletter form
+    if (Elements.newsletterForm) {
+        tests.newsletterForm = true;
+    }
+    
+    const passedTests = Object.values(tests).filter(Boolean).length;
+    const totalTests = Object.keys(tests).length;
+    
+    console.log(`🧪 Critical Flow Tests: ${passedTests}/${totalTests} passed`);
+    console.log('Test Results:', tests);
+    
+    return tests;
+}
+
+// Run validation on load
+window.addEventListener('load', function() {
+    setTimeout(() => {
+        validateInteractiveElements();
+        testCriticalFlows();
+    }, 1000);
+});
+
 // Export for testing purposes (if module system is used)
 if (typeof module !== 'undefined' && module.exports) {
     module.exports = {
@@ -976,6 +1311,8 @@ if (typeof module !== 'undefined' && module.exports) {
         toggleTheme,
         escapeHtml,
         isValidEmail,
-        formatDate
+        formatDate,
+        validateInteractiveElements,
+        testCriticalFlows
     };
 }

@@ -4,7 +4,7 @@
 
 Welcome to **AI Buffet**, your daily dose of hand-picked AI resources, tools, trends, and strategies. Whether you're a developer, researcher, entrepreneur, or just AI-curious — this site is your buffet of inspiration.
 
-🌐 **Live Site:** [ai-buffet.vercel.app](https://ai-buffet.vercel.app)
+🌐 **Live Site:** [ai-buffet.com](https://ai-buffet.com)
 
 ---
 

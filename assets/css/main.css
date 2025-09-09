@@ -740,17 +740,41 @@ p {
 }
 
 .nav-link--cta {
-    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-accent) 100%);
-    color: white;
+    background: var(--gradient-accent);
+    color: white !important;
     padding: var(--space-2) var(--space-4);
-    border-radius: var(--radius-lg);
-    font-weight: var(--font-weight-semibold);
+    border-radius: var(--radius-md);
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    box-shadow: var(--shadow-sm), var(--glow-pink);
+    animation: nav-cta-pulse 3s ease-in-out infinite;
+    border: 1px solid rgba(236, 72, 153, 0.3);
 }
 
 .nav-link--cta:hover {
-    transform: translateY(-1px);
-    box-shadow: var(--shadow-md);
-    color: white;
+    transform: translateY(-2px) scale(1.05);
+    box-shadow: var(--shadow-lg), var(--glow-pink);
+    background: var(--gradient-primary);
+    color: white !important;
+    border-color: rgba(34, 211, 238, 0.6);
+}
+
+.cta-badge {
+    font-size: var(--font-size-xs);
+    opacity: 0.8;
+    transition: all var(--transition-fast);
+}
+
+.nav-link--cta:hover .cta-badge {
+    transform: translateX(2px);
+    opacity: 1;
+}
+
+@keyframes nav-cta-pulse {
+    0%, 100% { box-shadow: var(--shadow-sm), var(--glow-pink); }
+    50% { box-shadow: var(--shadow-md), 0 0 25px rgba(236, 72, 153, 0.6); }
 }
 
 /* Search */
@@ -2090,6 +2114,389 @@ p {
     }
 }
 
+/* AI Facts Section - Unique Interactive Content */
+.ai-facts-section {
+    margin: var(--space-20) 0;
+    padding: var(--space-16) var(--space-6);
+    background: var(--gradient-surface);
+    border-radius: var(--radius-2xl);
+    border: 1px solid var(--color-border);
+    position: relative;
+    overflow: hidden;
+}
+
+.ai-facts-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: var(--gradient-primary);
+    animation: data-flow 3s ease-in-out infinite;
+}
+
+@keyframes data-flow {
+    0%, 100% { opacity: 0.5; transform: translateX(-100%); }
+    50% { opacity: 1; transform: translateX(100%); }
+}
+
+.facts-container {
+    display: grid;
+    gap: var(--space-12);
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* Featured Rotating Fact */
+.featured-fact {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--space-8);
+    background: var(--glass-bg);
+    border-radius: var(--radius-xl);
+    border: 1px solid var(--glass-border);
+    margin-bottom: var(--space-8);
+    animation: fact-pulse 4s ease-in-out infinite;
+}
+
+@keyframes fact-pulse {
+    0%, 100% { transform: scale(1); box-shadow: var(--shadow-md); }
+    50% { transform: scale(1.02); box-shadow: var(--shadow-xl), var(--glow-blue); }
+}
+
+.fact-content {
+    flex: 1;
+}
+
+.fact-number {
+    font-family: var(--font-family-display);
+    font-size: 3rem;
+    font-weight: 800;
+    background: var(--gradient-primary);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: var(--space-2);
+    text-shadow: 0 0 20px rgba(34, 211, 238, 0.5);
+}
+
+.fact-description {
+    font-size: var(--font-size-xl);
+    font-weight: 600;
+    color: var(--color-text-primary);
+    margin-bottom: var(--space-1);
+}
+
+.fact-comparison {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-secondary);
+    font-style: italic;
+}
+
+.fact-visual {
+    margin-left: var(--space-6);
+}
+
+.fact-icon {
+    font-size: 4rem;
+    opacity: 0.8;
+    animation: icon-float 3s ease-in-out infinite;
+}
+
+@keyframes icon-float {
+    0%, 100% { transform: translateY(0px) rotate(0deg); }
+    50% { transform: translateY(-10px) rotate(10deg); }
+}
+
+/* Facts Grid */
+.facts-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: var(--space-6);
+    margin-bottom: var(--space-12);
+}
+
+.fact-card {
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-lg);
+    padding: var(--space-6);
+    text-align: center;
+    transition: all var(--transition-base);
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+}
+
+.fact-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(34, 211, 238, 0.1), transparent);
+    transition: left 500ms ease;
+}
+
+.fact-card:hover::before {
+    left: 100%;
+}
+
+.fact-card:hover {
+    transform: translateY(-4px) scale(1.05);
+    border-color: var(--neon-blue);
+    box-shadow: var(--shadow-xl), var(--glow-subtle);
+}
+
+.fact-stat {
+    font-family: var(--font-family-display);
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: var(--neon-green);
+    margin-bottom: var(--space-2);
+    text-shadow: 0 0 15px rgba(16, 185, 129, 0.5);
+}
+
+.fact-label {
+    font-size: var(--font-size-lg);
+    font-weight: 600;
+    color: var(--color-text-primary);
+    margin-bottom: var(--space-2);
+}
+
+.fact-detail {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-secondary);
+    line-height: var(--line-height-relaxed);
+}
+
+/* AI Timeline */
+.ai-timeline {
+    background: var(--glass-bg);
+    border-radius: var(--radius-lg);
+    padding: var(--space-8);
+    border: 1px solid var(--glass-border);
+    margin-bottom: var(--space-8);
+}
+
+.ai-timeline h3 {
+    font-family: var(--font-family-display);
+    font-size: var(--font-size-xl);
+    color: var(--neon-purple);
+    margin-bottom: var(--space-6);
+    text-align: center;
+}
+
+.timeline-items {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+    position: relative;
+}
+
+.timeline-items::before {
+    content: '';
+    position: absolute;
+    left: 20px;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: var(--gradient-primary);
+    border-radius: 1px;
+}
+
+.timeline-item {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-4);
+    position: relative;
+}
+
+.timeline-date {
+    background: var(--neon-blue);
+    color: var(--color-bg);
+    padding: var(--space-1) var(--space-3);
+    border-radius: var(--radius-sm);
+    font-size: var(--font-size-xs);
+    font-weight: 600;
+    white-space: nowrap;
+    min-width: 80px;
+    text-align: center;
+    position: relative;
+    z-index: 2;
+}
+
+.timeline-content h4 {
+    font-size: var(--font-size-base);
+    font-weight: 600;
+    color: var(--color-text-primary);
+    margin-bottom: var(--space-1);
+}
+
+.timeline-content p {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-secondary);
+    margin: 0;
+}
+
+/* Interactive AI Quiz */
+.ai-quiz-teaser {
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-lg);
+    padding: var(--space-8);
+    text-align: center;
+    margin-bottom: var(--space-8);
+}
+
+.ai-quiz-teaser h3 {
+    font-family: var(--font-family-display);
+    color: var(--neon-orange);
+    margin-bottom: var(--space-4);
+}
+
+.quiz-options {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: var(--space-3);
+    margin: var(--space-4) 0;
+}
+
+.quiz-option {
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-sm);
+    padding: var(--space-3) var(--space-4);
+    color: var(--color-text-primary);
+    cursor: pointer;
+    transition: all var(--transition-base);
+    font-size: var(--font-size-sm);
+    font-weight: 500;
+}
+
+.quiz-option:hover {
+    border-color: var(--neon-blue);
+    background: rgba(34, 211, 238, 0.1);
+    transform: translateY(-2px);
+}
+
+.quiz-option.correct {
+    background: var(--neon-green);
+    color: var(--color-bg);
+    border-color: var(--neon-green);
+}
+
+.quiz-option.incorrect {
+    background: var(--neon-pink);
+    color: white;
+    border-color: var(--neon-pink);
+    opacity: 0.6;
+}
+
+.quiz-result {
+    margin-top: var(--space-4);
+    padding: var(--space-4);
+    background: rgba(16, 185, 129, 0.1);
+    border: 1px solid var(--neon-green);
+    border-radius: var(--radius-sm);
+    color: var(--color-text-primary);
+}
+
+/* Fun Facts */
+.fun-facts {
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-lg);
+    padding: var(--space-8);
+}
+
+.fun-facts h3 {
+    font-family: var(--font-family-display);
+    color: var(--neon-pink);
+    text-align: center;
+    margin-bottom: var(--space-6);
+}
+
+.fun-facts-list {
+    display: grid;
+    gap: var(--space-4);
+}
+
+.fun-fact {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    padding: var(--space-4);
+    background: rgba(255, 255, 255, 0.02);
+    border-radius: var(--radius-sm);
+    transition: all var(--transition-base);
+}
+
+.fun-fact:hover {
+    background: rgba(255, 255, 255, 0.05);
+    transform: translateX(8px);
+}
+
+.fun-fact-icon {
+    font-size: var(--font-size-xl);
+    min-width: 40px;
+    text-align: center;
+}
+
+.fun-fact-text {
+    color: var(--color-text-secondary);
+    line-height: var(--line-height-relaxed);
+}
+
+.fun-fact-text strong {
+    color: var(--neon-blue);
+    font-weight: 600;
+}
+
+/* Responsive Design for AI Facts */
+@media (max-width: 768px) {
+    .ai-facts-section {
+        margin: var(--space-12) 0;
+        padding: var(--space-8) var(--space-4);
+    }
+    
+    .featured-fact {
+        flex-direction: column;
+        text-align: center;
+        padding: var(--space-6);
+    }
+    
+    .fact-visual {
+        margin-left: 0;
+        margin-top: var(--space-4);
+    }
+    
+    .fact-number {
+        font-size: 2.5rem;
+    }
+    
+    .facts-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .timeline-items::before {
+        left: 10px;
+    }
+    
+    .timeline-date {
+        min-width: 60px;
+        font-size: 10px;
+        padding: 2px 6px;
+    }
+    
+    .quiz-options {
+        grid-template-columns: 1fr;
+    }
+}
+
 /* Reduced motion preferences */
 @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after {
@@ -2101,7 +2508,9 @@ p {
     
     .tool-card::after,
     .hero::before,
-    body::before {
+    body::before,
+    .featured-fact,
+    .fact-icon {
         animation: none;
     }
 }

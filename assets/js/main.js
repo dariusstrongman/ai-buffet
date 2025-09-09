@@ -1320,6 +1320,171 @@ if (typeof module !== 'undefined' && module.exports) {
         isValidEmail,
         formatDate,
         validateInteractiveElements,
-        testCriticalFlows
+        testCriticalFlows,
+        initializeAIFacts
     };
 }
+
+/**
+ * AI Facts Section Interactive Features
+ */
+function initializeAIFacts() {
+    // Only run on pages with AI facts section
+    if (!document.querySelector('.ai-facts-section')) return;
+    
+    initializeFeaturedFactRotation();
+    initializeQuizInteraction();
+    initializeFactCardInteractions();
+}
+
+/**
+ * Rotate Featured Fact Display
+ */
+function initializeFeaturedFactRotation() {
+    const featuredFact = document.getElementById('featured-fact');
+    if (!featuredFact) return;
+    
+    const facts = [
+        {
+            number: '2.9 seconds',
+            description: 'Average time for GPT-4 to write a 500-word article',
+            comparison: "That's 150x faster than the average human writer",
+            icon: '⚡'
+        },
+        {
+            number: '1.2 million',
+            description: 'New AI research papers published in 2024',
+            comparison: "That's 3,300 papers per day",
+            icon: '📚'
+        },
+        {
+            number: '67%',
+            description: 'Of developers now use AI coding assistants',
+            comparison: 'Up from 12% just two years ago',
+            icon: '💻'
+        },
+        {
+            number: '$200B',
+            description: 'Global AI market value in 2025',
+            comparison: 'Growing at 37% annually',
+            icon: '💰'
+        },
+        {
+            number: '45 languages',
+            description: 'Supported by the latest AI translation models',
+            comparison: 'With 98% accuracy for major languages',
+            icon: '🌍'
+        }
+    ];
+    
+    let currentFactIndex = 0;
+    
+    function rotateFact() {
+        const fact = facts[currentFactIndex];
+        
+        // Fade out
+        featuredFact.style.opacity = '0.5';
+        featuredFact.style.transform = 'scale(0.95)';
+        
+        setTimeout(() => {
+            // Update content
+            const numberElement = featuredFact.querySelector('.fact-number');
+            const descriptionElement = featuredFact.querySelector('.fact-description');
+            const comparisonElement = featuredFact.querySelector('.fact-comparison');
+            const iconElement = featuredFact.querySelector('.fact-icon');
+            
+            if (numberElement) numberElement.textContent = fact.number;
+            if (descriptionElement) descriptionElement.textContent = fact.description;
+            if (comparisonElement) comparisonElement.textContent = fact.comparison;
+            if (iconElement) iconElement.textContent = fact.icon;
+            
+            // Fade in
+            featuredFact.style.opacity = '1';
+            featuredFact.style.transform = 'scale(1)';
+            
+            currentFactIndex = (currentFactIndex + 1) % facts.length;
+        }, 300);
+    }
+    
+    // Rotate every 5 seconds
+    setInterval(rotateFact, 5000);
+}
+
+/**
+ * Handle Quiz Interaction
+ */
+function initializeQuizInteraction() {
+    const quizOptions = document.querySelectorAll('.quiz-option');
+    const quizResult = document.getElementById('quiz-result');
+    
+    if (quizOptions.length === 0) return;
+    
+    quizOptions.forEach(option => {
+        option.addEventListener('click', function() {
+            const isCorrect = this.dataset.correct === 'true';
+            
+            // Disable all options
+            quizOptions.forEach(opt => {
+                opt.disabled = true;
+                opt.style.pointerEvents = 'none';
+                
+                if (opt.dataset.correct === 'true') {
+                    opt.classList.add('correct');
+                } else {
+                    opt.classList.add('incorrect');
+                }
+            });
+            
+            // Show result
+            if (quizResult) {
+                quizResult.style.display = 'block';
+                quizResult.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }
+        });
+    });
+}
+
+/**
+ * Enhanced Fact Card Interactions
+ */
+function initializeFactCardInteractions() {
+    const factCards = document.querySelectorAll('.fact-card');
+    
+    factCards.forEach((card, index) => {
+        card.addEventListener('click', function() {
+            // Add click animation
+            this.style.transform = 'scale(0.95)';
+            
+            setTimeout(() => {
+                this.style.transform = '';
+            }, 150);
+            
+            // Highlight the detail text
+            const detail = this.querySelector('.fact-detail');
+            if (detail) {
+                detail.style.fontSize = 'var(--font-size-base)';
+                detail.style.fontWeight = '500';
+                detail.style.color = 'var(--neon-blue)';
+                
+                setTimeout(() => {
+                    detail.style.fontSize = '';
+                    detail.style.fontWeight = '';
+                    detail.style.color = '';
+                }, 2000);
+            }
+        });
+        
+        // Add staggered entrance animation
+        card.style.opacity = '0';
+        card.style.transform = 'translateY(20px)';
+        
+        setTimeout(() => {
+            card.style.transition = 'all 0.6s cubic-bezier(0.4, 0, 0.2, 1)';
+            card.style.opacity = '1';
+            card.style.transform = 'translateY(0)';
+        }, index * 100);
+    });
+}
+
+// Initialize AI Facts when DOM is ready
+document.addEventListener('DOMContentLoaded', initializeAIFacts);

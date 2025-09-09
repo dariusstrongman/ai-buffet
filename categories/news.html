@@ -92,6 +92,7 @@
                     <li role="none"><a href="../index.html" class="nav-link" role="menuitem">Home</a></li>
                     <li role="none"><a href="news.html" class="nav-link" role="menuitem" aria-current="page">News</a></li>
                     <li role="none"><a href="tools.html" class="nav-link" role="menuitem">Tools</a></li>
+                    <li role="none"><a href="stocks.html" class="nav-link" role="menuitem">Stocks</a></li>
                     <li role="none"><a href="../about.html" class="nav-link" role="menuitem">About</a></li>
                 </ul>
 
@@ -138,6 +139,89 @@
             <section class="category-hero" aria-labelledby="category-title">
                 <h1 id="category-title">📰 AI News & Updates</h1>
                 <p>Stay ahead of the curve with breaking AI developments, industry insights, and expert analysis. We curate the most important AI news so you don't miss what matters.</p>
+            </section>
+
+            <!-- Article tabs and content -->
+            <section class="articles-section" aria-labelledby="articles-heading">
+                <h2 id="articles-heading" class="sr-only">Articles</h2>
+                
+                <!-- Tab navigation -->
+                <div class="tab-nav" role="tablist" aria-label="Article categories">
+                    <button 
+                        class="tab-button tab-button--active" 
+                        role="tab" 
+                        aria-selected="true" 
+                        aria-controls="top-articles-panel"
+                        id="top-articles-tab"
+                        data-tab="top-articles"
+                    >
+                        <span class="tab-icon" aria-hidden="true">🔥</span>
+                        Top Articles
+                    </button>
+                    <button 
+                        class="tab-button" 
+                        role="tab" 
+                        aria-selected="false" 
+                        aria-controls="latest-articles-panel"
+                        id="latest-articles-tab"
+                        data-tab="latest-articles"
+                    >
+                        <span class="tab-icon" aria-hidden="true">📰</span>
+                        Latest Articles
+                    </button>
+                </div>
+
+                <!-- Tab panels -->
+                <div 
+                    class="tab-panel tab-panel--active" 
+                    role="tabpanel" 
+                    aria-labelledby="top-articles-tab"
+                    id="top-articles-panel"
+                >
+                    <div class="articles-grid" id="top-articles-grid" aria-live="polite">
+                        <!-- Loading placeholder -->
+                        <article class="article-card article-card--loading" aria-label="Loading top articles">
+                            <div class="article-card__content">
+                                <h3 class="article-card__title">
+                                    <a href="#" aria-label="Loading top AI stories">Loading top AI stories...</a>
+                                </h3>
+                                <p class="article-card__excerpt">
+                                    Please wait while we fetch the most important AI developments for you.
+                                </p>
+                                <div class="article-card__meta">
+                                    <time>Loading...</time>
+                                    <span class="article-card__category">Featured</span>
+                                </div>
+                            </div>
+                        </article>
+                    </div>
+                </div>
+
+                <div 
+                    class="tab-panel" 
+                    role="tabpanel" 
+                    aria-labelledby="latest-articles-tab"
+                    id="latest-articles-panel"
+                    hidden
+                >
+                    <div class="articles-grid" id="latest-articles-grid" aria-live="polite">
+                        <!-- Loading placeholder -->
+                        <article class="article-card article-card--loading" aria-label="Loading latest articles">
+                            <div class="article-card__content">
+                                <h3 class="article-card__title">
+                                    <a href="#" aria-label="Loading latest AI articles">Loading latest articles...</a>
+                                </h3>
+                                <p class="article-card__excerpt">
+                                    Please wait while we fetch the most recent AI news and analysis.
+                                </p>
+                                <div class="article-card__meta">
+                                    <time>Loading...</time>
+                                    <span class="article-card__category">Recent</span>
+                                </div>
+                            </div>
+                        </article>
+                    </div>
+                </div>
             </section>
 
             <!-- News Filters -->

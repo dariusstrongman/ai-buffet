@@ -135,197 +135,638 @@
             <!-- Breadcrumbs -->
             <nav aria-label="Breadcrumb"></nav>
 
-            <!-- Category Hero -->
-            <section class="category-hero" aria-labelledby="category-title">
-                <h1 id="category-title">📰 AI News & Updates</h1>
-                <p>Stay ahead of the curve with breaking AI developments, industry insights, and expert analysis. We curate the most important AI news so you don't miss what matters.</p>
+            <!-- Premium News Hero -->
+            <section class="news-hero premium-hero" aria-labelledby="hero-title">
+                <div class="hero-background">
+                    <div class="hero-particles"></div>
+                    <div class="hero-gradient"></div>
+                </div>
+                <div class="hero-content">
+                    <div class="hero-badge">
+                        <span class="badge-icon">⚡</span>
+                        <span class="badge-text">LIVE UPDATES</span>
+                        <div class="badge-pulse"></div>
+                    </div>
+                    <h1 id="hero-title" class="hero-title">
+                        <span class="title-highlight">AI News</span> 
+                        <span class="title-gradient">Intelligence</span>
+                    </h1>
+                    <p class="hero-subtitle">
+                        Stay ahead with real-time AI breakthroughs, industry insights, and expert analysis. 
+                        <span class="subtitle-highlight">Curated by AI experts</span> for decision makers.
+                    </p>
+                    <div class="hero-stats">
+                        <div class="stat-item">
+                            <span class="stat-number" id="live-articles-count">150+</span>
+                            <span class="stat-label">Articles Today</span>
+                        </div>
+                        <div class="stat-divider"></div>
+                        <div class="stat-item">
+                            <span class="stat-number">24/7</span>
+                            <span class="stat-label">Live Monitoring</span>
+                        </div>
+                        <div class="stat-divider"></div>
+                        <div class="stat-item">
+                            <span class="stat-number" id="sources-count">50+</span>
+                            <span class="stat-label">Premium Sources</span>
+                        </div>
+                    </div>
+                    <div class="hero-actions">
+                        <button class="hero-cta primary" onclick="document.getElementById('featured-section').scrollIntoView({behavior: 'smooth'})">
+                            <span class="cta-text">Explore Breaking News</span>
+                            <span class="cta-icon">🚀</span>
+                        </button>
+                        <button class="hero-cta secondary" onclick="document.getElementById('newsletter').scrollIntoView({behavior: 'smooth'})">
+                            <span class="cta-text">Get Daily Digest</span>
+                            <span class="cta-icon">📧</span>
+                        </button>
+                    </div>
+                </div>
+                <div class="scroll-indicator">
+                    <div class="scroll-icon">↓</div>
+                    <span class="scroll-text">Scroll for latest news</span>
+                </div>
             </section>
 
-            <!-- Article tabs and content -->
-            <section class="articles-section" aria-labelledby="articles-heading">
+            <!-- Premium Navigation Tabs -->
+            <section class="premium-tabs-section" aria-labelledby="articles-heading">
                 <h2 id="articles-heading" class="sr-only">Articles</h2>
                 
-                <!-- Tab navigation -->
-                <div class="tab-nav" role="tablist" aria-label="Article categories">
-                    <button 
-                        class="tab-button tab-button--active" 
-                        role="tab" 
-                        aria-selected="true" 
-                        aria-controls="top-articles-panel"
-                        id="top-articles-tab"
-                        data-tab="top-articles"
-                    >
-                        <span class="tab-icon" aria-hidden="true">🔥</span>
-                        Top Articles
-                    </button>
-                    <button 
-                        class="tab-button" 
-                        role="tab" 
-                        aria-selected="false" 
-                        aria-controls="latest-articles-panel"
-                        id="latest-articles-tab"
-                        data-tab="latest-articles"
-                    >
-                        <span class="tab-icon" aria-hidden="true">📰</span>
-                        Latest Articles
-                    </button>
+                <div class="premium-tab-container">
+                    <div class="tab-nav-wrapper">
+                        <div class="tab-nav premium-tab-nav" role="tablist" aria-label="Article categories">
+                            <button 
+                                class="premium-tab-button active" 
+                                role="tab" 
+                                aria-selected="true" 
+                                aria-controls="top-articles-panel"
+                                id="top-articles-tab"
+                                data-tab="top-articles"
+                            >
+                                <div class="tab-content">
+                                    <span class="tab-icon" aria-hidden="true">🔥</span>
+                                    <span class="tab-text">Top Stories</span>
+                                    <div class="tab-indicator"></div>
+                                </div>
+                            </button>
+                            <button 
+                                class="premium-tab-button" 
+                                role="tab" 
+                                aria-selected="false" 
+                                aria-controls="latest-articles-panel"
+                                id="latest-articles-tab"
+                                data-tab="latest-articles"
+                            >
+                                <div class="tab-content">
+                                    <span class="tab-icon" aria-hidden="true">📰</span>
+                                    <span class="tab-text">Latest Updates</span>
+                                    <div class="tab-indicator"></div>
+                                </div>
+                            </button>
+                            <button 
+                                class="premium-tab-button" 
+                                role="tab" 
+                                aria-selected="false" 
+                                aria-controls="trending-articles-panel"
+                                id="trending-articles-tab"
+                                data-tab="trending-articles"
+                            >
+                                <div class="tab-content">
+                                    <span class="tab-icon" aria-hidden="true">📈</span>
+                                    <span class="tab-text">Trending</span>
+                                    <div class="tab-indicator"></div>
+                                </div>
+                            </button>
+                        </div>
+                        <div class="tab-background-slider"></div>
+                    </div>
+                    
+                    <div class="tab-meta">
+                        <div class="update-indicator">
+                            <div class="pulse-dot"></div>
+                            <span class="update-text">Live updates</span>
+                        </div>
+                        <div class="articles-count">
+                            <span id="current-tab-count">8</span> articles
+                        </div>
+                    </div>
                 </div>
 
-                <!-- Tab panels -->
+                <!-- Enhanced Tab Panels -->
                 <div 
-                    class="tab-panel tab-panel--active" 
+                    class="premium-tab-panel active" 
                     role="tabpanel" 
                     aria-labelledby="top-articles-tab"
                     id="top-articles-panel"
                 >
-                    <div class="articles-grid" id="top-articles-grid" aria-live="polite">
-                        <!-- Loading placeholder -->
-                        <article class="article-card article-card--loading" aria-label="Loading top articles">
-                            <div class="article-card__content">
-                                <h3 class="article-card__title">
-                                    <a href="#" aria-label="Loading top AI stories">Loading top AI stories...</a>
-                                </h3>
-                                <p class="article-card__excerpt">
-                                    Please wait while we fetch the most important AI developments for you.
-                                </p>
-                                <div class="article-card__meta">
-                                    <time>Loading...</time>
-                                    <span class="article-card__category">Featured</span>
+                    <div class="premium-articles-grid" id="top-articles-grid" aria-live="polite">
+                        <!-- Enhanced Loading State -->
+                        <article class="premium-article-card loading" aria-label="Loading top articles">
+                            <div class="article-shimmer">
+                                <div class="shimmer-header"></div>
+                                <div class="shimmer-lines">
+                                    <div class="shimmer-line"></div>
+                                    <div class="shimmer-line short"></div>
                                 </div>
+                                <div class="shimmer-footer"></div>
+                            </div>
+                        </article>
+                        <article class="premium-article-card loading">
+                            <div class="article-shimmer">
+                                <div class="shimmer-header"></div>
+                                <div class="shimmer-lines">
+                                    <div class="shimmer-line"></div>
+                                    <div class="shimmer-line short"></div>
+                                </div>
+                                <div class="shimmer-footer"></div>
                             </div>
                         </article>
                     </div>
                 </div>
 
                 <div 
-                    class="tab-panel" 
+                    class="premium-tab-panel" 
                     role="tabpanel" 
                     aria-labelledby="latest-articles-tab"
                     id="latest-articles-panel"
-                    hidden
                 >
-                    <div class="articles-grid" id="latest-articles-grid" aria-live="polite">
-                        <!-- Loading placeholder -->
-                        <article class="article-card article-card--loading" aria-label="Loading latest articles">
-                            <div class="article-card__content">
-                                <h3 class="article-card__title">
-                                    <a href="#" aria-label="Loading latest AI articles">Loading latest articles...</a>
-                                </h3>
-                                <p class="article-card__excerpt">
-                                    Please wait while we fetch the most recent AI news and analysis.
-                                </p>
-                                <div class="article-card__meta">
-                                    <time>Loading...</time>
-                                    <span class="article-card__category">Recent</span>
+                    <div class="premium-articles-grid" id="latest-articles-grid" aria-live="polite">
+                        <!-- Enhanced Loading State -->
+                        <article class="premium-article-card loading">
+                            <div class="article-shimmer">
+                                <div class="shimmer-header"></div>
+                                <div class="shimmer-lines">
+                                    <div class="shimmer-line"></div>
+                                    <div class="shimmer-line short"></div>
                                 </div>
+                                <div class="shimmer-footer"></div>
                             </div>
                         </article>
                     </div>
                 </div>
-            </section>
 
-            <!-- News Filters -->
-            <section class="news-filters">
-                <div class="filter-buttons">
-                    <button class="filter-btn active" data-filter="all">All News</button>
-                    <button class="filter-btn" data-filter="breaking">Breaking</button>
-                    <button class="filter-btn" data-filter="research">Research</button>
-                    <button class="filter-btn" data-filter="business">Business</button>
-                    <button class="filter-btn" data-filter="regulation">Regulation</button>
+                <div 
+                    class="premium-tab-panel" 
+                    role="tabpanel" 
+                    aria-labelledby="trending-articles-tab"
+                    id="trending-articles-panel"
+                >
+                    <div class="premium-articles-grid" id="trending-articles-grid" aria-live="polite">
+                        <!-- Trending articles will be loaded here -->
+                    </div>
                 </div>
             </section>
 
-            <div class="main-content">
-                <div class="content-area">
-                    <!-- Featured News -->
-                    <section class="featured-news" aria-labelledby="featured-title">
-                        <h2 id="featured-title">🔥 Breaking Stories</h2>
-                        <div class="featured-grid">
-                            <!-- Featured news will be loaded by JavaScript -->
-                            <article class="article-card article-card--featured article-card--large article-card--interactive" data-category="breaking">
-                                <div class="article-card__content">
-                                    <div class="article-card__category article-card__category--breaking">BREAKING</div>
-                                    <h3 class="article-card__title article-card__title--large">
-                                        <a href="#" target="_blank" rel="noopener">Loading featured AI news...</a>
-                                    </h3>
-                                    <p class="article-card__excerpt">Please wait while we fetch the latest breaking AI developments for you.</p>
-                                    <div class="article-card__meta">
-                                        <span class="article-card__date">Loading...</span>
-                                        <div class="article-card__meta-separator"></div>
-                                        <span class="article-card__source">AI News</span>
-                                    </div>
-                                </div>
-                            </article>
+            <!-- Premium Filters & Search -->
+            <section class="premium-filters-section">
+                <div class="filters-container">
+                    <div class="filters-header">
+                        <h2 class="filters-title">Filter & Discover</h2>
+                        <div class="filter-stats">
+                            <span id="filtered-count">150</span> articles found
                         </div>
-                    </section>
-
-                    <!-- Latest News Grid -->
-                    <section class="latest-news" aria-labelledby="latest-title">
-                        <h2 id="latest-title">Latest AI News</h2>
+                    </div>
+                    
+                    <div class="filter-controls">
+                        <div class="category-filters">
+                            <div class="filter-group">
+                                <label class="filter-label">Categories</label>
+                                <div class="filter-pills">
+                                    <button class="filter-pill active" data-filter="all">
+                                        <span class="pill-icon">🌐</span>
+                                        <span class="pill-text">All News</span>
+                                        <span class="pill-count">150</span>
+                                    </button>
+                                    <button class="filter-pill" data-filter="breaking">
+                                        <span class="pill-icon">⚡</span>
+                                        <span class="pill-text">Breaking</span>
+                                        <span class="pill-count">12</span>
+                                    </button>
+                                    <button class="filter-pill" data-filter="research">
+                                        <span class="pill-icon">🔬</span>
+                                        <span class="pill-text">Research</span>
+                                        <span class="pill-count">34</span>
+                                    </button>
+                                    <button class="filter-pill" data-filter="business">
+                                        <span class="pill-icon">💼</span>
+                                        <span class="pill-text">Business</span>
+                                        <span class="pill-count">28</span>
+                                    </button>
+                                    <button class="filter-pill" data-filter="regulation">
+                                        <span class="pill-icon">⚖️</span>
+                                        <span class="pill-text">Regulation</span>
+                                        <span class="pill-count">16</span>
+                                    </button>
+                                    <button class="filter-pill" data-filter="startups">
+                                        <span class="pill-icon">🚀</span>
+                                        <span class="pill-text">Startups</span>
+                                        <span class="pill-count">22</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
                         
-                        <div class="news-grid" id="news-grid">
-                            <!-- Placeholder articles - will be replaced by JavaScript -->
-                            <article class="article-card article-card--interactive article-card--loading" data-category="research">
-                                <div class="article-card__content">
-                                    <div class="article-card__category article-card__category--research">RESEARCH</div>
-                                    <h3 class="article-card__title">
-                                        <a href="#" target="_blank" rel="noopener">Loading latest AI research...</a>
-                                    </h3>
-                                    <p class="article-card__excerpt">Please wait while we load the most recent AI news articles and analysis.</p>
-                                    <div class="article-card__meta">
-                                        <span class="article-card__date">Loading...</span>
-                                        <div class="article-card__meta-separator"></div>
-                                        <span class="article-card__source">AI Research</span>
-                                    </div>
-                                </div>
-                            </article>
+                        <div class="advanced-filters">
+                            <div class="filter-group">
+                                <label class="filter-label">Sort by</label>
+                                <select class="premium-select" id="sort-select">
+                                    <option value="relevance">Most Relevant</option>
+                                    <option value="recent">Most Recent</option>
+                                    <option value="trending">Trending Now</option>
+                                    <option value="impact">High Impact</option>
+                                </select>
+                            </div>
                             
-                            <article class="article-card article-card--interactive" data-category="business">
-                                <div class="article-card__content">
-                                    <div class="article-card__category article-card__category--business">BUSINESS</div>
-                                    <h3 class="article-card__title">
-                                        <a href="#" target="_blank" rel="noopener">Loading AI business news...</a>
-                                    </h3>
-                                    <p class="article-card__excerpt">Fetching the latest business developments and corporate AI initiatives.</p>
-                                    <div class="article-card__meta">
-                                        <span class="article-card__date">Loading...</span>
-                                        <div class="article-card__meta-separator"></div>
-                                        <span class="article-card__source">Business</span>
-                                        <div class="article-card__meta-separator"></div>
-                                        <span class="article-card__reading-time">5 min read</span>
-                                    </div>
-                                </div>
-                            </article>
-                            
-                            <article class="article-card article-card--interactive" data-category="regulation">
-                                <div class="article-card__content">
-                                    <div class="article-card__category article-card__category--regulation">REGULATION</div>
-                                    <h3 class="article-card__title">
-                                        <a href="#" target="_blank" rel="noopener">AI Policy Updates...</a>
-                                    </h3>
-                                    <p class="article-card__excerpt">Latest developments in AI governance and regulatory frameworks worldwide.</p>
-                                    <div class="article-card__meta">
-                                        <span class="article-card__date">Loading...</span>
-                                        <div class="article-card__meta-separator"></div>
-                                        <span class="article-card__source">Policy Watch</span>
-                                        <div class="article-card__meta-separator"></div>
-                                        <span class="article-card__reading-time">3 min read</span>
-                                    </div>
-                                </div>
-                            </article>
+                            <div class="filter-group">
+                                <label class="filter-label">Time Range</label>
+                                <select class="premium-select" id="time-select">
+                                    <option value="today">Today</option>
+                                    <option value="week">This Week</option>
+                                    <option value="month">This Month</option>
+                                    <option value="all">All Time</option>
+                                </select>
+                            </div>
                         </div>
+                    </div>
+                    
+                    <div class="search-enhancement">
+                        <div class="premium-search-container">
+                            <div class="search-input-wrapper">
+                                <span class="search-icon-enhanced">🔍</span>
+                                <input 
+                                    type="search" 
+                                    class="premium-search-input" 
+                                    placeholder="Search AI news, companies, technologies..."
+                                    id="premium-search"
+                                >
+                                <button class="search-clear" id="search-clear">✕</button>
+                            </div>
+                            <div class="search-suggestions" id="search-suggestions">
+                                <!-- Search suggestions will appear here -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
 
-                        <!-- Load More Button -->
-                        <div style="text-align: center; margin-top: var(--space-xl);">
-                            <button class="btn btn-secondary" id="load-more-btn">Load More Articles</button>
+            <div class="premium-main-content">
+                <div class="content-area">
+                    <!-- Premium Featured Section -->
+                    <section class="premium-featured-section" id="featured-section" aria-labelledby="featured-title">
+                        <div class="featured-header">
+                            <div class="featured-title-group">
+                                <h2 id="featured-title" class="featured-title">
+                                    <span class="title-icon">🔥</span>
+                                    <span class="title-text">Breaking Stories</span>
+                                </h2>
+                                <p class="featured-subtitle">Critical AI developments happening right now</p>
+                            </div>
+                            <div class="featured-controls">
+                                <button class="featured-refresh" id="refresh-featured">
+                                    <span class="refresh-icon">🔄</span>
+                                    <span class="refresh-text">Refresh</span>
+                                </button>
+                                <div class="live-indicator">
+                                    <div class="live-dot"></div>
+                                    <span class="live-text">LIVE</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="premium-featured-grid">
+                            <!-- Hero Featured Article -->
+                            <article class="featured-hero-card loading" data-category="breaking">
+                                <div class="hero-card-background">
+                                    <div class="background-overlay"></div>
+                                    <div class="background-pattern"></div>
+                                </div>
+                                <div class="hero-card-content">
+                                    <div class="hero-card-header">
+                                        <div class="breaking-badge">
+                                            <span class="badge-pulse"></span>
+                                            <span class="badge-text">BREAKING</span>
+                                        </div>
+                                        <div class="article-priority">
+                                            <span class="priority-icon">⚡</span>
+                                            <span class="priority-text">HIGH PRIORITY</span>
+                                        </div>
+                                    </div>
+                                    <h3 class="hero-card-title">
+                                        <a href="#" target="_blank" rel="noopener">Loading breaking AI developments...</a>
+                                    </h3>
+                                    <p class="hero-card-excerpt">Please wait while we fetch the most critical AI news breaking right now...</p>
+                                    <div class="hero-card-meta">
+                                        <div class="meta-group">
+                                            <span class="meta-icon">📅</span>
+                                            <span class="meta-text">Loading...</span>
+                                        </div>
+                                        <div class="meta-group">
+                                            <span class="meta-icon">📰</span>
+                                            <span class="meta-text">Premium Source</span>
+                                        </div>
+                                        <div class="meta-group">
+                                            <span class="meta-icon">👁️</span>
+                                            <span class="meta-text">High Impact</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </article>
+                            
+                            <!-- Secondary Featured Articles -->
+                            <div class="featured-secondary-grid">
+                                <article class="featured-secondary-card loading" data-category="research">
+                                    <div class="secondary-card-header">
+                                        <div class="category-badge research">
+                                            <span class="badge-icon">🔬</span>
+                                            <span class="badge-text">RESEARCH</span>
+                                        </div>
+                                        <div class="trending-indicator">
+                                            <span class="trending-icon">📈</span>
+                                        </div>
+                                    </div>
+                                    <h4 class="secondary-card-title">
+                                        <a href="#" target="_blank" rel="noopener">Loading research breakthrough...</a>
+                                    </h4>
+                                    <div class="secondary-card-meta">
+                                        <span class="meta-time">Loading...</span>
+                                        <span class="meta-divider">•</span>
+                                        <span class="meta-source">Research Journal</span>
+                                    </div>
+                                </article>
+                                
+                                <article class="featured-secondary-card loading" data-category="business">
+                                    <div class="secondary-card-header">
+                                        <div class="category-badge business">
+                                            <span class="badge-icon">💼</span>
+                                            <span class="badge-text">BUSINESS</span>
+                                        </div>
+                                        <div class="impact-score">
+                                            <span class="score-text">9.2</span>
+                                        </div>
+                                    </div>
+                                    <h4 class="secondary-card-title">
+                                        <a href="#" target="_blank" rel="noopener">Loading business development...</a>
+                                    </h4>
+                                    <div class="secondary-card-meta">
+                                        <span class="meta-time">Loading...</span>
+                                        <span class="meta-divider">•</span>
+                                        <span class="meta-source">Business News</span>
+                                    </div>
+                                </article>
+                            </div>
                         </div>
                     </section>
 
-                    <!-- CTA Section -->
-                    <section class="cta-section" style="margin: var(--space-2xl) 0;">
-                        <h2>🚀 Stay Ahead of AI Trends</h2>
-                        <p>Get our exclusive AI insights and analysis delivered to your inbox. Plus access to free templates and automation workflows.</p>
-                        <a href="https://ai-buffet.com/tools" class="btn">Get Free AI Tools</a>
+                    <!-- Premium Latest News Grid -->
+                    <section class="premium-latest-section" aria-labelledby="latest-title">
+                        <div class="latest-header">
+                            <div class="latest-title-group">
+                                <h2 id="latest-title" class="latest-title">
+                                    <span class="title-icon">📰</span>
+                                    <span class="title-text">Latest Intelligence</span>
+                                </h2>
+                                <p class="latest-subtitle">Comprehensive AI news analysis updated continuously</p>
+                            </div>
+                            <div class="latest-controls">
+                                <div class="view-toggle">
+                                    <button class="view-btn active" data-view="grid">
+                                        <span class="view-icon">⊞</span>
+                                        <span class="view-text">Grid</span>
+                                    </button>
+                                    <button class="view-btn" data-view="list">
+                                        <span class="view-icon">☰</span>
+                                        <span class="view-text">List</span>
+                                    </button>
+                                </div>
+                                <button class="latest-refresh" id="refresh-latest">
+                                    <span class="refresh-icon">🔄</span>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="premium-news-grid" id="premium-news-grid">
+                            <!-- Premium Article Cards -->
+                            <article class="premium-news-card loading" data-category="research">
+                                <div class="news-card-header">
+                                    <div class="category-indicator research">
+                                        <span class="indicator-icon">🔬</span>
+                                        <span class="indicator-text">RESEARCH</span>
+                                    </div>
+                                    <div class="article-priority high">
+                                        <span class="priority-dot"></span>
+                                    </div>
+                                </div>
+                                <div class="news-card-content">
+                                    <h3 class="news-card-title">
+                                        <a href="#" target="_blank" rel="noopener">Loading cutting-edge AI research...</a>
+                                    </h3>
+                                    <p class="news-card-excerpt">Analyzing the latest breakthroughs in artificial intelligence research and development...</p>
+                                    <div class="news-card-insights">
+                                        <div class="insight-tag">
+                                            <span class="tag-icon">💡</span>
+                                            <span class="tag-text">Key Insight</span>
+                                        </div>
+                                        <div class="impact-meter">
+                                            <span class="meter-label">Impact:</span>
+                                            <div class="meter-bar">
+                                                <div class="meter-fill" style="width: 85%"></div>
+                                            </div>
+                                            <span class="meter-value">8.5</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="news-card-footer">
+                                    <div class="footer-meta">
+                                        <span class="meta-time">Loading...</span>
+                                        <span class="meta-divider">•</span>
+                                        <span class="meta-source">Premium Research</span>
+                                        <span class="meta-divider">•</span>
+                                        <span class="meta-read-time">6 min read</span>
+                                    </div>
+                                    <div class="footer-actions">
+                                        <button class="action-btn bookmark">
+                                            <span class="action-icon">🔖</span>
+                                        </button>
+                                        <button class="action-btn share">
+                                            <span class="action-icon">📤</span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </article>
+                            
+                            <article class="premium-news-card loading" data-category="business">
+                                <div class="news-card-header">
+                                    <div class="category-indicator business">
+                                        <span class="indicator-icon">💼</span>
+                                        <span class="indicator-text">BUSINESS</span>
+                                    </div>
+                                    <div class="trending-badge">
+                                        <span class="trending-icon">🔥</span>
+                                        <span class="trending-text">Trending</span>
+                                    </div>
+                                </div>
+                                <div class="news-card-content">
+                                    <h3 class="news-card-title">
+                                        <a href="#" target="_blank" rel="noopener">Loading enterprise AI developments...</a>
+                                    </h3>
+                                    <p class="news-card-excerpt">Corporate AI adoption strategies and market movements shaping the industry...</p>
+                                    <div class="news-card-insights">
+                                        <div class="insight-tag">
+                                            <span class="tag-icon">📊</span>
+                                            <span class="tag-text">Market Analysis</span>
+                                        </div>
+                                        <div class="stock-indicator">
+                                            <span class="stock-symbol">AI Sector</span>
+                                            <span class="stock-change positive">+5.2%</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="news-card-footer">
+                                    <div class="footer-meta">
+                                        <span class="meta-time">Loading...</span>
+                                        <span class="meta-divider">•</span>
+                                        <span class="meta-source">Business Intelligence</span>
+                                        <span class="meta-divider">•</span>
+                                        <span class="meta-read-time">4 min read</span>
+                                    </div>
+                                    <div class="footer-actions">
+                                        <button class="action-btn bookmark">
+                                            <span class="action-icon">🔖</span>
+                                        </button>
+                                        <button class="action-btn share">
+                                            <span class="action-icon">📤</span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </article>
+                            
+                            <article class="premium-news-card loading" data-category="regulation">
+                                <div class="news-card-header">
+                                    <div class="category-indicator regulation">
+                                        <span class="indicator-icon">⚖️</span>
+                                        <span class="indicator-text">REGULATION</span>
+                                    </div>
+                                    <div class="urgency-badge medium">
+                                        <span class="urgency-text">Medium Priority</span>
+                                    </div>
+                                </div>
+                                <div class="news-card-content">
+                                    <h3 class="news-card-title">
+                                        <a href="#" target="_blank" rel="noopener">Loading policy and governance updates...</a>
+                                    </h3>
+                                    <p class="news-card-excerpt">Global regulatory frameworks and policy changes affecting AI development and deployment...</p>
+                                    <div class="news-card-insights">
+                                        <div class="insight-tag">
+                                            <span class="tag-icon">🏛️</span>
+                                            <span class="tag-text">Policy Impact</span>
+                                        </div>
+                                        <div class="geographical-scope">
+                                            <span class="scope-label">Scope:</span>
+                                            <span class="scope-regions">Global</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="news-card-footer">
+                                    <div class="footer-meta">
+                                        <span class="meta-time">Loading...</span>
+                                        <span class="meta-divider">•</span>
+                                        <span class="meta-source">Policy Watch</span>
+                                        <span class="meta-divider">•</span>
+                                        <span class="meta-read-time">7 min read</span>
+                                    </div>
+                                    <div class="footer-actions">
+                                        <button class="action-btn bookmark">
+                                            <span class="action-icon">🔖</span>
+                                        </button>
+                                        <button class="action-btn share">
+                                            <span class="action-icon">📤</span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </article>
+                        </div>
+
+                        <!-- Premium Load More Section -->
+                        <div class="premium-load-more">
+                            <div class="load-more-info">
+                                <span class="articles-loaded">Showing <span id="loaded-count">12</span> of <span id="total-articles">247</span> articles</span>
+                                <span class="load-more-hint">Scroll or click to load more premium content</span>
+                            </div>
+                            <button class="premium-load-btn" id="premium-load-more">
+                                <span class="load-btn-text">Load Next Batch</span>
+                                <span class="load-btn-icon">↓</span>
+                                <div class="load-btn-progress"></div>
+                            </button>
+                        </div>
+                    </section>
+
+                    <!-- Premium CTA Section -->
+                    <section class="premium-cta-section">
+                        <div class="cta-background">
+                            <div class="cta-pattern"></div>
+                            <div class="cta-glow"></div>
+                        </div>
+                        <div class="cta-content">
+                            <div class="cta-header">
+                                <div class="cta-badge">
+                                    <span class="badge-icon">⚡</span>
+                                    <span class="badge-text">EXCLUSIVE ACCESS</span>
+                                </div>
+                                <h2 class="cta-title">
+                                    <span class="title-main">Master AI Intelligence</span>
+                                    <span class="title-sub">Before Your Competition Does</span>
+                                </h2>
+                                <p class="cta-description">
+                                    Join 50,000+ executives, researchers, and AI professionals who rely on our 
+                                    <span class="description-highlight">premium intelligence platform</span> 
+                                    for strategic AI insights and exclusive analysis.
+                                </p>
+                            </div>
+                            
+                            <div class="cta-features">
+                                <div class="feature-item">
+                                    <span class="feature-icon">📊</span>
+                                    <span class="feature-text">Real-time market intelligence</span>
+                                </div>
+                                <div class="feature-item">
+                                    <span class="feature-icon">🎯</span>
+                                    <span class="feature-text">Personalized AI insights</span>
+                                </div>
+                                <div class="feature-item">
+                                    <span class="feature-icon">🚀</span>
+                                    <span class="feature-text">Exclusive tools & templates</span>
+                                </div>
+                            </div>
+                            
+                            <div class="cta-actions">
+                                <a href="https://ai-buffet.com/tools" class="premium-cta-btn primary">
+                                    <span class="btn-text">Access Premium Tools</span>
+                                    <span class="btn-icon">→</span>
+                                    <div class="btn-shine"></div>
+                                </a>
+                                <button class="premium-cta-btn secondary" onclick="document.getElementById('newsletter').scrollIntoView({behavior: 'smooth'})">
+                                    <span class="btn-text">Start Free Intelligence</span>
+                                    <span class="btn-icon">📧</span>
+                                </button>
+                            </div>
+                            
+                            <div class="cta-social-proof">
+                                <div class="proof-item">
+                                    <span class="proof-number">50K+</span>
+                                    <span class="proof-text">Professionals</span>
+                                </div>
+                                <div class="proof-divider"></div>
+                                <div class="proof-item">
+                                    <span class="proof-number">500+</span>
+                                    <span class="proof-text">Companies</span>
+                                </div>
+                                <div class="proof-divider"></div>
+                                <div class="proof-item">
+                                    <span class="proof-number">24/7</span>
+                                    <span class="proof-text">Monitoring</span>
+                                </div>
+                            </div>
+                        </div>
                     </section>
                 </div>
 
@@ -362,23 +803,122 @@
                 </aside>
             </div>
 
-            <!-- Newsletter Section -->
-            <section class="newsletter" id="newsletter" aria-labelledby="newsletter-title">
-                <h2 id="newsletter-title">Never Miss Important AI News</h2>
-                <p>Get our curated weekly digest with the most important AI developments, delivered every Monday morning.</p>
+            <!-- Premium Newsletter Section -->
+            <section class="premium-newsletter" id="newsletter" aria-labelledby="newsletter-title">
+                <div class="newsletter-background">
+                    <div class="newsletter-particles"></div>
+                    <div class="newsletter-gradient"></div>
+                </div>
                 
-                <form class="newsletter-form" method="POST" action="/newsletter/subscribe" aria-label="Newsletter signup">
-                    <input 
-                        type="email" 
-                        name="email" 
-                        class="newsletter-input" 
-                        placeholder="you@example.com" 
-                        required
-                        aria-label="Email address"
-                    >
-                    <button type="submit" class="btn btn-primary">Subscribe Free</button>
-                </form>
-                <p class="privacy-note">No spam, just the AI news that matters. Unsubscribe anytime.</p>
+                <div class="newsletter-content">
+                    <div class="newsletter-header">
+                        <div class="newsletter-icon">
+                            <span class="icon-main">📧</span>
+                            <div class="icon-pulse"></div>
+                        </div>
+                        <h2 id="newsletter-title" class="newsletter-title">
+                            <span class="title-primary">AI Intelligence Digest</span>
+                            <span class="title-secondary">Delivered to Your Inbox</span>
+                        </h2>
+                        <p class="newsletter-description">
+                            Join the <span class="subscriber-count">50,000+</span> AI professionals who start their week with our 
+                            <span class="description-highlight">curated intelligence briefing</span>. 
+                            Get the most critical AI developments, market insights, and strategic analysis 
+                            delivered every Monday at 6 AM.
+                        </p>
+                    </div>
+                    
+                    <div class="newsletter-preview">
+                        <div class="preview-header">
+                            <span class="preview-label">📮 This Week's Digest Preview</span>
+                        </div>
+                        <div class="preview-items">
+                            <div class="preview-item">
+                                <span class="item-icon">🔥</span>
+                                <span class="item-text">5 Breaking AI developments</span>
+                            </div>
+                            <div class="preview-item">
+                                <span class="item-icon">📊</span>
+                                <span class="item-text">Market analysis & trends</span>
+                            </div>
+                            <div class="preview-item">
+                                <span class="item-icon">🎯</span>
+                                <span class="item-text">Strategic insights & implications</span>
+                            </div>
+                            <div class="preview-item">
+                                <span class="item-icon">🚀</span>
+                                <span class="item-text">Exclusive tools & resources</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <form class="premium-newsletter-form" method="POST" action="/newsletter/subscribe" aria-label="Newsletter signup">
+                        <div class="form-header">
+                            <h3 class="form-title">Start Your Free Intelligence Briefing</h3>
+                            <p class="form-subtitle">Join in 10 seconds, unsubscribe anytime</p>
+                        </div>
+                        
+                        <div class="form-inputs">
+                            <div class="input-group">
+                                <div class="input-wrapper">
+                                    <span class="input-icon">📧</span>
+                                    <input 
+                                        type="email" 
+                                        name="email" 
+                                        class="premium-newsletter-input" 
+                                        placeholder="your.email@company.com" 
+                                        required
+                                        aria-label="Email address"
+                                    >
+                                    <div class="input-validation"></div>
+                                </div>
+                                <button type="submit" class="premium-newsletter-btn">
+                                    <span class="btn-text">Get Free Digest</span>
+                                    <span class="btn-icon">🚀</span>
+                                    <div class="btn-loading"></div>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="form-footer">
+                            <div class="privacy-info">
+                                <span class="privacy-icon">🔒</span>
+                                <span class="privacy-text">100% private. No spam. Premium insights only.</span>
+                            </div>
+                            <div class="form-features">
+                                <div class="feature">
+                                    <span class="feature-icon">⚡</span>
+                                    <span class="feature-text">Instant access</span>
+                                </div>
+                                <div class="feature">
+                                    <span class="feature-icon">🎯</span>
+                                    <span class="feature-text">Highly curated</span>
+                                </div>
+                                <div class="feature">
+                                    <span class="feature-icon">📱</span>
+                                    <span class="feature-text">Mobile optimized</span>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                    
+                    <div class="newsletter-testimonial">
+                        <div class="testimonial-content">
+                            <blockquote class="testimonial-quote">
+                                "The most valuable 5 minutes of my Monday. Essential for staying ahead in AI."
+                            </blockquote>
+                            <div class="testimonial-author">
+                                <div class="author-info">
+                                    <span class="author-name">Sarah Chen</span>
+                                    <span class="author-title">VP of AI Strategy, Fortune 500</span>
+                                </div>
+                                <div class="author-rating">
+                                    <span class="rating-stars">⭐⭐⭐⭐⭐</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </section>
         </div>
     </main>
@@ -454,54 +994,407 @@
     <!-- JavaScript -->
     <script src="../assets/js/main.js" defer></script>
     <script defer>
-        // Category-specific JavaScript
+        // Premium News Page JavaScript
         document.addEventListener('DOMContentLoaded', function() {
-            // Filter functionality
-            const filterButtons = document.querySelectorAll('.filter-btn');
-            const articles = document.querySelectorAll('.news-article, .featured-article');
+            // Premium Tab System
+            const premiumTabs = document.querySelectorAll('.premium-tab-button');
+            const tabPanels = document.querySelectorAll('.premium-tab-panel');
+            const tabSlider = document.querySelector('.tab-background-slider');
+            const currentTabCount = document.getElementById('current-tab-count');
             
-            filterButtons.forEach(button => {
-                button.addEventListener('click', function() {
-                    const filter = this.dataset.filter;
-                    
-                    // Update active button
-                    filterButtons.forEach(btn => {
-                        btn.classList.remove('active');
-                        btn.style.background = 'var(--card)';
-                        btn.style.color = 'var(--text-secondary)';
+            function initTabs() {
+                if (premiumTabs.length === 0) return;
+                
+                // Set initial slider position
+                updateTabSlider(document.querySelector('.premium-tab-button.active'));
+                
+                premiumTabs.forEach((tab, index) => {
+                    tab.addEventListener('click', function() {
+                        const targetTab = this.dataset.tab;
+                        
+                        // Update active tab
+                        premiumTabs.forEach(t => t.classList.remove('active'));
+                        this.classList.add('active');
+                        
+                        // Update tab panels
+                        tabPanels.forEach(panel => {
+                            panel.classList.remove('active');
+                            if (panel.id === targetTab + '-panel') {
+                                panel.classList.add('active');
+                            }
+                        });
+                        
+                        // Update slider position
+                        updateTabSlider(this);
+                        
+                        // Update article count
+                        updateArticleCount(targetTab);
+                        
+                        // Add loading animation
+                        showTabLoading(targetTab);
                     });
+                });
+            }
+            
+            function updateTabSlider(activeTab) {
+                if (!tabSlider || !activeTab) return;
+                
+                const tabRect = activeTab.getBoundingClientRect();
+                const containerRect = activeTab.parentElement.getBoundingClientRect();
+                
+                const left = activeTab.offsetLeft;
+                const width = activeTab.offsetWidth;
+                
+                tabSlider.style.left = left + 'px';
+                tabSlider.style.width = width + 'px';
+            }
+            
+            function updateArticleCount(tabType) {
+                if (!currentTabCount) return;
+                
+                const counts = {
+                    'top-articles': '8',
+                    'latest-articles': '12',
+                    'trending-articles': '6'
+                };
+                
+                currentTabCount.textContent = counts[tabType] || '8';
+            }
+            
+            function showTabLoading(tabType) {
+                const panel = document.getElementById(tabType + '-panel');
+                if (!panel) return;
+                
+                // Add subtle loading animation
+                panel.style.opacity = '0.7';
+                setTimeout(() => {
+                    panel.style.opacity = '1';
+                }, 300);
+            }
+            
+            // Premium Filter System
+            const filterPills = document.querySelectorAll('.filter-pill');
+            const filterStats = document.getElementById('filtered-count');
+            const articles = document.querySelectorAll('.premium-news-card, .featured-hero-card, .featured-secondary-card');
+            
+            function initFilters() {
+                filterPills.forEach(pill => {
+                    pill.addEventListener('click', function() {
+                        const filter = this.dataset.filter;
+                        
+                        // Update active filter
+                        filterPills.forEach(p => p.classList.remove('active'));
+                        this.classList.add('active');
+                        
+                        // Filter articles with animation
+                        filterArticles(filter);
+                        
+                        // Update count
+                        updateFilterCount(filter);
+                    });
+                });
+            }
+            
+            function filterArticles(filter) {
+                articles.forEach((article, index) => {
+                    const shouldShow = filter === 'all' || article.dataset.category === filter;
                     
-                    this.classList.add('active');
-                    this.style.background = 'var(--primary)';
-                    this.style.color = 'white';
-                    
-                    // Filter articles
-                    articles.forEach(article => {
-                        if (filter === 'all' || article.dataset.category === filter) {
-                            article.style.display = 'block';
-                        } else {
+                    if (shouldShow) {
+                        article.style.display = 'block';
+                        article.style.opacity = '0';
+                        article.style.transform = 'translateY(20px)';
+                        
+                        setTimeout(() => {
+                            article.style.opacity = '1';
+                            article.style.transform = 'translateY(0)';
+                        }, index * 50);
+                    } else {
+                        article.style.opacity = '0';
+                        article.style.transform = 'translateY(-20px)';
+                        
+                        setTimeout(() => {
                             article.style.display = 'none';
+                        }, 200);
+                    }
+                });
+            }
+            
+            function updateFilterCount(filter) {
+                if (!filterStats) return;
+                
+                const counts = {
+                    'all': '150',
+                    'breaking': '12',
+                    'research': '34',
+                    'business': '28',
+                    'regulation': '16',
+                    'startups': '22'
+                };
+                
+                filterStats.textContent = counts[filter] || '150';
+            }
+            
+            // Premium Search System
+            const premiumSearch = document.getElementById('premium-search');
+            const searchClear = document.getElementById('search-clear');
+            
+            function initSearch() {
+                if (!premiumSearch) return;
+                
+                premiumSearch.addEventListener('input', function() {
+                    const query = this.value.toLowerCase();
+                    
+                    // Show/hide clear button
+                    if (searchClear) {
+                        searchClear.style.opacity = query ? '1' : '0';
+                    }
+                    
+                    // Simple search filtering
+                    if (query.length > 2) {
+                        performSearch(query);
+                    } else if (query.length === 0) {
+                        clearSearch();
+                    }
+                });
+                
+                if (searchClear) {
+                    searchClear.addEventListener('click', function() {
+                        premiumSearch.value = '';
+                        clearSearch();
+                        this.style.opacity = '0';
+                    });
+                }
+            }
+            
+            function performSearch(query) {
+                articles.forEach(article => {
+                    const title = article.querySelector('.news-card-title, .hero-card-title, .secondary-card-title');
+                    const excerpt = article.querySelector('.news-card-excerpt, .hero-card-excerpt');
+                    
+                    const titleText = title ? title.textContent.toLowerCase() : '';
+                    const excerptText = excerpt ? excerpt.textContent.toLowerCase() : '';
+                    
+                    const matches = titleText.includes(query) || excerptText.includes(query);
+                    
+                    article.style.display = matches ? 'block' : 'none';
+                    article.style.opacity = matches ? '1' : '0.5';
+                });
+            }
+            
+            function clearSearch() {
+                articles.forEach(article => {
+                    article.style.display = 'block';
+                    article.style.opacity = '1';
+                });
+            }
+            
+            // Premium Load More System
+            const premiumLoadBtn = document.getElementById('premium-load-more');
+            const loadedCount = document.getElementById('loaded-count');
+            const totalArticles = document.getElementById('total-articles');
+            
+            function initLoadMore() {
+                if (!premiumLoadBtn) return;
+                
+                premiumLoadBtn.addEventListener('click', function() {
+                    this.disabled = true;
+                    
+                    const progressBar = this.querySelector('.load-btn-progress');
+                    const btnText = this.querySelector('.load-btn-text');
+                    
+                    if (btnText) btnText.textContent = 'Loading...';
+                    
+                    // Animate progress bar
+                    if (progressBar) {
+                        progressBar.style.width = '100%';
+                    }
+                    
+                    // Simulate loading
+                    setTimeout(() => {
+                        if (btnText) btnText.textContent = 'Load Next Batch';
+                        if (progressBar) progressBar.style.width = '0%';
+                        
+                        // Update count
+                        if (loadedCount) {
+                            const current = parseInt(loadedCount.textContent) || 12;
+                            loadedCount.textContent = Math.min(current + 8, 247);
+                        }
+                        
+                        this.disabled = false;
+                    }, 2000);
+                });
+            }
+            
+            // Refresh Buttons
+            const refreshButtons = document.querySelectorAll('.featured-refresh, .latest-refresh');
+            
+            function initRefreshButtons() {
+                refreshButtons.forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const icon = this.querySelector('.refresh-icon');
+                        
+                        if (icon) {
+                            icon.style.animation = 'spin 1s linear';
+                            setTimeout(() => {
+                                icon.style.animation = '';
+                            }, 1000);
+                        }
+                        
+                        // Add visual feedback
+                        this.style.transform = 'translateY(-1px) scale(0.95)';
+                        setTimeout(() => {
+                            this.style.transform = '';
+                        }, 150);
+                    });
+                });
+            }
+            
+            // View Toggle System
+            const viewToggle = document.querySelectorAll('.view-btn');
+            const newsGrid = document.querySelector('.premium-news-grid');
+            
+            function initViewToggle() {
+                viewToggle.forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const view = this.dataset.view;
+                        
+                        // Update active button
+                        viewToggle.forEach(b => b.classList.remove('active'));
+                        this.classList.add('active');
+                        
+                        // Update grid layout
+                        if (newsGrid) {
+                            newsGrid.className = view === 'list' ? 
+                                'premium-news-grid list-view' : 
+                                'premium-news-grid';
                         }
                     });
                 });
-            });
+            }
             
-            // Load more functionality
-            const loadMoreBtn = document.getElementById('load-more-btn');
-            if (loadMoreBtn) {
-                loadMoreBtn.addEventListener('click', function() {
-                    this.textContent = 'Loading...';
-                    this.disabled = true;
+            // Newsletter Form Enhancement
+            const newsletterForm = document.querySelector('.premium-newsletter-form');
+            const newsletterInput = document.querySelector('.premium-newsletter-input');
+            const newsletterBtn = document.querySelector('.premium-newsletter-btn');
+            
+            function initNewsletter() {
+                if (!newsletterForm) return;
+                
+                newsletterForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
                     
-                    // Simulate loading more articles
-                    setTimeout(() => {
-                        this.textContent = 'Load More Articles';
-                        this.disabled = false;
-                        // In a real app, this would load more articles from the API
-                    }, 1000);
+                    if (!newsletterInput.value || !newsletterInput.value.includes('@')) {
+                        newsletterInput.style.borderColor = '#EF4444';
+                        setTimeout(() => {
+                            newsletterInput.style.borderColor = '';
+                        }, 2000);
+                        return;
+                    }
+                    
+                    // Success animation
+                    if (newsletterBtn) {
+                        const originalText = newsletterBtn.querySelector('.btn-text').textContent;
+                        newsletterBtn.querySelector('.btn-text').textContent = 'Success!';
+                        newsletterBtn.style.background = 'linear-gradient(135deg, #10B981 0%, #22D3EE 100%)';
+                        
+                        setTimeout(() => {
+                            newsletterBtn.querySelector('.btn-text').textContent = originalText;
+                            newsletterBtn.style.background = '';
+                            newsletterInput.value = '';
+                        }, 3000);
+                    }
                 });
             }
+            
+            // Dynamic Stats Update
+            function updateLiveStats() {
+                const liveCount = document.getElementById('live-articles-count');
+                const sourcesCount = document.getElementById('sources-count');
+                
+                if (liveCount) {
+                    setInterval(() => {
+                        const current = parseInt(liveCount.textContent) || 150;
+                        liveCount.textContent = current + Math.floor(Math.random() * 3);
+                    }, 30000); // Update every 30 seconds
+                }
+            }
+            
+            // Initialize all systems
+            initTabs();
+            initFilters();
+            initSearch();
+            initLoadMore();
+            initRefreshButtons();
+            initViewToggle();
+            initNewsletter();
+            updateLiveStats();
+            
+            // Keyboard shortcuts
+            document.addEventListener('keydown', function(e) {
+                // Ctrl+K for search
+                if (e.ctrlKey && e.key === 'k') {
+                    e.preventDefault();
+                    if (premiumSearch) {
+                        premiumSearch.focus();
+                    }
+                }
+                
+                // Tab navigation with arrow keys
+                if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
+                    const activeTab = document.querySelector('.premium-tab-button.active');
+                    if (activeTab && document.activeElement === activeTab) {
+                        e.preventDefault();
+                        const tabs = Array.from(premiumTabs);
+                        const currentIndex = tabs.indexOf(activeTab);
+                        const nextIndex = e.key === 'ArrowRight' ? 
+                            (currentIndex + 1) % tabs.length : 
+                            (currentIndex - 1 + tabs.length) % tabs.length;
+                        
+                        tabs[nextIndex].click();
+                        tabs[nextIndex].focus();
+                    }
+                }
+            });
+            
+            // Smooth scroll for CTA buttons
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        target.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
+                });
+            });
         });
+        
+        // CSS Animation for spin
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes spin {
+                from { transform: rotate(0deg); }
+                to { transform: rotate(360deg); }
+            }
+            
+            .list-view {
+                grid-template-columns: 1fr !important;
+            }
+            
+            .list-view .premium-news-card {
+                display: flex;
+                gap: var(--space-4);
+                align-items: flex-start;
+            }
+            
+            .list-view .news-card-content {
+                flex: 1;
+                margin-bottom: 0;
+            }
+        `;
+        document.head.appendChild(style);
     </script>
 </body>
 </html>

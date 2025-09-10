@@ -55,9 +55,9 @@
     --color-info: #3B82F6;
     
     /* Typography - Futuristic Fonts */
-    --font-family-base: 'Poppins', 'Inter', system-ui, -apple-system, sans-serif;
-    --font-family-display: 'Orbitron', 'Exo 2', 'Arial Black', sans-serif;
-    --font-family-tech: 'Exo 2', 'Roboto', monospace;
+    --font-family-base: 'Inter', system-ui, -apple-system, sans-serif;
+    --font-family-display: 'DM Serif Display', serif;
+    --font-family-tech: 'DM Serif Display', monospace;
     --font-family-mono: 'JetBrains Mono', 'Fira Code', 'SF Mono', monospace;
     
     /* Font Sizes - Fluid Typography Scale */
@@ -200,7 +200,7 @@ body {
     position: relative;
 }
 
-/* Futuristic background particles effect */
+/* Premium starfield background effect */
 body::before {
     content: '';
     position: fixed;
@@ -209,22 +209,54 @@ body::before {
     width: 100%;
     height: 100%;
     background-image: 
-        radial-gradient(2px 2px at 100px 50px, rgba(34, 211, 238, 0.3), transparent),
-        radial-gradient(2px 2px at 200px 100px, rgba(16, 185, 129, 0.2), transparent),
-        radial-gradient(1px 1px at 300px 200px, rgba(139, 92, 246, 0.3), transparent),
-        radial-gradient(1px 1px at 400px 300px, rgba(236, 72, 153, 0.2), transparent);
-    background-size: 500px 500px, 400px 400px, 300px 300px, 600px 600px;
-    animation: float 20s ease-in-out infinite;
+        /* Large bright stars */
+        radial-gradient(2px 2px at 80px 40px, rgba(34, 211, 238, 0.8), transparent),
+        radial-gradient(2px 2px at 180px 120px, rgba(255, 255, 255, 0.6), transparent),
+        radial-gradient(2px 2px at 320px 80px, rgba(16, 185, 129, 0.7), transparent),
+        radial-gradient(2px 2px at 480px 200px, rgba(139, 92, 246, 0.6), transparent),
+        radial-gradient(2px 2px at 120px 280px, rgba(236, 72, 153, 0.5), transparent),
+        
+        /* Medium stars */
+        radial-gradient(1px 1px at 50px 150px, rgba(255, 255, 255, 0.4), transparent),
+        radial-gradient(1px 1px at 250px 60px, rgba(34, 211, 238, 0.5), transparent),
+        radial-gradient(1px 1px at 380px 160px, rgba(16, 185, 129, 0.4), transparent),
+        radial-gradient(1px 1px at 150px 320px, rgba(255, 255, 255, 0.3), transparent),
+        
+        /* Small twinkling stars */
+        radial-gradient(0.5px 0.5px at 30px 90px, rgba(255, 255, 255, 0.8), transparent),
+        radial-gradient(0.5px 0.5px at 220px 180px, rgba(34, 211, 238, 0.6), transparent),
+        radial-gradient(0.5px 0.5px at 360px 120px, rgba(16, 185, 129, 0.5), transparent),
+        radial-gradient(0.5px 0.5px at 90px 240px, rgba(255, 255, 255, 0.7), transparent),
+        radial-gradient(0.5px 0.5px at 420px 280px, rgba(139, 92, 246, 0.4), transparent);
+    
+    background-size: 
+        600px 400px, 500px 350px, 450px 300px, 550px 450px, 400px 320px,
+        350px 250px, 480px 280px, 520px 380px, 300px 200px,
+        200px 150px, 250px 180px, 280px 200px, 180px 120px, 320px 240px;
+    
+    animation: twinkle 25s ease-in-out infinite;
     pointer-events: none;
     z-index: -1;
-    opacity: 0.6;
+    opacity: 0.8;
 }
 
-@keyframes float {
-    0%, 100% { transform: translateY(0px) translateX(0px); }
-    25% { transform: translateY(-20px) translateX(10px); }
-    50% { transform: translateY(0px) translateX(-10px); }
-    75% { transform: translateY(20px) translateX(5px); }
+@keyframes twinkle {
+    0%, 100% { 
+        opacity: 0.8; 
+        transform: scale(1) rotate(0deg); 
+    }
+    25% { 
+        opacity: 0.4; 
+        transform: scale(1.1) rotate(90deg); 
+    }
+    50% { 
+        opacity: 0.9; 
+        transform: scale(0.9) rotate(180deg); 
+    }
+    75% { 
+        opacity: 0.5; 
+        transform: scale(1.2) rotate(270deg); 
+    }
 }
 
 img,
@@ -2342,130 +2374,6 @@ p {
     margin: 0;
 }
 
-/* Interactive AI Quiz */
-.ai-quiz-teaser {
-    background: var(--glass-bg);
-    border: 1px solid var(--glass-border);
-    border-radius: var(--radius-lg);
-    padding: var(--space-8);
-    text-align: center;
-    margin-bottom: var(--space-8);
-}
-
-.ai-quiz-teaser h3 {
-    font-family: var(--font-family-display);
-    color: var(--neon-orange);
-    margin-bottom: var(--space-4);
-}
-
-.quiz-options {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-    gap: var(--space-3);
-    margin: var(--space-4) 0;
-}
-
-.quiz-option {
-    background: var(--glass-bg);
-    border: 1px solid var(--glass-border);
-    border-radius: var(--radius-sm);
-    padding: var(--space-3) var(--space-4);
-    color: var(--color-text-primary);
-    cursor: pointer;
-    transition: all var(--transition-base);
-    font-size: var(--font-size-sm);
-    font-weight: 500;
-}
-
-.quiz-option:hover {
-    border-color: var(--neon-blue);
-    background: rgba(34, 211, 238, 0.1);
-    transform: translateY(-2px);
-}
-
-.quiz-option.correct {
-    background: var(--neon-green);
-    color: var(--color-bg);
-    border-color: var(--neon-green);
-}
-
-.quiz-option.incorrect {
-    background: var(--neon-pink);
-    color: white;
-    border-color: var(--neon-pink);
-    opacity: 0.6;
-}
-
-.quiz-result {
-    margin-top: var(--space-4);
-    padding: var(--space-4);
-    background: rgba(16, 185, 129, 0.1);
-    border: 1px solid var(--neon-green);
-    border-radius: var(--radius-sm);
-    color: var(--color-text-primary);
-}
-
-.quiz-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: var(--space-4);
-    flex-wrap: wrap;
-    gap: var(--space-2);
-}
-
-.quiz-timer {
-    display: flex;
-    align-items: center;
-    gap: var(--space-2);
-    background: rgba(79, 70, 229, 0.1);
-    border: 1px solid var(--color-primary);
-    border-radius: var(--radius-sm);
-    padding: var(--space-2) var(--space-3);
-    font-size: var(--font-size-sm);
-}
-
-.timer-text {
-    color: var(--color-text-secondary);
-}
-
-.timer-countdown {
-    color: var(--color-primary);
-    font-weight: 700;
-    font-family: var(--font-family-mono);
-    min-width: 25px;
-}
-
-.quiz-question {
-    font-size: var(--font-size-lg);
-    font-weight: 600;
-    color: var(--color-text-primary);
-    margin-bottom: var(--space-4);
-    line-height: 1.4;
-}
-
-.quiz-progress {
-    margin-top: var(--space-4);
-    text-align: center;
-    color: var(--color-text-secondary);
-    font-size: var(--font-size-sm);
-}
-
-.quiz-option:disabled {
-    cursor: not-allowed;
-    opacity: 0.6;
-}
-
-@media (max-width: 768px) {
-    .quiz-header {
-        flex-direction: column;
-        text-align: center;
-    }
-    
-    .quiz-timer {
-        order: -1;
-    }
-}
 
 /* Fun Facts */
 .fun-facts {
@@ -2554,9 +2462,6 @@ p {
         padding: 2px 6px;
     }
     
-    .quiz-options {
-        grid-template-columns: 1fr;
-    }
 }
 
 /* Reduced motion preferences */
@@ -2576,6 +2481,7 @@ p {
         animation: none;
     }
 }
+
 
 /* High contrast mode */
 @media (prefers-contrast: high) {
@@ -2797,6 +2703,18 @@ p {
 .value-item {
     text-align: center;
     padding: var(--space-6);
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-lg), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    transition: all var(--transition-base);
+}
+
+.value-item:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-xl), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    border-color: var(--color-border);
 }
 
 .value-icon {

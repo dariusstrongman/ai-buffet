@@ -238,7 +238,6 @@
                                 </div>
                             </button>
                         </div>
-                        <div class="tab-background-slider"></div>
                     </div>
                     
                     <div class="tab-meta">
@@ -999,14 +998,10 @@
             // Premium Tab System
             const premiumTabs = document.querySelectorAll('.premium-tab-button');
             const tabPanels = document.querySelectorAll('.premium-tab-panel');
-            const tabSlider = document.querySelector('.tab-background-slider');
             const currentTabCount = document.getElementById('current-tab-count');
             
             function initTabs() {
                 if (premiumTabs.length === 0) return;
-                
-                // Set initial slider position
-                updateTabSlider(document.querySelector('.premium-tab-button.active'));
                 
                 premiumTabs.forEach((tab, index) => {
                     tab.addEventListener('click', function() {
@@ -1024,9 +1019,6 @@
                             }
                         });
                         
-                        // Update slider position
-                        updateTabSlider(this);
-                        
                         // Update article count
                         updateArticleCount(targetTab);
                         
@@ -1034,19 +1026,6 @@
                         showTabLoading(targetTab);
                     });
                 });
-            }
-            
-            function updateTabSlider(activeTab) {
-                if (!tabSlider || !activeTab) return;
-                
-                const tabRect = activeTab.getBoundingClientRect();
-                const containerRect = activeTab.parentElement.getBoundingClientRect();
-                
-                const left = activeTab.offsetLeft;
-                const width = activeTab.offsetWidth;
-                
-                tabSlider.style.left = left + 'px';
-                tabSlider.style.width = width + 'px';
             }
             
             function updateArticleCount(tabType) {

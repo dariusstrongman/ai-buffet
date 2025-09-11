@@ -8,6 +8,7 @@
     
     <!-- Canonical and Favicon -->
     <link rel="canonical" href="https://myaibuffet.com/">
+    <link rel="icon" type="image/png" href="img/Logo.png">
     <link rel="icon" type="image/x-icon" href="/favicon.ico">
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
@@ -99,6 +100,15 @@
             }
         ]
     }
+    </script>
+    
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-R0N7018SBX"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-R0N7018SBX');
     </script>
     
     <!-- Google Fonts - Futuristic Typography -->
@@ -852,6 +862,169 @@
 
             // Rotate facts every 8 seconds
             setInterval(rotateFeaturedFact, 8000);
+
+            // Dynamic Facts Grid Rotation
+            const factDatabase = [
+                {
+                    stat: "650%",
+                    label: "Increase in AI job postings since 2023",
+                    detail: "AI skills dominate top 10 most sought-after roles globally",
+                    gradient: "gradient-primary"
+                },
+                {
+                    stat: "$21.8T",
+                    label: "AI's projected economic impact by 2030",
+                    detail: "Greater than the entire current US economy",
+                    gradient: "gradient-secondary"
+                },
+                {
+                    stat: "1.76T",
+                    label: "Parameters in GPT-4 Turbo's neural network",
+                    detail: "Nearly 9,000x more than the human brain's neurons",
+                    gradient: "gradient-accent"
+                },
+                {
+                    stat: "8.2M+",
+                    label: "AI-generated images created daily",
+                    detail: "DALL-E 3 and Midjourney combined output per day",
+                    gradient: "gradient-primary"
+                },
+                {
+                    stat: "97%",
+                    label: "Of Fortune 500 companies using AI",
+                    detail: "Up from 23% in 2019 - an 8x increase in 5 years",
+                    gradient: "gradient-secondary"
+                },
+                {
+                    stat: "37 mins",
+                    label: "Time saved per employee daily using AI",
+                    detail: "Equivalent to 9.5 extra work weeks per year",
+                    gradient: "gradient-accent"
+                },
+                // Additional rotating facts
+                {
+                    stat: "4.8B",
+                    label: "People using AI-powered applications",
+                    detail: "Including search, translation, and voice assistants",
+                    gradient: "gradient-primary"
+                },
+                {
+                    stat: "1,200%",
+                    label: "Increase in AI research papers since 2010",
+                    detail: "Growing from 200,000 to 2.4M papers annually",
+                    gradient: "gradient-secondary"
+                },
+                {
+                    stat: "42%",
+                    label: "Reduction in coding time with AI assistants",
+                    detail: "GitHub Copilot and similar tools boost productivity",
+                    gradient: "gradient-accent"
+                },
+                {
+                    stat: "$15.7T",
+                    label: "Global GDP boost potential by 2030",
+                    detail: "McKinsey's projection for AI economic impact",
+                    gradient: "gradient-primary"
+                },
+                {
+                    stat: "87%",
+                    label: "Of executives say AI is a competitive advantage",
+                    detail: "Up 73% from pre-pandemic levels in 2019",
+                    gradient: "gradient-secondary"
+                },
+                {
+                    stat: "2.9 sec",
+                    label: "Average time for AI image generation",
+                    detail: "From text prompt to high-quality artwork",
+                    gradient: "gradient-accent"
+                },
+                {
+                    stat: "145M",
+                    label: "New jobs expected to be created by AI",
+                    detail: "World Economic Forum 2025 projection",
+                    gradient: "gradient-primary"
+                },
+                {
+                    stat: "78%",
+                    label: "Of developers using AI coding assistants",
+                    detail: "Stack Overflow 2024 Developer Survey",
+                    gradient: "gradient-secondary"
+                },
+                {
+                    stat: "0.3 sec",
+                    label: "Time for AI to translate 500 words",
+                    detail: "99.1% accuracy across 100+ languages",
+                    gradient: "gradient-accent"
+                }
+            ];
+
+            // Track which facts are currently displayed
+            let currentlyDisplayedFacts = [0, 1, 2, 3, 4, 5];
+            
+            function getRandomFact(excludeIndices = []) {
+                const availableFacts = factDatabase.filter((_, index) => !excludeIndices.includes(index));
+                return Math.floor(Math.random() * availableFacts.length);
+            }
+
+            function updateFactCard(cardIndex) {
+                const card = document.querySelector(`[data-fact-id="${cardIndex}"]`);
+                if (!card) return;
+
+                const statEl = card.querySelector('.fact-stat');
+                const labelEl = card.querySelector('.fact-label');
+                const detailEl = card.querySelector('.fact-detail');
+
+                // Get a random fact that's not currently displayed
+                let newFactIndex;
+                do {
+                    newFactIndex = Math.floor(Math.random() * factDatabase.length);
+                } while (currentlyDisplayedFacts.includes(newFactIndex));
+
+                const newFact = factDatabase[newFactIndex];
+
+                // Smooth transition animation
+                card.style.transition = 'all 0.5s cubic-bezier(0.4, 0, 0.2, 1)';
+                card.style.transform = 'scale(0.95)';
+                card.style.opacity = '0.7';
+
+                setTimeout(() => {
+                    // Update content
+                    statEl.textContent = newFact.stat;
+                    labelEl.textContent = newFact.label;
+                    detailEl.textContent = newFact.detail;
+                    
+                    // Update gradient class
+                    statEl.style.background = `var(--${newFact.gradient})`;
+
+                    // Animate back in
+                    card.style.transform = 'scale(1)';
+                    card.style.opacity = '1';
+
+                    // Update the tracking array
+                    currentlyDisplayedFacts[cardIndex] = newFactIndex;
+                }, 250);
+            }
+
+            // Start dynamic rotation with random intervals
+            function startFactRotation() {
+                setInterval(() => {
+                    // Pick a random card to update
+                    const randomCard = Math.floor(Math.random() * 6);
+                    updateFactCard(randomCard);
+                }, Math.random() * 8000 + 5000); // Random interval between 5-13 seconds
+            }
+
+            // Also rotate individual cards at their own intervals
+            for (let i = 0; i < 6; i++) {
+                setTimeout(() => {
+                    setInterval(() => {
+                        updateFactCard(i);
+                    }, Math.random() * 15000 + 10000); // Each card rotates every 10-25 seconds
+                }, Math.random() * 5000); // Stagger the start times
+            }
+
+            // Start the main rotation system
+            startFactRotation();
         });
     </script>
 </body>

@@ -75,6 +75,59 @@
             margin: 0;
             line-height: 1.6;
         }
+        
+        /* Loading and error states */
+        .search-loading, .no-search-results, .search-error, .no-articles {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 3rem 1rem;
+            text-align: center;
+            grid-column: 1 / -1;
+        }
+        
+        .loading-spinner {
+            width: 3rem;
+            height: 3rem;
+            border: 3px solid rgba(255, 255, 255, 0.1);
+            border-top: 3px solid var(--color-primary, #4F46E5);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 1rem;
+        }
+        
+        .loading-text, .no-results-text, .error-text, .no-articles-text {
+            font-size: 1.125rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+        
+        .no-results-suggestion {
+            color: var(--color-text-secondary, #9CA3AF);
+            font-size: 0.875rem;
+        }
+        
+        .retry-btn, .refresh-btn {
+            margin-top: 1rem;
+            padding: 0.5rem 1rem;
+            background: var(--color-primary, #4F46E5);
+            color: white;
+            border: none;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            font-weight: 500;
+            transition: background-color 0.2s;
+        }
+        
+        .retry-btn:hover, .refresh-btn:hover {
+            background: var(--color-primary-dark, #3730A3);
+        }
+        
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
     </style>
 </head>
 <body>
@@ -92,34 +145,10 @@
                     <li role="none"><a href="../index.html" class="nav-link" role="menuitem">Home</a></li>
                     <li role="none"><a href="news.html" class="nav-link" role="menuitem" aria-current="page">News</a></li>
                     <li role="none"><a href="tools.html" class="nav-link" role="menuitem">Tools</a></li>
-                    <li role="none"><a href="stocks.html" class="nav-link" role="menuitem">Stocks</a></li>
                     <li role="none"><a href="../about.html" class="nav-link" role="menuitem">About</a></li>
                 </ul>
 
                 <div class="nav-actions">
-                    <div class="search-container">
-                        <label for="search-input" class="sr-only">Search articles</label>
-                        <input 
-                            type="search" 
-                            class="search-input" 
-                            placeholder="Search news... (Ctrl+K)"
-                            aria-label="Search AI news articles"
-                            id="search-input"
-                            autocomplete="off"
-                        >
-                        <span class="search-icon" aria-hidden="true">🔍</span>
-                    </div>
-
-                    <!-- Theme toggle -->
-                    <button 
-                        id="theme-toggle" 
-                        class="theme-toggle" 
-                        aria-label="Toggle dark/light theme"
-                        title="Toggle theme"
-                    >
-                        <span class="theme-toggle-icon" aria-hidden="true">🌓</span>
-                    </button>
-
                     <!-- Mobile menu button -->
                     <button class="mobile-menu-toggle" aria-label="Toggle mobile menu" aria-expanded="false">
                         <span class="hamburger"></span>
@@ -316,97 +345,6 @@
                 </div>
             </section>
 
-            <!-- Premium Filters & Search -->
-            <section class="premium-filters-section">
-                <div class="filters-container">
-                    <div class="filters-header">
-                        <h2 class="filters-title">Filter & Discover</h2>
-                        <div class="filter-stats">
-                            <span id="filtered-count">150</span> articles found
-                        </div>
-                    </div>
-                    
-                    <div class="filter-controls">
-                        <div class="category-filters">
-                            <div class="filter-group">
-                                <label class="filter-label">Categories</label>
-                                <div class="filter-pills">
-                                    <button class="filter-pill active" data-filter="all">
-                                        <span class="pill-icon">🌐</span>
-                                        <span class="pill-text">All News</span>
-                                        <span class="pill-count">150</span>
-                                    </button>
-                                    <button class="filter-pill" data-filter="breaking">
-                                        <span class="pill-icon">⚡</span>
-                                        <span class="pill-text">Breaking</span>
-                                        <span class="pill-count">12</span>
-                                    </button>
-                                    <button class="filter-pill" data-filter="research">
-                                        <span class="pill-icon">🔬</span>
-                                        <span class="pill-text">Research</span>
-                                        <span class="pill-count">34</span>
-                                    </button>
-                                    <button class="filter-pill" data-filter="business">
-                                        <span class="pill-icon">💼</span>
-                                        <span class="pill-text">Business</span>
-                                        <span class="pill-count">28</span>
-                                    </button>
-                                    <button class="filter-pill" data-filter="regulation">
-                                        <span class="pill-icon">⚖️</span>
-                                        <span class="pill-text">Regulation</span>
-                                        <span class="pill-count">16</span>
-                                    </button>
-                                    <button class="filter-pill" data-filter="startups">
-                                        <span class="pill-icon">🚀</span>
-                                        <span class="pill-text">Startups</span>
-                                        <span class="pill-count">22</span>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="advanced-filters">
-                            <div class="filter-group">
-                                <label class="filter-label">Sort by</label>
-                                <select class="premium-select" id="sort-select">
-                                    <option value="relevance">Most Relevant</option>
-                                    <option value="recent">Most Recent</option>
-                                    <option value="trending">Trending Now</option>
-                                    <option value="impact">High Impact</option>
-                                </select>
-                            </div>
-                            
-                            <div class="filter-group">
-                                <label class="filter-label">Time Range</label>
-                                <select class="premium-select" id="time-select">
-                                    <option value="today">Today</option>
-                                    <option value="week">This Week</option>
-                                    <option value="month">This Month</option>
-                                    <option value="all">All Time</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="search-enhancement">
-                        <div class="premium-search-container">
-                            <div class="search-input-wrapper">
-                                <span class="search-icon-enhanced">🔍</span>
-                                <input 
-                                    type="search" 
-                                    class="premium-search-input" 
-                                    placeholder="Search AI news, companies, technologies..."
-                                    id="premium-search"
-                                >
-                                <button class="search-clear" id="search-clear">✕</button>
-                            </div>
-                            <div class="search-suggestions" id="search-suggestions">
-                                <!-- Search suggestions will appear here -->
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
 
             <div class="premium-main-content">
                 <div class="content-area">
@@ -990,9 +928,593 @@
         </div>
     </footer>
 
+    <!-- Supabase Client -->
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+    
     <!-- JavaScript -->
     <script src="../assets/js/main.js" defer></script>
     <script defer>
+        // Supabase Configuration
+        // TODO: Replace these with your actual Supabase credentials
+        const SUPABASE_URL = 'https://npetaroffoyjohjiwssf.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5wZXRhcm9mZm95am9oaml3c3NmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTcwMDk5OTgsImV4cCI6MjA3MjU4NTk5OH0.oYJ4ETV_zIDx_7KWJlEtcrIrRqy72HYEFzAs37pPzB8';
+        
+        console.log('Using Supabase URL:', SUPABASE_URL);
+        console.log('API Key starts with:', SUPABASE_ANON_KEY.substring(0, 20) + '...');
+        
+        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        
+        // Global state
+        let allArticles = [];
+        let filteredArticles = [];
+        let currentFilter = 'all';
+        let currentSort = 'relevance';
+        let currentTimeRange = 'today';
+        let articlesLoaded = 0;
+        const articlesPerPage = 12;
+        
+        // Data fetching functions
+        async function fetchNewsArticles(options = {}) {
+            try {
+                const {
+                    category = null,
+                    limit = 50,
+                    offset = 0,
+                    sortBy = 'relevance_score',
+                    timeRange = 'today',
+                    featured = null,
+                    breaking = null,
+                    isTopStory = null
+                } = options;
+                
+                let query = supabase
+                    .from('articles')
+                    .select('*');
+                    
+                // Status column has been removed - no need to filter by it anymore
+                
+                // Apply filters
+                if (category && category !== 'all') {
+                    if (category === 'breaking') {
+                        query = query.eq('breaking_news', 'TRUE');
+                    } else {
+                        // Use the new normalized category field
+                        query = query.eq('category_normalized', category);
+                    }
+                }
+                
+                if (featured !== null) {
+                    query = query.eq('featured', featured ? 'TRUE' : 'FALSE');
+                }
+                
+                if (breaking !== null) {
+                    query = query.eq('breaking_news', breaking ? 'TRUE' : 'FALSE');
+                }
+                
+                if (isTopStory !== null) {
+                    query = query.eq('is_top_story', isTopStory);
+                }
+                
+                // Time range filter
+                if (timeRange !== 'all') {
+                    const now = new Date();
+                    let startDate;
+                    
+                    switch (timeRange) {
+                        case 'today':
+                            startDate = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+                            break;
+                        case 'week':
+                            startDate = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+                            break;
+                        case 'month':
+                            startDate = new Date(now.getFullYear(), now.getMonth(), 1);
+                            break;
+                    }
+                    
+                    if (startDate) {
+                        query = query.gte('pub_date', startDate.toISOString());
+                    }
+                }
+                
+                // Sorting
+                switch (sortBy) {
+                    case 'recent':
+                        query = query.order('pub_date', { ascending: false });
+                        break;
+                    case 'trending_score':
+                        query = query.order('trending_score', { ascending: false });
+                        break;
+                    case 'importance_score':
+                        // Use relevance_score since importance_score doesn't exist
+                        query = query.order('relevance_score', { ascending: false });
+                        break;
+                    case 'relevance_score':
+                        query = query.order('relevance_score', { ascending: false });
+                        break;
+                    case 'impact':
+                        // Use relevance_score since market_impact was removed
+                        query = query.order('relevance_score', { ascending: false });
+                        break;
+                    default:
+                        query = query.order('pub_date', { ascending: false }); // Default to recent
+                }
+                
+                query = query.range(offset, offset + limit - 1);
+                
+                const { data, error, count } = await query;
+                
+                if (error) {
+                    console.error('Error fetching articles:', error);
+                    return { articles: [], total: 0 };
+                }
+                
+                console.log(`Fetched ${data?.length || 0} articles with options:`, options);
+                return { articles: data || [], total: count || data?.length || 0 };
+            } catch (error) {
+                console.error('Error in fetchNewsArticles:', error);
+                return { articles: [], total: 0 };
+            }
+        }
+        
+        async function searchArticles(query, options = {}) {
+            try {
+                const { limit = 20, offset = 0 } = options;
+                
+                const { data, error } = await supabase
+                    .from('articles')
+                    .select('*')
+                    .eq('status', 'published')
+                    .eq('category', 'news')
+                    .or(`title.ilike.%${query}%, description.ilike.%${query}%, content_snippet.ilike.%${query}%`)
+                    .order('relevance_score', { ascending: false })
+                    .range(offset, offset + limit - 1);
+                
+                if (error) {
+                    console.error('Error searching articles:', error);
+                    return [];
+                }
+                
+                return data || [];
+            } catch (error) {
+                console.error('Error in searchArticles:', error);
+                return [];
+            }
+        }
+        
+        async function getArticleStats() {
+            try {
+                const { count: totalCount } = await supabase
+                    .from('articles')
+                    .select('*', { count: 'exact', head: true })
+                    .eq('status', 'published')
+                    .eq('category', 'news');
+                
+                const { count: todayCount } = await supabase
+                    .from('articles')
+                    .select('*', { count: 'exact', head: true })
+                    .eq('status', 'published')
+                    .eq('category', 'news')
+                    .gte('pub_date', new Date(new Date().setHours(0,0,0,0)).toISOString());
+                
+                const { data: sources } = await supabase
+                    .from('articles')
+                    .select('source')
+                    .eq('status', 'published')
+                    .eq('category', 'news');
+                
+                const uniqueSources = [...new Set(sources?.map(s => s.source) || [])].length;
+                
+                return {
+                    total: totalCount || 0,
+                    today: todayCount || 0,
+                    sources: uniqueSources
+                };
+            } catch (error) {
+                console.error('Error getting article stats:', error);
+                return { total: 0, today: 0, sources: 0 };
+            }
+        }
+        
+        // Article rendering functions
+        function renderArticleCard(article, type = 'standard') {
+            const formatDate = (dateString) => {
+                const date = new Date(dateString);
+                const now = new Date();
+                const diffMs = now - date;
+                const diffMins = Math.floor(diffMs / 60000);
+                const diffHours = Math.floor(diffMs / 3600000);
+                const diffDays = Math.floor(diffMs / 86400000);
+                
+                if (diffMins < 60) {
+                    return `${diffMins}m ago`;
+                } else if (diffHours < 24) {
+                    return `${diffHours}h ago`;
+                } else if (diffDays < 7) {
+                    return `${diffDays}d ago`;
+                } else {
+                    return date.toLocaleDateString();
+                }
+            };
+            
+            const getCategoryIcon = (category) => {
+                const icons = {
+                    'breaking': '⚡',
+                    'research': '🔬',
+                    'business': '💼',
+                    'regulation': '⚖️',
+                    'startups': '🚀',
+                    'product-launch': '🚀',
+                    'policy': '🏛️',
+                    'ai-safety': '🛡️',
+                    'ethics': '🤝'
+                };
+                return icons[category] || '📰';
+            };
+            
+            const getReadTime = (wordCount) => {
+                const wordsPerMinute = 200;
+                const minutes = Math.ceil((wordCount || 800) / wordsPerMinute);
+                return `${minutes} min read`;
+            };
+            
+            const truncateText = (text, maxLength = 150) => {
+                if (!text || text.length <= maxLength) return text || '';
+                return text.substring(0, maxLength) + '...';
+            };
+            
+            if (type === 'hero') {
+                return `
+                    <article class="featured-hero-card" data-category="${article.category_normalized || 'news'}">
+                        <div class="hero-card-background">
+                            <div class="background-overlay"></div>
+                            <div class="background-pattern"></div>
+                        </div>
+                        <div class="hero-card-content">
+                            <div class="hero-card-header">
+                                ${article.breaking_news === 'TRUE' ? `
+                                    <div class="breaking-badge">
+                                        <span class="badge-pulse"></span>
+                                        <span class="badge-text">BREAKING</span>
+                                    </div>
+                                ` : ''}
+                                <div class="article-priority">
+                                    <span class="priority-icon">${getCategoryIcon(article.category_normalized || article.subcategory)}</span>
+                                    <span class="priority-text">${(parseFloat(article.relevance_score) || 7) >= 8 ? 'HIGH RELEVANCE' : 'TOP STORY'}</span>
+                                </div>
+                            </div>
+                            <h3 class="hero-card-title">
+                                <a href="${article.link}" target="_blank" rel="noopener">${article.title}</a>
+                            </h3>
+                            <p class="hero-card-excerpt">${truncateText(article.description || article.content_snippet, 200)}</p>
+                            <div class="hero-card-meta">
+                                <div class="meta-group">
+                                    <span class="meta-icon">📅</span>
+                                    <span class="meta-text">${formatDate(article.pub_date)}</span>
+                                </div>
+                                <div class="meta-group">
+                                    <span class="meta-icon">📰</span>
+                                    <span class="meta-text">${article.source}</span>
+                                </div>
+                                <div class="meta-group">
+                                    <span class="meta-icon">⭐</span>
+                                    <span class="meta-text">Score ${(parseFloat(article.relevance_score) || 7).toFixed(1)}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </article>
+                `;
+            }
+            
+            if (type === 'secondary') {
+                return `
+                    <article class="featured-secondary-card" data-category="${article.category_normalized || 'news'}">
+                        <div class="secondary-card-header">
+                            <div class="category-badge ${article.category_normalized || 'news'}">
+                                <span class="badge-icon">${getCategoryIcon(article.category_normalized)}</span>
+                                <span class="badge-text">${(article.category_normalized || 'NEWS').toUpperCase()}</span>
+                            </div>
+                            ${(parseFloat(article.trending_score) || parseFloat(article.relevance_score) || 0) >= 8 ? `
+                                <div class="trending-indicator">
+                                    <span class="trending-icon">📈</span>
+                                </div>
+                            ` : `
+                                <div class="impact-score">
+                                    <span class="score-text">${(parseFloat(article.relevance_score) || 7).toFixed(1)}</span>
+                                </div>
+                            `}
+                        </div>
+                        <h4 class="secondary-card-title">
+                            <a href="${article.link}" target="_blank" rel="noopener">${article.title}</a>
+                        </h4>
+                        <div class="secondary-card-meta">
+                            <span class="meta-time">${formatDate(article.pub_date)}</span>
+                            <span class="meta-divider">•</span>
+                            <span class="meta-source">${article.source}</span>
+                        </div>
+                    </article>
+                `;
+            }
+            
+            // Standard card for grid
+            return `
+                <article class="premium-news-card" data-category="${article.category_normalized || 'news'}">
+                    <div class="news-card-header">
+                        <div class="category-indicator ${article.category_normalized || 'news'}">
+                            <span class="indicator-icon">${getCategoryIcon(article.category_normalized)}</span>
+                            <span class="indicator-text">${(article.category_normalized || 'NEWS').toUpperCase()}</span>
+                        </div>
+                        ${(parseFloat(article.trending_score) || parseFloat(article.relevance_score) || 0) >= 9 ? `
+                            <div class="trending-badge">
+                                <span class="trending-icon">🔥</span>
+                                <span class="trending-text">Trending</span>
+                            </div>
+                        ` : `
+                            <div class="article-priority ${(parseFloat(article.relevance_score) || 7) >= 8 ? 'high' : 'medium'}">
+                                <span class="priority-dot"></span>
+                            </div>
+                        `}
+                    </div>
+                    <div class="news-card-content">
+                        <h3 class="news-card-title">
+                            <a href="${article.link}" target="_blank" rel="noopener">${article.title}</a>
+                        </h3>
+                        <p class="news-card-excerpt">${truncateText(article.description || article.content_snippet)}</p>
+                        <div class="news-card-insights">
+                            <div class="insight-tag">
+                                <span class="tag-icon">${article.category_normalized === 'business' ? '📊' : '💡'}</span>
+                                <span class="tag-text">${article.category_normalized === 'business' ? 'Market Analysis' : 'Key Insight'}</span>
+                            </div>
+                            ${article.category_normalized === 'business' ? `
+                                <div class="stock-indicator">
+                                    <span class="stock-symbol">AI Sector</span>
+                                    <span class="stock-change positive">+${(Math.random() * 5 + 1).toFixed(1)}%</span>
+                                </div>
+                            ` : `
+                                <div class="impact-meter">
+                                    <span class="meter-label">Relevance:</span>
+                                    <div class="meter-bar">
+                                        <div class="meter-fill" style="width: ${(parseFloat(article.relevance_score) || 7) * 10}%"></div>
+                                    </div>
+                                    <span class="meter-value">${(parseFloat(article.relevance_score) || 7).toFixed(1)}</span>
+                                </div>
+                            `}
+                        </div>
+                    </div>
+                    <div class="news-card-footer">
+                        <div class="footer-meta">
+                            <span class="meta-time">${formatDate(article.pub_date)}</span>
+                            <span class="meta-divider">•</span>
+                            <span class="meta-source">${article.source}</span>
+                            <span class="meta-divider">•</span>
+                            <span class="meta-read-time">${getReadTime(article.word_count)}</span>
+                        </div>
+                        <div class="footer-actions">
+                            <button class="action-btn bookmark" onclick="toggleBookmark('${article.id}')">
+                                <span class="action-icon">🔖</span>
+                            </button>
+                            <button class="action-btn share" onclick="shareArticle('${article.id}', '${article.title}', '${article.link}')">
+                                <span class="action-icon">📤</span>
+                            </button>
+                        </div>
+                    </div>
+                </article>
+            `;
+        }
+        
+        function renderTabContent(articles, tabType) {
+            const grid = document.getElementById(`${tabType}-grid`);
+            if (!grid) return;
+            
+            if (articles.length === 0) {
+                grid.innerHTML = `
+                    <div class="no-articles">
+                        <div class="no-articles-icon">📰</div>
+                        <div class="no-articles-text">No articles found for this filter</div>
+                        <button class="refresh-btn" onclick="loadTabContent('${tabType}')">Try Again</button>
+                    </div>
+                `;
+                return;
+            }
+            
+            grid.innerHTML = articles.map(article => renderArticleCard(article)).join('');
+        }
+        
+        function renderFeaturedSection(articles) {
+            if (articles.length === 0) return;
+            
+            const heroCard = document.querySelector('.featured-hero-card');
+            const secondaryGrid = document.querySelector('.featured-secondary-grid');
+            
+            if (heroCard && articles[0]) {
+                heroCard.outerHTML = renderArticleCard(articles[0], 'hero');
+            }
+            
+            if (secondaryGrid && articles.length > 1) {
+                secondaryGrid.innerHTML = articles.slice(1, 3).map(article => 
+                    renderArticleCard(article, 'secondary')
+                ).join('');
+            }
+        }
+        
+        function renderMainGrid(articles, append = false) {
+            const grid = document.getElementById('premium-news-grid');
+            if (!grid) return;
+            
+            if (!append) {
+                grid.innerHTML = '';
+            }
+            
+            if (articles.length === 0 && !append) {
+                grid.innerHTML = `
+                    <div class="no-articles">
+                        <div class="no-articles-icon">📰</div>
+                        <div class="no-articles-text">No articles found</div>
+                        <button class="refresh-btn" onclick="loadAllContent()">Refresh</button>
+                    </div>
+                `;
+                return;
+            }
+            
+            const articlesHTML = articles.map(article => renderArticleCard(article)).join('');
+            grid.insertAdjacentHTML('beforeend', articlesHTML);
+        }
+        
+        // Content loading functions
+        async function loadTabContent(tabType) {
+            const grid = document.getElementById(`${tabType}-grid`);
+            if (!grid) return;
+            
+            // Show loading state
+            grid.innerHTML = `
+                <article class="premium-article-card loading">
+                    <div class="article-shimmer">
+                        <div class="shimmer-header"></div>
+                        <div class="shimmer-lines">
+                            <div class="shimmer-line"></div>
+                            <div class="shimmer-line short"></div>
+                        </div>
+                        <div class="shimmer-footer"></div>
+                    </div>
+                </article>
+            `.repeat(3);
+            
+            let options = { limit: 12 };
+            
+            switch (tabType) {
+                case 'top-articles':
+                    options.isTopStory = true; // Get articles where is_top_story = TRUE
+                    options.sortBy = 'importance_score';
+                    break;
+                case 'latest-articles':
+                    options.sortBy = 'recent'; // Sort by pub_date DESC
+                    break;
+                case 'trending-articles':
+                    options.sortBy = 'trending_score'; // Sort by trending_score DESC
+                    options.timeRange = 'week';
+                    break;
+            }
+            
+            let { articles } = await fetchNewsArticles(options);
+            
+            // If no articles found with strict filtering, try with looser filters
+            if (articles.length === 0 && tabType === 'top-articles') {
+                console.log('No top story articles found, trying without is_top_story filter...');
+                const fallbackResult = await fetchNewsArticles({
+                    limit: 12,
+                    sortBy: 'importance_score'
+                });
+                articles = fallbackResult.articles;
+            }
+            
+            renderTabContent(articles, tabType);
+            
+            // Update count
+            const countElement = document.getElementById('current-tab-count');
+            if (countElement) {
+                countElement.textContent = articles.length;
+            }
+        }
+        
+        async function loadFeaturedContent() {
+            // Get top story articles (importance_score >= 7 OR breaking_news = true)
+            let { articles } = await fetchNewsArticles({
+                isTopStory: true,
+                limit: 3,
+                sortBy: 'importance_score'
+            });
+            
+            console.log(`Top story articles found: ${articles.length}`);
+            
+            // If no top stories, get breaking news
+            if (articles.length === 0) {
+                const breakingResult = await fetchNewsArticles({
+                    breaking: true,
+                    limit: 3,
+                    sortBy: 'importance_score'
+                });
+                articles = breakingResult.articles;
+                console.log(`Breaking articles found: ${articles.length}`);
+            }
+            
+            // If still no articles, get highest importance articles
+            if (articles.length === 0) {
+                const topResult = await fetchNewsArticles({
+                    limit: 3,
+                    sortBy: 'importance_score'
+                });
+                articles = topResult.articles;
+                console.log(`Fallback articles found: ${articles.length}`);
+            }
+            
+            renderFeaturedSection(articles);
+        }
+        
+        async function loadMainContent() {
+            const { articles, total } = await fetchNewsArticles({
+                limit: articlesPerPage,
+                offset: articlesLoaded,
+                sortBy: currentSort,
+                timeRange: currentTimeRange,
+                category: currentFilter
+            });
+            
+            allArticles = [...allArticles, ...articles];
+            filteredArticles = allArticles;
+            articlesLoaded += articles.length;
+            
+            renderMainGrid(articles, articlesLoaded > articlesPerPage);
+            
+            // Update counts
+            const loadedCountEl = document.getElementById('loaded-count');
+            const totalArticlesEl = document.getElementById('total-articles');
+            const filteredCountEl = document.getElementById('filtered-count');
+            
+            if (loadedCountEl) loadedCountEl.textContent = articlesLoaded;
+            if (totalArticlesEl) totalArticlesEl.textContent = total;
+            if (filteredCountEl) filteredCountEl.textContent = articles.length;
+        }
+        
+        async function loadAllContent() {
+            await Promise.all([
+                loadTabContent('top-articles'),
+                loadTabContent('latest-articles'),
+                loadTabContent('trending-articles'),
+                loadFeaturedContent(),
+                loadMainContent(),
+                updateStats()
+            ]);
+        }
+        
+        async function updateStats() {
+            const stats = await getArticleStats();
+            
+            const liveCountEl = document.getElementById('live-articles-count');
+            const sourcesCountEl = document.getElementById('sources-count');
+            
+            if (liveCountEl) liveCountEl.textContent = `${stats.today}+`;
+            if (sourcesCountEl) sourcesCountEl.textContent = `${stats.sources}+`;
+        }
+        
+        // Utility functions
+        function toggleBookmark(articleId) {
+            // This would integrate with user preferences/local storage
+            console.log('Bookmark toggled for article:', articleId);
+        }
+        
+        function shareArticle(articleId, title, url) {
+            if (navigator.share) {
+                navigator.share({
+                    title: title,
+                    url: url
+                });
+            } else {
+                navigator.clipboard.writeText(url);
+                // Show toast notification
+                console.log('Link copied to clipboard');
+            }
+        }
+        
         // Premium News Page JavaScript
         document.addEventListener('DOMContentLoaded', function() {
             // Premium Tab System
@@ -1019,8 +1541,8 @@
                             }
                         });
                         
-                        // Update article count
-                        updateArticleCount(targetTab);
+                        // Load content for the active tab
+                        loadTabContent(targetTab);
                         
                         // Add loading animation
                         showTabLoading(targetTab);
@@ -1054,117 +1576,154 @@
             // Premium Filter System
             const filterPills = document.querySelectorAll('.filter-pill');
             const filterStats = document.getElementById('filtered-count');
-            const articles = document.querySelectorAll('.premium-news-card, .featured-hero-card, .featured-secondary-card');
+            const sortSelect = document.getElementById('sort-select');
+            const timeSelect = document.getElementById('time-select');
             
             function initFilters() {
                 filterPills.forEach(pill => {
-                    pill.addEventListener('click', function() {
+                    pill.addEventListener('click', async function() {
                         const filter = this.dataset.filter;
+                        currentFilter = filter;
                         
                         // Update active filter
                         filterPills.forEach(p => p.classList.remove('active'));
                         this.classList.add('active');
                         
-                        // Filter articles with animation
-                        filterArticles(filter);
+                        // Reset pagination
+                        articlesLoaded = 0;
+                        allArticles = [];
                         
-                        // Update count
-                        updateFilterCount(filter);
+                        // Reload content with new filter
+                        await loadMainContent();
+                        
+                        // Update filter count
+                        await updateFilterCounts();
                     });
                 });
+                
+                if (sortSelect) {
+                    sortSelect.addEventListener('change', async function() {
+                        currentSort = this.value;
+                        articlesLoaded = 0;
+                        allArticles = [];
+                        await loadMainContent();
+                    });
+                }
+                
+                if (timeSelect) {
+                    timeSelect.addEventListener('change', async function() {
+                        currentTimeRange = this.value;
+                        articlesLoaded = 0;
+                        allArticles = [];
+                        await loadMainContent();
+                    });
+                }
             }
             
-            function filterArticles(filter) {
-                articles.forEach((article, index) => {
-                    const shouldShow = filter === 'all' || article.dataset.category === filter;
+            async function updateFilterCounts() {
+                const filters = ['all', 'breaking', 'research', 'business', 'regulation', 'startups'];
+                
+                for (const filter of filters) {
+                    const options = {
+                        category: filter,
+                        limit: 1,
+                        timeRange: currentTimeRange
+                    };
                     
-                    if (shouldShow) {
-                        article.style.display = 'block';
-                        article.style.opacity = '0';
-                        article.style.transform = 'translateY(20px)';
-                        
-                        setTimeout(() => {
-                            article.style.opacity = '1';
-                            article.style.transform = 'translateY(0)';
-                        }, index * 50);
-                    } else {
-                        article.style.opacity = '0';
-                        article.style.transform = 'translateY(-20px)';
-                        
-                        setTimeout(() => {
-                            article.style.display = 'none';
-                        }, 200);
+                    const { total } = await fetchNewsArticles(options);
+                    
+                    const pillCount = document.querySelector(`[data-filter="${filter}"] .pill-count`);
+                    if (pillCount) {
+                        pillCount.textContent = total;
                     }
-                });
-            }
-            
-            function updateFilterCount(filter) {
-                if (!filterStats) return;
-                
-                const counts = {
-                    'all': '150',
-                    'breaking': '12',
-                    'research': '34',
-                    'business': '28',
-                    'regulation': '16',
-                    'startups': '22'
-                };
-                
-                filterStats.textContent = counts[filter] || '150';
+                }
             }
             
             // Premium Search System
             const premiumSearch = document.getElementById('premium-search');
             const searchClear = document.getElementById('search-clear');
+            let searchTimeout;
             
             function initSearch() {
                 if (!premiumSearch) return;
                 
                 premiumSearch.addEventListener('input', function() {
-                    const query = this.value.toLowerCase();
+                    const query = this.value.trim();
                     
                     // Show/hide clear button
                     if (searchClear) {
                         searchClear.style.opacity = query ? '1' : '0';
                     }
                     
-                    // Simple search filtering
-                    if (query.length > 2) {
-                        performSearch(query);
-                    } else if (query.length === 0) {
-                        clearSearch();
-                    }
+                    // Debounced search
+                    clearTimeout(searchTimeout);
+                    searchTimeout = setTimeout(async () => {
+                        if (query.length > 2) {
+                            await performSearch(query);
+                        } else if (query.length === 0) {
+                            await clearSearch();
+                        }
+                    }, 300);
                 });
                 
                 if (searchClear) {
-                    searchClear.addEventListener('click', function() {
+                    searchClear.addEventListener('click', async function() {
                         premiumSearch.value = '';
-                        clearSearch();
+                        await clearSearch();
                         this.style.opacity = '0';
                     });
                 }
             }
             
-            function performSearch(query) {
-                articles.forEach(article => {
-                    const title = article.querySelector('.news-card-title, .hero-card-title, .secondary-card-title');
-                    const excerpt = article.querySelector('.news-card-excerpt, .hero-card-excerpt');
+            async function performSearch(query) {
+                // Show loading state
+                const mainGrid = document.getElementById('premium-news-grid');
+                if (mainGrid) {
+                    mainGrid.innerHTML = `
+                        <div class="search-loading">
+                            <div class="loading-spinner"></div>
+                            <div class="loading-text">Searching "${query}"...</div>
+                        </div>
+                    `;
+                }
+                
+                try {
+                    const searchResults = await searchArticles(query, { limit: 50 });
                     
-                    const titleText = title ? title.textContent.toLowerCase() : '';
-                    const excerptText = excerpt ? excerpt.textContent.toLowerCase() : '';
-                    
-                    const matches = titleText.includes(query) || excerptText.includes(query);
-                    
-                    article.style.display = matches ? 'block' : 'none';
-                    article.style.opacity = matches ? '1' : '0.5';
-                });
+                    if (searchResults.length === 0) {
+                        mainGrid.innerHTML = `
+                            <div class="no-search-results">
+                                <div class="no-results-icon">🔍</div>
+                                <div class="no-results-text">No results found for "${query}"</div>
+                                <div class="no-results-suggestion">Try different keywords or check spelling</div>
+                            </div>
+                        `;
+                    } else {
+                        renderMainGrid(searchResults, false);
+                        
+                        // Update result count
+                        const filteredCountEl = document.getElementById('filtered-count');
+                        if (filteredCountEl) {
+                            filteredCountEl.textContent = searchResults.length;
+                        }
+                    }
+                } catch (error) {
+                    console.error('Search error:', error);
+                    mainGrid.innerHTML = `
+                        <div class="search-error">
+                            <div class="error-icon">⚠️</div>
+                            <div class="error-text">Search temporarily unavailable</div>
+                            <button class="retry-btn" onclick="performSearch('${query}')">Try Again</button>
+                        </div>
+                    `;
+                }
             }
             
-            function clearSearch() {
-                articles.forEach(article => {
-                    article.style.display = 'block';
-                    article.style.opacity = '1';
-                });
+            async function clearSearch() {
+                // Reset to normal content
+                articlesLoaded = 0;
+                allArticles = [];
+                await loadMainContent();
             }
             
             // Premium Load More System
@@ -1175,7 +1734,7 @@
             function initLoadMore() {
                 if (!premiumLoadBtn) return;
                 
-                premiumLoadBtn.addEventListener('click', function() {
+                premiumLoadBtn.addEventListener('click', async function() {
                     this.disabled = true;
                     
                     const progressBar = this.querySelector('.load-btn-progress');
@@ -1188,19 +1747,19 @@
                         progressBar.style.width = '100%';
                     }
                     
-                    // Simulate loading
-                    setTimeout(() => {
+                    try {
+                        await loadMainContent();
+                        
                         if (btnText) btnText.textContent = 'Load Next Batch';
                         if (progressBar) progressBar.style.width = '0%';
                         
-                        // Update count
-                        if (loadedCount) {
-                            const current = parseInt(loadedCount.textContent) || 12;
-                            loadedCount.textContent = Math.min(current + 8, 247);
-                        }
-                        
                         this.disabled = false;
-                    }, 2000);
+                    } catch (error) {
+                        console.error('Error loading more articles:', error);
+                        if (btnText) btnText.textContent = 'Try Again';
+                        if (progressBar) progressBar.style.width = '0%';
+                        this.disabled = false;
+                    }
                 });
             }
             
@@ -1209,21 +1768,32 @@
             
             function initRefreshButtons() {
                 refreshButtons.forEach(btn => {
-                    btn.addEventListener('click', function() {
+                    btn.addEventListener('click', async function() {
                         const icon = this.querySelector('.refresh-icon');
                         
                         if (icon) {
                             icon.style.animation = 'spin 1s linear';
-                            setTimeout(() => {
-                                icon.style.animation = '';
-                            }, 1000);
                         }
                         
                         // Add visual feedback
                         this.style.transform = 'translateY(-1px) scale(0.95)';
+                        
+                        try {
+                            if (this.classList.contains('featured-refresh')) {
+                                await loadFeaturedContent();
+                            } else if (this.classList.contains('latest-refresh')) {
+                                articlesLoaded = 0;
+                                allArticles = [];
+                                await loadMainContent();
+                            }
+                        } catch (error) {
+                            console.error('Error refreshing content:', error);
+                        }
+                        
                         setTimeout(() => {
+                            if (icon) icon.style.animation = '';
                             this.style.transform = '';
-                        }, 150);
+                        }, 1000);
                     });
                 });
             }
@@ -1306,7 +1876,77 @@
             initRefreshButtons();
             initViewToggle();
             initNewsletter();
-            updateLiveStats();
+            
+            // Test Supabase connection first
+            async function testSupabaseConnection() {
+                try {
+                    console.log('Testing Supabase connection...');
+                    
+                    // Test 1: Simple query without filters
+                    const { data: testData, error: testError } = await supabase
+                        .from('articles')
+                        .select('id, title, featured, breaking_news, is_top_story, trending_score, category_normalized, relevance_score, subcategory, confidence_score')
+                        .limit(5);
+                    
+                    if (testData && testData.length > 0) {
+                        console.log('Sample data from database:', testData);
+                        console.log('Featured values:', testData.map(article => article.featured));
+                        console.log('Breaking values:', testData.map(article => article.breaking_news));
+                        console.log('Top story values:', testData.map(article => article.is_top_story));
+                        console.log('Relevance scores:', testData.map(article => article.relevance_score));
+                        console.log('Trending scores:', testData.map(article => article.trending_score));
+                        console.log('Category normalized:', testData.map(article => article.category_normalized));
+                        console.log('Subcategory:', testData.map(article => article.subcategory));
+                    }
+                    
+                    if (testError) {
+                        console.error('Supabase connection test failed:', testError);
+                        console.error('Error details:', {
+                            message: testError.message,
+                            details: testError.details,
+                            hint: testError.hint,
+                            code: testError.code
+                        });
+                        
+                        // Show user-friendly error
+                        document.body.insertAdjacentHTML('beforeend', `
+                            <div style="position: fixed; top: 20px; right: 20px; background: #DC2626; color: white; padding: 1rem; border-radius: 8px; z-index: 9999; max-width: 400px;">
+                                <h4>Database Connection Error</h4>
+                                <p><strong>Error:</strong> ${testError.message}</p>
+                                <p><strong>Possible fixes:</strong></p>
+                                <ul style="margin: 8px 0; padding-left: 20px;">
+                                    <li>Check if RLS is enabled on the articles table</li>
+                                    <li>Verify the Supabase URL and API key</li>
+                                    <li>Ensure anon key has read permissions</li>
+                                </ul>
+                                <button onclick="this.parentElement.remove()" style="background: rgba(255,255,255,0.2); border: none; color: white; padding: 4px 8px; border-radius: 4px; cursor: pointer;">Close</button>
+                            </div>
+                        `);
+                        return false;
+                    }
+                    
+                    console.log('Supabase connection successful!', testData);
+                    return true;
+                    
+                } catch (error) {
+                    console.error('Connection test failed:', error);
+                    return false;
+                }
+            }
+            
+            // Test connection first, then load content
+            testSupabaseConnection().then((isConnected) => {
+                if (isConnected) {
+                    loadAllContent().then(() => {
+                        console.log('Initial content loaded');
+                    }).catch(error => {
+                        console.error('Error loading initial content:', error);
+                    });
+                } else {
+                    console.log('Skipping content load due to connection issues');
+                    // Show fallback content or instructions
+                }
+            });
             
             // Keyboard shortcuts
             document.addEventListener('keydown', function(e) {

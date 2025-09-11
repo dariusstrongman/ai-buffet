@@ -1,0 +1,840 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Stock Prices Live | AI Buffet</title>
+    <meta name="description" content="Track live AI stock prices and market data for major artificial intelligence companies. Real-time updates on NVIDIA, Microsoft, Google, and more AI stocks.">
+    <link rel="canonical" href="https://myaibuffet.com/categories/stocks">
+    
+    <!-- Open Graph -->
+    <meta property="og:title" content="Live AI Stock Prices | AI Buffet">
+    <meta property="og:description" content="Track live AI stock prices and market performance for leading artificial intelligence companies.">
+    <meta property="og:image" content="https://myaibuffet.com/assets/img/ai-stocks-category.jpg">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://myaibuffet.com/categories/stocks">
+    
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Live AI Stock Prices | AI Buffet">
+    <meta name="twitter:description" content="Real-time AI stock tracking and market analysis for investors.">
+    <meta name="twitter:image" content="https://myaibuffet.com/assets/img/ai-stocks-category.jpg">
+    
+    <!-- JSON-LD Structured Data -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "CollectionPage",
+        "name": "AI Stock Prices Live",
+        "description": "Live tracking of AI company stock prices and market performance",
+        "url": "https://myaibuffet.com/categories/stocks",
+        "mainEntity": {
+            "@type": "ItemList",
+            "name": "AI Stock Prices",
+            "itemListElement": []
+        },
+        "breadcrumb": {
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+                {
+                    "@type": "ListItem",
+                    "position": 1,
+                    "name": "Home",
+                    "item": "https://myaibuffet.com"
+                },
+                {
+                    "@type": "ListItem",
+                    "position": 2,
+                    "name": "AI Stocks",
+                    "item": "https://myaibuffet.com/categories/stocks"
+                }
+            ]
+        }
+    }
+    </script>
+
+    <!-- Preconnect to external resources -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://api.finnhub.io">
+    
+    <!-- Google Fonts - Futuristic Typography -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=DM+Serif+Display:wght@400&display=swap" rel="stylesheet">
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="../assets/css/main.css">
+    <link rel="stylesheet" href="../assets/css/components.css">
+    
+    <!-- Critical CSS -->
+    <style>
+        /* Prevent FOUC - Keep minimal critical styles only */
+        body { 
+            font-family: Inter, system-ui, sans-serif; 
+            background: var(--color-bg, #0B1020); 
+            color: var(--color-text-primary, #E5E7EB);
+            margin: 0;
+            line-height: 1.6;
+        }
+        
+        /* Stock-specific styles */
+        .stock-card {
+            background: var(--card-bg, #1A2332);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            border: 1px solid var(--border-color, #2A3441);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .stock-card:hover {
+            transform: translateY(-2px);
+            border-color: var(--primary-color, #4F46E5);
+            box-shadow: 0 8px 25px rgba(79, 70, 229, 0.15);
+        }
+        
+        .stock-header {
+            display: flex;
+            justify-content: between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        
+        .stock-symbol {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-color, #4F46E5);
+            font-family: 'DM Serif Display', serif;
+        }
+        
+        .stock-name {
+            color: var(--text-secondary, #94A3B8);
+            font-size: 0.9rem;
+            margin-top: 0.25rem;
+        }
+        
+        .stock-price {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--text-primary, #E5E7EB);
+            font-family: 'DM Serif Display', serif;
+        }
+        
+        .stock-change {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+        }
+        
+        .stock-change.positive {
+            color: #10B981;
+        }
+        
+        .stock-change.negative {
+            color: #EF4444;
+        }
+        
+        .stock-change-percent {
+            font-weight: 600;
+        }
+        
+        .stock-change-arrow {
+            font-size: 1.2rem;
+        }
+        
+        .stock-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+        
+        .market-status {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 2rem;
+        }
+        
+        .market-status.open {
+            background: rgba(16, 185, 129, 0.1);
+            color: #10B981;
+            border: 1px solid rgba(16, 185, 129, 0.3);
+        }
+        
+        .market-status.closed {
+            background: rgba(239, 68, 68, 0.1);
+            color: #EF4444;
+            border: 1px solid rgba(239, 68, 68, 0.3);
+        }
+        
+        .loading-pulse {
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        
+        .last-updated {
+            color: var(--text-secondary, #94A3B8);
+            font-size: 0.8rem;
+            margin-top: 1rem;
+        }
+        
+        .stock-meta {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border-color, #2A3441);
+        }
+        
+        .stock-meta-item {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .stock-meta-label {
+            color: var(--text-secondary, #94A3B8);
+            font-size: 0.8rem;
+            margin-bottom: 0.25rem;
+        }
+        
+        .stock-meta-value {
+            color: var(--text-primary, #E5E7EB);
+            font-weight: 600;
+            font-family: 'DM Serif Display', serif;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <header class="header" role="banner">
+        <div class="container">
+            <nav class="nav" role="navigation" aria-label="Main navigation">
+                <a href="../" class="logo" aria-label="AI Buffet homepage">
+                    <span class="logo-icon" aria-hidden="true">🍽️</span>
+                    AI Buffet
+                </a>
+                
+                <ul class="nav-links" role="menubar">
+                    <li role="none"><a href="../index.html" class="nav-link" role="menuitem">Home</a></li>
+                    <li role="none"><a href="news.html" class="nav-link" role="menuitem">News</a></li>
+                    <li role="none"><a href="tools.html" class="nav-link" role="menuitem">Tools</a></li>
+                    <li role="none"><a href="stocks.html" class="nav-link" role="menuitem" aria-current="page">Stocks</a></li>
+                    <li role="none"><a href="../about.html" class="nav-link" role="menuitem">About</a></li>
+                </ul>
+
+                <div class="nav-actions">
+                    <!-- Mobile menu button -->
+                    <button class="mobile-menu-toggle" aria-label="Toggle mobile menu" aria-expanded="false">
+                        <span class="hamburger"></span>
+                    </button>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main content -->
+    <main id="main" role="main">
+        <div class="container">
+            <!-- Category Hero -->
+            <section class="category-hero" aria-labelledby="category-title">
+                <h1 id="category-title">📈 Live AI Stock Prices</h1>
+                <p>Track real-time stock prices for leading artificial intelligence companies. Market data updates every few seconds to keep you informed of the latest movements.</p>
+                
+                <div class="market-status" id="market-status">
+                    <span class="status-indicator">🔴</span>
+                    <span>Market Status: Loading...</span>
+                </div>
+            </section>
+
+            <!-- Stock Grid -->
+            <section class="stocks-section" aria-labelledby="stocks-heading">
+                <h2 id="stocks-heading" class="sr-only">AI Stock Prices</h2>
+                
+                <div class="stock-grid" id="stock-grid">
+                    <!-- Stock cards will be populated by JavaScript -->
+                    <div class="stock-card loading-pulse">
+                        <div class="stock-header">
+                            <div>
+                                <div class="stock-symbol">NVDA</div>
+                                <div class="stock-name">NVIDIA Corporation</div>
+                            </div>
+                        </div>
+                        <div class="stock-price">Loading...</div>
+                        <div class="stock-change">
+                            <span class="stock-change-arrow">📈</span>
+                            <span class="stock-change-percent">Loading...</span>
+                        </div>
+                        <div class="stock-meta">
+                            <div class="stock-meta-item">
+                                <span class="stock-meta-label">Open</span>
+                                <span class="stock-meta-value">--</span>
+                            </div>
+                            <div class="stock-meta-item">
+                                <span class="stock-meta-label">Volume</span>
+                                <span class="stock-meta-value">--</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="stock-card loading-pulse">
+                        <div class="stock-header">
+                            <div>
+                                <div class="stock-symbol">MSFT</div>
+                                <div class="stock-name">Microsoft Corporation</div>
+                            </div>
+                        </div>
+                        <div class="stock-price">Loading...</div>
+                        <div class="stock-change">
+                            <span class="stock-change-arrow">📈</span>
+                            <span class="stock-change-percent">Loading...</span>
+                        </div>
+                        <div class="stock-meta">
+                            <div class="stock-meta-item">
+                                <span class="stock-meta-label">Open</span>
+                                <span class="stock-meta-value">--</span>
+                            </div>
+                            <div class="stock-meta-item">
+                                <span class="stock-meta-label">Volume</span>
+                                <span class="stock-meta-value">--</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="stock-card loading-pulse">
+                        <div class="stock-header">
+                            <div>
+                                <div class="stock-symbol">GOOGL</div>
+                                <div class="stock-name">Alphabet Inc.</div>
+                            </div>
+                        </div>
+                        <div class="stock-price">Loading...</div>
+                        <div class="stock-change">
+                            <span class="stock-change-arrow">📈</span>
+                            <span class="stock-change-percent">Loading...</span>
+                        </div>
+                        <div class="stock-meta">
+                            <div class="stock-meta-item">
+                                <span class="stock-meta-label">Open</span>
+                                <span class="stock-meta-value">--</span>
+                            </div>
+                            <div class="stock-meta-item">
+                                <span class="stock-meta-label">Volume</span>
+                                <span class="stock-meta-value">--</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="stock-card loading-pulse">
+                        <div class="stock-header">
+                            <div>
+                                <div class="stock-symbol">TSLA</div>
+                                <div class="stock-name">Tesla, Inc.</div>
+                            </div>
+                        </div>
+                        <div class="stock-price">Loading...</div>
+                        <div class="stock-change">
+                            <span class="stock-change-arrow">📈</span>
+                            <span class="stock-change-percent">Loading...</span>
+                        </div>
+                        <div class="stock-meta">
+                            <div class="stock-meta-item">
+                                <span class="stock-meta-label">Open</span>
+                                <span class="stock-meta-value">--</span>
+                            </div>
+                            <div class="stock-meta-item">
+                                <span class="stock-meta-label">Volume</span>
+                                <span class="stock-meta-value">--</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="stock-card loading-pulse">
+                        <div class="stock-header">
+                            <div>
+                                <div class="stock-symbol">AMD</div>
+                                <div class="stock-name">Advanced Micro Devices</div>
+                            </div>
+                        </div>
+                        <div class="stock-price">Loading...</div>
+                        <div class="stock-change">
+                            <span class="stock-change-arrow">📈</span>
+                            <span class="stock-change-percent">Loading...</span>
+                        </div>
+                        <div class="stock-meta">
+                            <div class="stock-meta-item">
+                                <span class="stock-meta-label">Open</span>
+                                <span class="stock-meta-value">--</span>
+                            </div>
+                            <div class="stock-meta-item">
+                                <span class="stock-meta-label">Volume</span>
+                                <span class="stock-meta-value">--</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="stock-card loading-pulse">
+                        <div class="stock-header">
+                            <div>
+                                <div class="stock-symbol">ORCL</div>
+                                <div class="stock-name">Oracle Corporation</div>
+                            </div>
+                        </div>
+                        <div class="stock-price">Loading...</div>
+                        <div class="stock-change">
+                            <span class="stock-change-arrow">📈</span>
+                            <span class="stock-change-percent">Loading...</span>
+                        </div>
+                        <div class="stock-meta">
+                            <div class="stock-meta-item">
+                                <span class="stock-meta-label">Open</span>
+                                <span class="stock-meta-value">--</span>
+                            </div>
+                            <div class="stock-meta-item">
+                                <span class="stock-meta-label">Volume</span>
+                                <span class="stock-meta-value">--</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="stock-card loading-pulse">
+                        <div class="stock-header">
+                            <div>
+                                <div class="stock-symbol">META</div>
+                                <div class="stock-name">Meta Platforms Inc.</div>
+                            </div>
+                        </div>
+                        <div class="stock-price">Loading...</div>
+                        <div class="stock-change">
+                            <span class="stock-change-arrow">📈</span>
+                            <span class="stock-change-percent">Loading...</span>
+                        </div>
+                        <div class="stock-meta">
+                            <div class="stock-meta-item">
+                                <span class="stock-meta-label">Open</span>
+                                <span class="stock-meta-value">--</span>
+                            </div>
+                            <div class="stock-meta-item">
+                                <span class="stock-meta-label">Volume</span>
+                                <span class="stock-meta-value">--</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="stock-card loading-pulse">
+                        <div class="stock-header">
+                            <div>
+                                <div class="stock-symbol">AMZN</div>
+                                <div class="stock-name">Amazon.com Inc.</div>
+                            </div>
+                        </div>
+                        <div class="stock-price">Loading...</div>
+                        <div class="stock-change">
+                            <span class="stock-change-arrow">📈</span>
+                            <span class="stock-change-percent">Loading...</span>
+                        </div>
+                        <div class="stock-meta">
+                            <div class="stock-meta-item">
+                                <span class="stock-meta-label">Open</span>
+                                <span class="stock-meta-value">--</span>
+                            </div>
+                            <div class="stock-meta-item">
+                                <span class="stock-meta-label">Volume</span>
+                                <span class="stock-meta-value">--</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="stock-card loading-pulse">
+                        <div class="stock-header">
+                            <div>
+                                <div class="stock-symbol">CRM</div>
+                                <div class="stock-name">Salesforce Inc.</div>
+                            </div>
+                        </div>
+                        <div class="stock-price">Loading...</div>
+                        <div class="stock-change">
+                            <span class="stock-change-arrow">📈</span>
+                            <span class="stock-change-percent">Loading...</span>
+                        </div>
+                        <div class="stock-meta">
+                            <div class="stock-meta-item">
+                                <span class="stock-meta-label">Open</span>
+                                <span class="stock-meta-value">--</span>
+                            </div>
+                            <div class="stock-meta-item">
+                                <span class="stock-meta-label">Volume</span>
+                                <span class="stock-meta-value">--</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="stock-card loading-pulse">
+                        <div class="stock-header">
+                            <div>
+                                <div class="stock-symbol">INTC</div>
+                                <div class="stock-name">Intel Corporation</div>
+                            </div>
+                        </div>
+                        <div class="stock-price">Loading...</div>
+                        <div class="stock-change">
+                            <span class="stock-change-arrow">📈</span>
+                            <span class="stock-change-percent">Loading...</span>
+                        </div>
+                        <div class="stock-meta">
+                            <div class="stock-meta-item">
+                                <span class="stock-meta-label">Open</span>
+                                <span class="stock-meta-value">--</span>
+                            </div>
+                            <div class="stock-meta-item">
+                                <span class="stock-meta-label">Volume</span>
+                                <span class="stock-meta-value">--</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="stock-card loading-pulse">
+                        <div class="stock-header">
+                            <div>
+                                <div class="stock-symbol">IBM</div>
+                                <div class="stock-name">International Business Machines</div>
+                            </div>
+                        </div>
+                        <div class="stock-price">Loading...</div>
+                        <div class="stock-change">
+                            <span class="stock-change-arrow">📈</span>
+                            <span class="stock-change-percent">Loading...</span>
+                        </div>
+                        <div class="stock-meta">
+                            <div class="stock-meta-item">
+                                <span class="stock-meta-label">Open</span>
+                                <span class="stock-meta-value">--</span>
+                            </div>
+                            <div class="stock-meta-item">
+                                <span class="stock-meta-label">Volume</span>
+                                <span class="stock-meta-value">--</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="stock-card loading-pulse">
+                        <div class="stock-header">
+                            <div>
+                                <div class="stock-symbol">SNOW</div>
+                                <div class="stock-name">Snowflake Inc.</div>
+                            </div>
+                        </div>
+                        <div class="stock-price">Loading...</div>
+                        <div class="stock-change">
+                            <span class="stock-change-arrow">📈</span>
+                            <span class="stock-change-percent">Loading...</span>
+                        </div>
+                        <div class="stock-meta">
+                            <div class="stock-meta-item">
+                                <span class="stock-meta-label">Open</span>
+                                <span class="stock-meta-value">--</span>
+                            </div>
+                            <div class="stock-meta-item">
+                                <span class="stock-meta-label">Volume</span>
+                                <span class="stock-meta-value">--</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="stock-card loading-pulse">
+                        <div class="stock-header">
+                            <div>
+                                <div class="stock-symbol">PLTR</div>
+                                <div class="stock-name">Palantir Technologies</div>
+                            </div>
+                        </div>
+                        <div class="stock-price">Loading...</div>
+                        <div class="stock-change">
+                            <span class="stock-change-arrow">📈</span>
+                            <span class="stock-change-percent">Loading...</span>
+                        </div>
+                        <div class="stock-meta">
+                            <div class="stock-meta-item">
+                                <span class="stock-meta-label">Open</span>
+                                <span class="stock-meta-value">--</span>
+                            </div>
+                            <div class="stock-meta-item">
+                                <span class="stock-meta-label">Volume</span>
+                                <span class="stock-meta-value">--</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="last-updated" id="last-updated">
+                    Last updated: Loading...
+                </div>
+            </section>
+
+        </div>
+    </main>
+
+    <footer class="footer" role="contentinfo">
+        <div class="container">
+            <div class="footer__content">
+                <div class="footer__section footer__section--brand">
+                    <div class="footer__brand">
+                        <div class="footer__logo">
+                            <span class="logo-icon" aria-hidden="true">🍽️</span>
+                            AI Buffet
+                        </div>
+                        <p class="footer__tagline">
+                            Premium AI insights served fresh daily
+                        </p>
+                    </div>
+                    <div class="social-links" aria-label="Follow us on social media">
+                        <a href="https://www.linkedin.com/company/aibuffet" class="social-link" target="_blank" rel="noopener" aria-label="Follow us on LinkedIn">
+                            <span aria-hidden="true">💼</span>
+                        </a>
+                        <a href="https://x.com/aibuffet" class="social-link" target="_blank" rel="noopener" aria-label="Follow us on X (Twitter)">
+                            <span aria-hidden="true">🐦</span>
+                        </a>
+                        <a href="../rss" class="social-link" aria-label="Subscribe to RSS feed">
+                            <span aria-hidden="true">📡</span>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="footer__section">
+                    <h3 class="footer__heading">Explore</h3>
+                    <ul class="footer__links">
+                        <li><a href="news.html" class="footer__link">AI News</a></li>
+                        <li><a href="tools.html" class="footer__link">Tool Reviews</a></li>
+                        <li><a href="stocks.html" class="footer__link">AI Stocks</a></li>
+                        <li><a href="../categories/" class="footer__link">All Categories</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer__section">
+                    <h3 class="footer__heading">Resources</h3>
+                    <ul class="footer__links">
+                        <li><a href="../about" class="footer__link">About</a></li>
+                        <li><a href="../contact" class="footer__link">Contact</a></li>
+                        <li><a href="../privacy" class="footer__link">Privacy Policy</a></li>
+                        <li><a href="../terms" class="footer__link">Terms of Service</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer__section">
+                    <h3 class="footer__heading">Newsletter</h3>
+                    <p class="footer__newsletter-text">
+                        Get weekly AI insights delivered to your inbox
+                    </p>
+                    <a href="../#newsletter" class="btn btn-secondary btn-sm">
+                        Subscribe Now
+                    </a>
+                </div>
+            </div>
+
+            <div class="footer__bottom">
+                <div class="footer__legal">
+                    <p>&copy; 2025 AI Buffet. All rights reserved.</p>
+                </div>
+                <div class="footer__credits">
+                    <p>Made with care for the AI community</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="../assets/js/main.js" defer></script>
+    <script defer>
+        // Stock tracking functionality
+        class StockTracker {
+            constructor() {
+                this.stocks = [
+                    { symbol: 'NVDA', name: 'NVIDIA Corporation' },
+                    { symbol: 'MSFT', name: 'Microsoft Corporation' },
+                    { symbol: 'GOOGL', name: 'Alphabet Inc.' },
+                    { symbol: 'TSLA', name: 'Tesla, Inc.' },
+                    { symbol: 'AMD', name: 'Advanced Micro Devices' },
+                    { symbol: 'ORCL', name: 'Oracle Corporation' },
+                    { symbol: 'META', name: 'Meta Platforms Inc.' },
+                    { symbol: 'AMZN', name: 'Amazon.com Inc.' },
+                    { symbol: 'CRM', name: 'Salesforce Inc.' },
+                    { symbol: 'INTC', name: 'Intel Corporation' },
+                    { symbol: 'IBM', name: 'International Business Machines' },
+                    { symbol: 'SNOW', name: 'Snowflake Inc.' },
+                    { symbol: 'PLTR', name: 'Palantir Technologies' }
+                ];
+                this.updateInterval = 5000; // 5 seconds
+                this.init();
+            }
+
+            init() {
+                this.updateStocks();
+                setInterval(() => this.updateStocks(), this.updateInterval);
+                this.updateMarketStatus();
+            }
+
+            async updateStocks() {
+                try {
+                    // Simulate API calls - in production, you'd use real stock APIs
+                    for (const stock of this.stocks) {
+                        await this.updateStockCard(stock);
+                    }
+                    this.updateLastUpdated();
+                } catch (error) {
+                    console.error('Error updating stocks:', error);
+                }
+            }
+
+            async updateStockCard(stock) {
+                // Simulate real stock data - replace with actual API calls
+                const mockData = this.generateMockStockData(stock.symbol);
+                
+                const card = this.findStockCard(stock.symbol);
+                if (!card) return;
+
+                // Remove loading state
+                card.classList.remove('loading-pulse');
+
+                // Update price
+                const priceElement = card.querySelector('.stock-price');
+                if (priceElement) {
+                    priceElement.textContent = `$${mockData.price.toFixed(2)}`;
+                }
+
+                // Update change
+                const changeElement = card.querySelector('.stock-change');
+                const changePercent = card.querySelector('.stock-change-percent');
+                const changeArrow = card.querySelector('.stock-change-arrow');
+                
+                if (changeElement && changePercent && changeArrow) {
+                    const isPositive = mockData.change >= 0;
+                    changeElement.className = `stock-change ${isPositive ? 'positive' : 'negative'}`;
+                    changePercent.textContent = `${mockData.change >= 0 ? '+' : ''}$${mockData.change.toFixed(2)} (${mockData.changePercent >= 0 ? '+' : ''}${mockData.changePercent.toFixed(2)}%)`;
+                    changeArrow.textContent = isPositive ? '📈' : '📉';
+                }
+
+                // Update metadata
+                const openValue = card.querySelector('.stock-meta-item:first-child .stock-meta-value');
+                const volumeValue = card.querySelector('.stock-meta-item:last-child .stock-meta-value');
+                
+                if (openValue) openValue.textContent = `$${mockData.open.toFixed(2)}`;
+                if (volumeValue) volumeValue.textContent = this.formatVolume(mockData.volume);
+            }
+
+            generateMockStockData(symbol) {
+                // Generate realistic mock data that changes over time
+                const basePrice = this.getBasePrice(symbol);
+                const volatility = 0.02; // 2% volatility
+                const randomChange = (Math.random() - 0.5) * volatility * basePrice;
+                
+                const currentPrice = basePrice + randomChange;
+                const open = basePrice * (0.98 + Math.random() * 0.04);
+                const change = currentPrice - open;
+                const changePercent = (change / open) * 100;
+                const volume = Math.floor(Math.random() * 50000000) + 5000000;
+
+                return {
+                    price: currentPrice,
+                    open: open,
+                    change: change,
+                    changePercent: changePercent,
+                    volume: volume
+                };
+            }
+
+            getBasePrice(symbol) {
+                // Base prices for different stocks (approximate)
+                const basePrices = {
+                    'NVDA': 890,
+                    'MSFT': 425,
+                    'GOOGL': 175,
+                    'TSLA': 245,
+                    'AMD': 145,
+                    'ORCL': 135,
+                    'META': 580,
+                    'AMZN': 185,
+                    'CRM': 265,
+                    'INTC': 25,
+                    'IBM': 175,
+                    'SNOW': 150,
+                    'PLTR': 65
+                };
+                return basePrices[symbol] || 100;
+            }
+
+            formatVolume(volume) {
+                if (volume >= 1000000000) {
+                    return (volume / 1000000000).toFixed(1) + 'B';
+                } else if (volume >= 1000000) {
+                    return (volume / 1000000).toFixed(1) + 'M';
+                } else if (volume >= 1000) {
+                    return (volume / 1000).toFixed(1) + 'K';
+                }
+                return volume.toString();
+            }
+
+            findStockCard(symbol) {
+                const stockCards = document.querySelectorAll('.stock-card');
+                for (const card of stockCards) {
+                    const symbolElement = card.querySelector('.stock-symbol');
+                    if (symbolElement && symbolElement.textContent === symbol) {
+                        return card;
+                    }
+                }
+                return null;
+            }
+
+            updateLastUpdated() {
+                const element = document.getElementById('last-updated');
+                if (element) {
+                    const now = new Date();
+                    element.textContent = `Last updated: ${now.toLocaleTimeString()}`;
+                }
+            }
+
+            updateMarketStatus() {
+                const statusElement = document.getElementById('market-status');
+                if (!statusElement) return;
+
+                const now = new Date();
+                const currentTime = now.getTime();
+                const marketOpen = new Date();
+                const marketClose = new Date();
+                
+                // Set market hours (9:30 AM - 4:00 PM ET)
+                marketOpen.setHours(9, 30, 0, 0);
+                marketClose.setHours(16, 0, 0, 0);
+                
+                const isWeekday = now.getDay() >= 1 && now.getDay() <= 5;
+                const isDuringMarketHours = currentTime >= marketOpen.getTime() && currentTime <= marketClose.getTime();
+                const isMarketOpen = isWeekday && isDuringMarketHours;
+
+                if (isMarketOpen) {
+                    statusElement.className = 'market-status open';
+                    statusElement.innerHTML = '<span class="status-indicator">🟢</span><span>Market Status: Open</span>';
+                } else {
+                    statusElement.className = 'market-status closed';
+                    statusElement.innerHTML = '<span class="status-indicator">🔴</span><span>Market Status: Closed</span>';
+                }
+            }
+        }
+
+        // Initialize stock tracker when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            new StockTracker();
+        });
+    </script>
+</body>
+</html>

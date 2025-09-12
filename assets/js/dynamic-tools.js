@@ -1,165 +1,340 @@
-// Dynamic AI Tools System
+// Simple Dynamic Tools System
 'use strict';
-const DynamicToolsApp = {
-    // Core state
-    state: {
-        allTools: [],
-        filteredTools: [],
-        displayedTools: [],
-        currentPage: 1,
-        toolsPerPage: 15,
-        totalPages: 0,
-        hasMoreTools: false,
-        isLoading: false,
-        lastUpdated: null,
-        
-        // Filters
-        activeCategory: 'all',
-        activeSortBy: 'rank',
-        activePriceFilter: 'all',
-        searchQuery: '',
-        
-        // UI modes
-        viewMode: 'infinite', // 'infinite' or 'pagination'
-        isRealTimeEnabled: true,
-        
-        // Performance
-        renderStartTime: 0,
-        lastRenderTime: 0
-    },
-    
-    // DOM elements cache
-    elements: {
-        toolsGrid: null,
-        loadingSpinner: null,
-        emptyState: null,
-        loadMoreBtn: null,
-        paginationControls: null,
-        viewToggle: null,
-        filterButtons: null,
-        sortSelect: null,
-        searchInput: null,
-        visibleCount: null,
-        totalCount: null,
-        lastUpdateTime: null,
-        toolsMeta: null
-    },
-    
-    // Performance metrics
-    metrics: {
-        totalRenders: 0,
-        averageRenderTime: 0,
-        cacheHits: 0,
-        apiCalls: 0
-    }
-};
 
-/**
- * Initialize Dynamic Tools System
- */
+// Initialize when DOM is ready
 document.addEventListener('DOMContentLoaded', function() {
     // Only initialize if we're on the tools page
-    if (!document.querySelector('.dynamic-tools-grid')) {
+    const toolsGrid = document.getElementById('dynamic-tools-grid');
+    if (!toolsGrid) {
+        console.log('❌ Not on tools page, skipping initialization');
         return;
     }
     
-    console.log('🚀 Initializing Dynamic Tools System...');
+    console.log('🚀 Initializing Simple Dynamic Tools System...');
     
-    const elementsReady = initializeElements();
-    if (!elementsReady) {
-        console.error('❌ Failed to initialize elements, retrying in 1 second...');
-        setTimeout(() => {
-            if (initializeElements()) {
-                initializeEventListeners();
-                initializeToolsData();
-                startRealTimeUpdates();
-                monitorPerformance();
-                console.log('✅ Dynamic Tools System initialized successfully (retry)');
-            }
-        }, 1000);
+    // Check database availability
+    if (!window.AI_TOOLS_DATABASE || !Array.isArray(window.AI_TOOLS_DATABASE)) {
+        console.error('❌ AI_TOOLS_DATABASE not found');
+        showError('Failed to load tools database');
         return;
     }
     
-    initializeEventListeners();
-    initializeToolsData();
-    startRealTimeUpdates();
+    console.log(`✅ Database found with ${window.AI_TOOLS_DATABASE.length} tools`);
     
-    // Performance monitoring
-    monitorPerformance();
-    
-    console.log('✅ Dynamic Tools System initialized successfully');
+    // Initialize the tools
+    initializeTools();
 });
 
-/**
- * Cache DOM Elements
- */
-function initializeElements() {
-    const elements = DynamicToolsApp.elements;
-    
-    elements.toolsGrid = document.getElementById('dynamic-tools-grid');
-    elements.loadingSpinner = document.getElementById('tools-loading');
-    elements.emptyState = document.getElementById('empty-state');
-    // Pagination controls removed - showing all 15 tools at once
-    elements.filterButtons = document.querySelectorAll('.filter-btn');
-    elements.sortSelect = document.getElementById('sort-select');
-    elements.searchInput = document.getElementById('search-input');
-    elements.visibleCount = document.getElementById('visible-count');
-    elements.totalCount = document.getElementById('total-count');
-    elements.lastUpdateTime = document.getElementById('last-update-time');
-    elements.toolsMeta = document.getElementById('tools-meta');
-    
-    // Validate critical elements
-    if (!elements.toolsGrid) {
-        console.error('❌ Critical element not found: dynamic-tools-grid');
-        return false;
+let currentTools = [];
+let filteredTools = [];
+let activeCategory = 'all';
+
+function initializeTools() {
+    try {
+        // Load tools data
+        currentTools = [...window.AI_TOOLS_DATABASE];
+        filteredTools = [...currentTools];
+        
+        // Set up event listeners
+        setupEventListeners();
+        
+        // Render initial tools
+        renderTools();
+        
+        // Hide loading, show tools
+        hideLoading();
+        
+        console.log(`✅ Successfully loaded ${currentTools.length} tools`);
+        
+    } catch (error) {
+        console.error('❌ Failed to initialize tools:', error);
+        showError('Failed to load AI tools. Please refresh the page.');
     }
-    
-    console.log('✅ DOM elements cached successfully');
-    return true;
 }
 
-/**
- * Initialize Event Listeners
- */
-function initializeEventListeners() {
-    const elements = DynamicToolsApp.elements;
+function setupEventListeners() {
+    // Category filters
+    const filterButtons = document.querySelectorAll('.filter-btn');
+    filterButtons.forEach(btn => {
+        btn.addEventListener('click', handleCategoryFilter);
+    });
     
-    // Filter buttons
-    if (elements.filterButtons && elements.filterButtons.length > 0) {
-        console.log(`🔧 Setting up ${elements.filterButtons.length} filter buttons...`);
-        elements.filterButtons.forEach(button => {
-            button.addEventListener('click', handleCategoryFilter);
-            button.addEventListener('keydown', (e) => {
-                if (e.key === 'Enter' || e.key === ' ') {
-                    e.preventDefault();
-                    handleCategoryFilter.call(button, e);
-                }
-            });
-        });
-        console.log('✅ Filter button event listeners attached');
-    } else {
-        console.warn('⚠️ No filter buttons found for event listeners');
-    }
-    
-    // Sort dropdown
-    if (elements.sortSelect) {
-        elements.sortSelect.addEventListener('change', handleSortChange);
+    // Sort select
+    const sortSelect = document.getElementById('sort-select');
+    if (sortSelect) {
+        sortSelect.addEventListener('change', handleSortChange);
     }
     
     // Search input
-    if (elements.searchInput) {
-        elements.searchInput.addEventListener('input', debounce(handleSearch, 300));
-        elements.searchInput.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape') {
-                e.target.value = '';
-                handleSearch(e);
-            }
-        });
+    const searchInput = document.getElementById('search-input');
+    if (searchInput) {
+        searchInput.addEventListener('input', debounce(handleSearch, 300));
     }
     
-    // Pagination controls removed - showing all tools at once
+    console.log('✅ Event listeners set up');
+}
+
+function handleCategoryFilter(event) {
+    // Update active filter button
+    document.querySelectorAll('.filter-btn').forEach(btn => {
+        btn.classList.remove('active');
+    });
+    event.target.classList.add('active');
     
-    // Keyboard shortcuts
-    document.addEventListener('keydown', handleGlobalKeyboard);
+    // Update category
+    activeCategory = event.target.dataset.category;
     
-    console.log('✅ Event listeners initialized');\n}\n\n/**\n * Initialize Tools Data\n */\nasync function initializeToolsData() {\n    try {\n        console.log('🚀 Initializing tools data...');\n        showLoading(true);\n        \n        // Ensure we have the database\n        if (!window.AI_TOOLS_DATABASE || !Array.isArray(window.AI_TOOLS_DATABASE)) {\n            throw new Error('AI_TOOLS_DATABASE not found or invalid');\n        }\n        \n        // In a real app, this would be an API call\n        const toolsData = await simulateAPICall(window.AI_TOOLS_DATABASE);\n        \n        console.log(`📊 Loaded ${toolsData.length} tools from database`);\n        \n        DynamicToolsApp.state.allTools = toolsData;\n        DynamicToolsApp.state.lastUpdated = new Date();\n        DynamicToolsApp.metrics.apiCalls++;\n        \n        // Set initial state for 15 tools display\n        DynamicToolsApp.state.toolsPerPage = 15;\n        DynamicToolsApp.state.activeSortBy = 'rank'; // Ensure ranking order\n        \n        // Apply initial filters and render\n        applyFilters();\n        renderTools();\n        updateUI();\n        \n        showLoading(false);\n        \n        console.log(`✅ Successfully displayed ${DynamicToolsApp.state.displayedTools.length} tools`);\n        \n        // Success logged to console only\n        console.log(`✅ Loaded ${toolsData.length} AI tools successfully!`);\n        \n    } catch (error) {\n        console.error('❌ Failed to initialize tools data:', error);\n        showLoading(false);\n        showError(`Failed to load AI tools: ${error.message}. Please refresh the page.`);\n    }\n}"\n\n/**\n * Simulate API Call (replace with real API call)\n */\nasync function simulateAPICall(data, delay = 800) {\n    return new Promise((resolve) => {\n        setTimeout(() => {\n            // Simulate some market data updates\n            const updatedData = data.map(tool => ({\n                ...tool,\n                marketData: {\n                    ...tool.marketData,\n                    lastWeekChange: tool.marketData.lastWeekChange + (Math.random() - 0.5) * 2,\n                    trendingScore: Math.max(0, Math.min(100, \n                        tool.marketData.trendingScore + (Math.random() - 0.5) * 5\n                    ))\n                },\n                lastUpdated: new Date()\n            }));\n            \n            resolve(updatedData);\n        }, delay);\n    });\n}\n\n/**\n * Handle Category Filter Changes\n */\nfunction handleCategoryFilter(event) {\n    const category = event.target.dataset.category;\n    \n    // Update UI state\n    DynamicToolsApp.elements.filterButtons.forEach(btn => {\n        btn.classList.remove('active');\n        btn.setAttribute('aria-pressed', 'false');\n    });\n    \n    event.target.classList.add('active');\n    event.target.setAttribute('aria-pressed', 'true');\n    \n    // Update app state\n    DynamicToolsApp.state.activeCategory = category;\n    // No pagination needed\n    \n    // Apply filters and re-render\n    applyFilters();\n    renderTools();\n    updateUI();\n    \n    // Analytics\n    trackEvent('filter_change', { category, timestamp: new Date() });\n    \n    // Announce to screen readers\n    const categoryName = category === 'all' ? 'all tools' : getCategoryDisplayName(category);\n    announceToScreenReader(`Filtered to ${categoryName}. Showing ${DynamicToolsApp.state.filteredTools.length} tools.`);\n}\n\n/**\n * Handle Sort Changes\n */\nfunction handleSortChange(event) {\n    DynamicToolsApp.state.activeSortBy = event.target.value;\n    // No pagination needed\n    \n    applyFilters();\n    renderTools();\n    updateUI();\n    \n    trackEvent('sort_change', { sortBy: event.target.value });\n    announceToScreenReader(`Tools sorted by ${event.target.options[event.target.selectedIndex].text}`);\n}\n\n/**\n * Handle Search\n */\nfunction handleSearch(event) {\n    DynamicToolsApp.state.searchQuery = event.target.value.toLowerCase().trim();\n    // No pagination needed\n    \n    applyFilters();\n    renderTools();\n    updateUI();\n    \n    const resultCount = DynamicToolsApp.state.filteredTools.length;\n    const searchTerm = DynamicToolsApp.state.searchQuery;\n    \n    if (searchTerm) {\n        announceToScreenReader(`Search results: ${resultCount} tools found for \"${searchTerm}\"`);\n        trackEvent('search', { query: searchTerm, results: resultCount });\n    } else {\n        announceToScreenReader(`Search cleared. Showing all tools.`);\n    }\n}\n\n/**\n * Apply Current Filters\n */\nfunction applyFilters() {\n    let filtered = [...DynamicToolsApp.state.allTools];\n    \n    // Category filter\n    if (DynamicToolsApp.state.activeCategory !== 'all') {\n        filtered = filtered.filter(tool => \n            tool.category === DynamicToolsApp.state.activeCategory\n        );\n    }\n    \n    // Search filter\n    if (DynamicToolsApp.state.searchQuery) {\n        const query = DynamicToolsApp.state.searchQuery;\n        filtered = filtered.filter(tool => \n            tool.name.toLowerCase().includes(query) ||\n            tool.description.toLowerCase().includes(query) ||\n            tool.company.toLowerCase().includes(query) ||\n            tool.tags.some(tag => tag.toLowerCase().includes(query))\n        );\n    }\n    \n    // Sort tools\n    filtered = sortTools(filtered, DynamicToolsApp.state.activeSortBy);\n    \n    // Update state\n    DynamicToolsApp.state.filteredTools = filtered;\n    DynamicToolsApp.state.totalPages = Math.ceil(\n        filtered.length / DynamicToolsApp.state.toolsPerPage\n    );\n    \n    // Update displayed tools based on current page\n    updateDisplayedTools();\n}\n\n/**\n * Update Displayed Tools Based on Current Page/Mode\n */\nfunction updateDisplayedTools() {\n    const state = DynamicToolsApp.state;\n    \n    if (state.viewMode === 'infinite') {\n        // Infinite scroll: show all tools up to current page\n        const endIndex = state.currentPage * state.toolsPerPage;\n        state.displayedTools = state.filteredTools.slice(0, endIndex);\n        state.hasMoreTools = endIndex < state.filteredTools.length;\n    } else {\n        // Pagination: show only current page tools\n        const startIndex = (state.currentPage - 1) * state.toolsPerPage;\n        const endIndex = startIndex + state.toolsPerPage;\n        state.displayedTools = state.filteredTools.slice(startIndex, endIndex);\n        state.hasMoreTools = state.currentPage < state.totalPages;\n    }\n}\n\n/**\n * Sort Tools Based on Criteria\n */\nfunction sortTools(tools, criteria) {\n    const sortedTools = [...tools];\n    \n    switch (criteria) {\n        case 'rank':\n            return sortedTools.sort((a, b) => {\n                const scoreA = calculateDynamicRankingScore(a);\n                const scoreB = calculateDynamicRankingScore(b);\n                return scoreB - scoreA;\n            });\n            \n        case 'popularity':\n            return sortedTools.sort((a, b) => \n                b.marketData.popularity - a.marketData.popularity\n            );\n            \n        case 'rating':\n            return sortedTools.sort((a, b) => b.rating - a.rating);\n            \n        case 'growth':\n            return sortedTools.sort((a, b) => b.growth - a.growth);\n            \n        case 'trending':\n            return sortedTools.sort((a, b) => \n                b.marketData.trendingScore - a.marketData.trendingScore\n            );\n            \n        case 'price':\n            return sortedTools.sort((a, b) => {\n                const priceA = a.pricing.range[0];\n                const priceB = b.pricing.range[0];\n                return priceA - priceB;\n            });\n            \n        case 'newest':\n            return sortedTools.sort((a, b) => \n                new Date(b.lastUpdated) - new Date(a.lastUpdated)\n            );\n            \n        case 'alphabetical':\n            return sortedTools.sort((a, b) => a.name.localeCompare(b.name));\n            \n        default:\n            return sortedTools;\n    }\n}\n\n/**\n * Calculate Dynamic Ranking Score with Market Data\n */\nfunction calculateDynamicRankingScore(tool) {\n    const weights = {\n        popularity: 0.25,\n        trustScore: 0.20,\n        innovation: 0.18,\n        growth: 0.12,\n        trendingScore: 0.15,\n        marketShare: 0.10\n    };\n    \n    const normalizedGrowth = Math.min(tool.growth / 50 * 100, 100);\n    \n    const baseScore = (\n        tool.marketData.popularity * weights.popularity +\n        tool.marketData.trustScore * weights.trustScore +\n        tool.marketData.innovation * weights.innovation +\n        normalizedGrowth * weights.growth +\n        tool.marketData.trendingScore * weights.trendingScore +\n        tool.marketData.marketShare * weights.marketShare\n    );\n    \n    // Apply recent activity boost\n    const daysSinceUpdate = (new Date() - new Date(tool.lastUpdated)) / (1000 * 60 * 60 * 24);\n    const recencyBoost = Math.max(0, 10 - daysSinceUpdate);\n    \n    // Apply premium/sponsored modifiers\n    const premiumBoost = tool.isPremium ? 5 : 0;\n    const sponsoredBoost = tool.isSponsored ? 3 : 0;\n    \n    return baseScore + recencyBoost + premiumBoost + sponsoredBoost;\n}\n\n/**\n * Render Tools to DOM\n */\nfunction renderTools() {\n    const startTime = performance.now();\n    DynamicToolsApp.state.renderStartTime = startTime;\n    \n    const toolsGrid = DynamicToolsApp.elements.toolsGrid;\n    const displayedTools = DynamicToolsApp.state.displayedTools;\n    \n    if (displayedTools.length === 0) {\n        showEmptyState();\n        return;\n    }\n    \n    hideEmptyState();\n    \n    // Generate HTML for all tools\n    const toolsHTML = displayedTools.map((tool, index) => \n        generateToolCardHTML(tool, index + 1)\n    ).join('');\n    \n    // Update DOM\n    toolsGrid.innerHTML = toolsHTML;\n    \n    // Add interactive features to newly rendered cards\n    enhanceToolCards();\n    \n    // Update metrics\n    const renderTime = performance.now() - startTime;\n    DynamicToolsApp.metrics.totalRenders++;\n    DynamicToolsApp.metrics.averageRenderTime = \n        (DynamicToolsApp.metrics.averageRenderTime * (DynamicToolsApp.metrics.totalRenders - 1) + renderTime) /\n        DynamicToolsApp.metrics.totalRenders;\n    \n    DynamicToolsApp.state.lastRenderTime = renderTime;\n    \n    console.log(`⚡ Rendered ${displayedTools.length} tools in ${renderTime.toFixed(2)}ms`);\n}\n\n/**\n * Generate Tool Card HTML\n */\nfunction generateToolCardHTML(tool, displayRank) {\n    const trendIcon = tool.marketData.lastWeekChange > 0 ? '↗' : \n                     tool.marketData.lastWeekChange < 0 ? '↘' : '→';\n    const trendClass = tool.marketData.lastWeekChange > 0 ? 'trend-up' : \n                       tool.marketData.lastWeekChange < 0 ? 'trend-down' : '';\n    \n    const rankingScore = calculateDynamicRankingScore(tool);\n    const isTopTier = displayRank <= 3;\n    const isPremiumFeatured = tool.isPremium && displayRank <= 5;\n    \n    return `\n        <article class=\"tool-card ${isTopTier ? 'tool-card--featured' : ''} ${tool.isSponsored ? 'tool-card--sponsored' : ''}\" \n                 data-tool-id=\"${tool.id}\" \n                 data-category=\"${tool.category}\" \n                 data-rank=\"${displayRank}\"\n                 data-score=\"${rankingScore.toFixed(1)}\"\n                 tabindex=\"0\" \n                 role=\"button\"\n                 aria-label=\"View ${tool.name} details - Ranked #${displayRank}\">\n            \n            ${tool.isSponsored ? '<div class=\"sponsored-badge\">Sponsored</div>' : ''}\n            ${isPremiumFeatured ? '<div class=\"premium-badge\">Premium Pick</div>' : ''}\n            \n            <div class=\"tool-card__rank\">\n                <span class=\"rank-number\">${displayRank}</span>\n                ${displayRank === 1 ? '<span class=\"rank-badge\">🏆</span>' : ''}\n                ${displayRank === 2 ? '<span class=\"rank-badge\">🥈</span>' : ''}\n                ${displayRank === 3 ? '<span class=\"rank-badge\">🥉</span>' : ''}\n                ${displayRank <= 10 && !isTopTier ? '<span class=\"rank-badge\">⭐</span>' : ''}\n            </div>\n            \n            <div class=\"tool-card__header\">\n                <div class=\"tool-card__icon\">\n                    <img src=\"${tool.icon}\" \n                         alt=\"${tool.name} icon\" \n                         width=\"48\" \n                         height=\"48\" \n                         loading=\"lazy\"\n                         onerror=\"this.src='data:image/svg+xml,%3Csvg xmlns=\\'http://www.w3.org/2000/svg\\' width=\\'48\\' height=\\'48\\' viewBox=\\'0 0 48 48\\'%3E%3Crect width=\\'48\\' height=\\'48\\' fill=\\'%23f0f0f0\\'/%3E%3Ctext x=\\'50%25\\' y=\\'50%25\\' text-anchor=\\'middle\\' dominant-baseline=\\'middle\\' font-size=\\'16\\' fill=\\'%23666\\'%3E🤖%3C/text%3E%3C/svg%3E'\">\n                </div>\n                <div class=\"tool-card__title-area\">\n                    <h3 class=\"tool-card__title\">\n                        <a href=\"${tool.url}\" \n                           target=\"_blank\" \n                           rel=\"noopener\"\n                           class=\"tool-card__link\"\n                           onclick=\"trackToolClick('${tool.id}', '${tool.name}', ${displayRank})\">\n                            ${tool.name}\n                        </a>\n                    </h3>\n                    <div class=\"tool-card__category\">${getCategoryDisplayName(tool.category)}</div>\n                    <div class=\"tool-card__company\">by ${tool.company}</div>\n                </div>\n            </div>\n            \n            <p class=\"tool-card__description\">${tool.description}</p>\n            \n            <div class=\"tool-card__metrics\">\n                <div class=\"metric\">\n                    <span class=\"metric-value\" data-rating=\"${tool.rating}\">${tool.rating}</span>\n                    <span class=\"metric-label\">Rating</span>\n                </div>\n                <div class=\"metric\">\n                    <span class=\"metric-value\" data-users=\"${tool.users}\">${tool.users}</span>\n                    <span class=\"metric-label\">Users</span>\n                </div>\n                <div class=\"metric\">\n                    <span class=\"metric-value ${trendClass}\" \n                          data-trend=\"${trendIcon} ${Math.abs(tool.marketData.lastWeekChange).toFixed(1)}%\">\n                        ${trendIcon} ${Math.abs(tool.marketData.lastWeekChange).toFixed(1)}%\n                    </span>\n                    <span class=\"metric-label\">7-day Change</span>\n                </div>\n            </div>\n            \n            <div class=\"tool-card__pricing\">\n                <span class=\"price-badge ${tool.pricing.range[0] === 0 ? 'price-badge--free' : ''}\">\n                    ${tool.pricing.type}\n                </span>\n                <span class=\"price-details\">${tool.pricing.cost}</span>\n            </div>\n            \n            <div class=\"tool-card__tags\">\n                ${tool.tags.slice(0, 4).map(tag => \n                    `<span class=\"tag\" onclick=\"searchByTag('${tag.toLowerCase()}')\">${tag}</span>`\n                ).join('')}\n                ${tool.tags.length > 4 ? `<span class=\"tag tag--more\">+${tool.tags.length - 4}</span>` : ''}\n            </div>\n            \n            <div class=\"tool-card__footer\">\n                <div class=\"tool-card__stats\">\n                    <span class=\"stat-item\">\n                        <span class=\"stat-label\">Ranking Score:</span>\n                        <span class=\"stat-value\">${rankingScore.toFixed(1)}</span>\n                    </span>\n                    <span class=\"stat-item\">\n                        <span class=\"stat-label\">Updated:</span>\n                        <span class=\"stat-value\">${formatRelativeTime(tool.lastUpdated)}</span>\n                    </span>\n                </div>\n                <button class=\"tool-card__favorite\" \n                        onclick=\"toggleFavorite('${tool.id}')\" \n                        aria-label=\"Add ${tool.name} to favorites\">\n                    <span class=\"favorite-icon\">♡</span>\n                </button>\n            </div>\n        </article>\n    `;\n}\n\n/**\n * Enhance Tool Cards with Interactive Features\n */\nfunction enhanceToolCards() {\n    const toolCards = document.querySelectorAll('.tool-card');\n    \n    toolCards.forEach(card => {\n        // Hover effects\n        card.addEventListener('mouseenter', () => {\n            card.style.transform = 'translateY(-4px)';\n        });\n        \n        card.addEventListener('mouseleave', () => {\n            card.style.transform = '';\n        });\n        \n        // Keyboard navigation\n        card.addEventListener('keydown', (e) => {\n            if (e.key === 'Enter' || e.key === ' ') {\n                e.preventDefault();\n                const link = card.querySelector('.tool-card__link');\n                if (link) {\n                    window.open(link.href, '_blank', 'noopener');\n                }\n            }\n        });\n        \n        // Click tracking\n        card.addEventListener('click', (e) => {\n            if (!e.target.closest('a, button')) {\n                const link = card.querySelector('.tool-card__link');\n                if (link) {\n                    window.open(link.href, '_blank', 'noopener');\n                }\n            }\n        });\n    });\n}\n\n/**\n * Handle Load More\n */\nfunction handleLoadMore() {\n    if (DynamicToolsApp.state.isLoading || !DynamicToolsApp.state.hasMoreTools) {\n        return;\n    }\n    \n    const button = DynamicToolsApp.elements.loadMoreBtn;\n    const originalText = button.innerHTML;\n    \n    // Show loading state\n    button.innerHTML = '<span class=\"loading-spinner\"></span> Loading more tools...';\n    button.disabled = true;\n    \n    // Simulate loading delay\n    setTimeout(() => {\n        DynamicToolsApp.state.currentPage++;\n        updateDisplayedTools();\n        renderTools();\n        updateUI();\n        \n        // Reset button\n        button.innerHTML = originalText;\n        button.disabled = false;\n        \n        // Announce to screen readers\n        const newCount = DynamicToolsApp.state.displayedTools.length;\n        announceToScreenReader(`Loaded more tools. Now showing ${newCount} tools.`);\n        \n        // Track event\n        trackEvent('load_more', { page: DynamicToolsApp.state.currentPage });\n        \n    }, 600);\n}\n\n/**\n * Handle Infinite Scroll\n */\nfunction handleScroll() {\n    if (DynamicToolsApp.state.viewMode !== 'infinite' || \n        DynamicToolsApp.state.isLoading || \n        !DynamicToolsApp.state.hasMoreTools) {\n        return;\n    }\n    \n    const scrollPosition = window.innerHeight + window.scrollY;\n    const documentHeight = document.documentElement.scrollHeight;\n    const threshold = 1000; // Load more when 1000px from bottom\n    \n    if (scrollPosition >= documentHeight - threshold) {\n        handleLoadMore();\n    }\n}\n\n/**\n * Toggle View Mode (Infinite vs Pagination)\n */\nfunction toggleViewMode() {\n    const currentMode = DynamicToolsApp.state.viewMode;\n    const newMode = currentMode === 'infinite' ? 'pagination' : 'infinite';\n    \n    DynamicToolsApp.state.viewMode = newMode;\n    // No pagination needed\n    \n    updateDisplayedTools();\n    renderTools();\n    updateUI();\n    \n    // Update toggle button\n    const toggleBtn = DynamicToolsApp.elements.viewToggle;\n    if (toggleBtn) {\n        const icon = newMode === 'pagination' ? '📄' : '∞';\n        const text = newMode === 'pagination' ? 'Switch to Infinite Scroll' : 'Switch to Pagination';\n        toggleBtn.innerHTML = `<span class=\"view-icon\">${icon}</span> ${text}`;\n    }\n    \n    announceToScreenReader(`Switched to ${newMode} view mode`);\n    trackEvent('view_mode_change', { mode: newMode });\n}\n\n/**\n * Update UI Elements\n */\nfunction updateUI() {\n    const state = DynamicToolsApp.state;\n    const elements = DynamicToolsApp.elements;\n    \n    // Update counts\n    if (elements.visibleCount) {\n        elements.visibleCount.textContent = state.displayedTools.length;\n    }\n    if (elements.totalCount) {\n        elements.totalCount.textContent = state.filteredTools.length;\n    }\n    \n    // Update last updated time\n    if (elements.lastUpdateTime && state.lastUpdated) {\n        elements.lastUpdateTime.textContent = formatRelativeTime(state.lastUpdated);\n    }\n    \n    // Update load more button\n    if (elements.loadMoreBtn) {\n        const loadMoreSection = document.getElementById('load-more-section');\n        if (state.viewMode === 'infinite') {\n            loadMoreSection.style.display = state.hasMoreTools ? 'block' : 'none';\n            elements.paginationControls.style.display = 'none';\n        } else {\n            loadMoreSection.style.display = 'none';\n            elements.paginationControls.style.display = state.totalPages > 1 ? 'flex' : 'none';\n            updatePaginationControls();\n        }\n    }\n    \n    // Update empty state\n    if (state.filteredTools.length === 0) {\n        showEmptyState();\n    } else {\n        hideEmptyState();\n    }\n}\n\n/**\n * Update Pagination Controls\n */\nfunction updatePaginationControls() {\n    const state = DynamicToolsApp.state;\n    const paginationNumbers = document.getElementById('pagination-numbers');\n    const prevBtn = document.getElementById('prev-page');\n    const nextBtn = document.getElementById('next-page');\n    \n    if (!paginationNumbers) return;\n    \n    // Update prev/next buttons\n    if (prevBtn) {\n        prevBtn.disabled = state.currentPage === 1;\n    }\n    if (nextBtn) {\n        nextBtn.disabled = state.currentPage === state.totalPages;\n    }\n    \n    // Generate page numbers\n    const maxVisiblePages = 5;\n    let startPage = Math.max(1, state.currentPage - Math.floor(maxVisiblePages / 2));\n    let endPage = Math.min(state.totalPages, startPage + maxVisiblePages - 1);\n    \n    if (endPage - startPage + 1 < maxVisiblePages) {\n        startPage = Math.max(1, endPage - maxVisiblePages + 1);\n    }\n    \n    let paginationHTML = '';\n    \n    // Add first page if needed\n    if (startPage > 1) {\n        paginationHTML += `<button class=\"pagination-number\" data-page=\"1\">1</button>`;\n        if (startPage > 2) {\n            paginationHTML += `<span class=\"pagination-ellipsis\">...</span>`;\n        }\n    }\n    \n    // Add page numbers\n    for (let i = startPage; i <= endPage; i++) {\n        const isActive = i === state.currentPage;\n        paginationHTML += `\n            <button class=\"pagination-number ${isActive ? 'active' : ''}\" \n                    data-page=\"${i}\"\n                    ${isActive ? 'aria-current=\"page\"' : ''}>\n                ${i}\n            </button>\n        `;\n    }\n    \n    // Add last page if needed\n    if (endPage < state.totalPages) {\n        if (endPage < state.totalPages - 1) {\n            paginationHTML += `<span class=\"pagination-ellipsis\">...</span>`;\n        }\n        paginationHTML += `<button class=\"pagination-number\" data-page=\"${state.totalPages}\">${state.totalPages}</button>`;\n    }\n    \n    paginationNumbers.innerHTML = paginationHTML;\n}\n\n/**\n * Handle Pagination Clicks\n */\nfunction handlePaginationClick(event) {\n    const target = event.target;\n    \n    if (target.classList.contains('pagination-number')) {\n        const page = parseInt(target.dataset.page);\n        goToPage(page);\n    } else if (target.id === 'prev-page') {\n        goToPage(DynamicToolsApp.state.currentPage - 1);\n    } else if (target.id === 'next-page') {\n        goToPage(DynamicToolsApp.state.currentPage + 1);\n    }\n}\n\n/**\n * Navigate to Specific Page\n */\nfunction goToPage(page) {\n    if (page < 1 || page > DynamicToolsApp.state.totalPages || \n        page === DynamicToolsApp.state.currentPage) {\n        return;\n    }\n    \n    DynamicToolsApp.state.currentPage = page;\n    updateDisplayedTools();\n    renderTools();\n    updateUI();\n    \n    // Scroll to top of tools grid\n    DynamicToolsApp.elements.toolsGrid.scrollIntoView({ \n        behavior: 'smooth',\n        block: 'start'\n    });\n    \n    trackEvent('page_change', { page });\n    announceToScreenReader(`Navigated to page ${page}`);\n}\n\n/**\n * Show/Hide Loading State\n */\nfunction showLoading(show) {\n    const spinner = DynamicToolsApp.elements.loadingSpinner;\n    if (spinner) {\n        spinner.style.display = show ? 'block' : 'none';\n    }\n    DynamicToolsApp.state.isLoading = show;\n}\n\n/**\n * Show/Hide Empty State\n */\nfunction showEmptyState() {\n    const emptyState = DynamicToolsApp.elements.emptyState;\n    const toolsGrid = DynamicToolsApp.elements.toolsGrid;\n    \n    if (emptyState) {\n        emptyState.style.display = 'block';\n    }\n    if (toolsGrid) {\n        toolsGrid.style.display = 'none';\n    }\n}\n\nfunction hideEmptyState() {\n    const emptyState = DynamicToolsApp.elements.emptyState;\n    const toolsGrid = DynamicToolsApp.elements.toolsGrid;\n    \n    if (emptyState) {\n        emptyState.style.display = 'none';\n    }\n    if (toolsGrid) {\n        toolsGrid.style.display = 'grid';\n    }\n}\n\n/**\n * Real-time Updates System\n */\nfunction startRealTimeUpdates() {\n    if (!DynamicToolsApp.state.isRealTimeEnabled) return;\n    \n    // Update market data every 30 seconds\n    setInterval(async () => {\n        try {\n            // In a real app, this would fetch from API\n            const updatedData = await simulateMarketDataUpdate();\n            DynamicToolsApp.state.allTools = updatedData;\n            DynamicToolsApp.state.lastUpdated = new Date();\n            \n            // Re-apply filters and update display\n            applyFilters();\n            renderTools();\n            updateUI();\n            \n            console.log('📈 Market data updated');\n            \n        } catch (error) {\n            console.error('❌ Failed to update market data:', error);\n        }\n    }, 30000);\n    \n    // Update timestamps every minute\n    setInterval(() => {\n        updateUI();\n    }, 60000);\n}\n\n/**\n * Simulate Market Data Updates\n */\nasync function simulateMarketDataUpdate() {\n    return DynamicToolsApp.state.allTools.map(tool => {\n        const marketData = { ...tool.marketData };\n        \n        // Simulate small market changes\n        marketData.lastWeekChange += (Math.random() - 0.5) * 2;\n        marketData.trendingScore = Math.max(0, Math.min(100,\n            marketData.trendingScore + (Math.random() - 0.5) * 3\n        ));\n        marketData.popularity = Math.max(0, Math.min(100,\n            marketData.popularity + (Math.random() - 0.5) * 1\n        ));\n        \n        return {\n            ...tool,\n            marketData,\n            lastUpdated: new Date()\n        };\n    });\n}\n\n/**\n * Global Keyboard Shortcuts\n */\nfunction handleGlobalKeyboard(event) {\n    // Only handle if not in an input field\n    if (event.target.tagName === 'INPUT' || event.target.tagName === 'TEXTAREA') {\n        return;\n    }\n    \n    switch (event.key) {\n        case 'r':\n        case 'R':\n            event.preventDefault();\n            refreshTools();\n            break;\n        case 'f':\n        case 'F':\n            event.preventDefault();\n            DynamicToolsApp.elements.searchInput?.focus();\n            break;\n        case '1':\n        case '2':\n        case '3':\n        case '4':\n        case '5':\n            event.preventDefault();\n            const categories = ['all', 'writing', 'coding', 'design', 'business', 'research'];\n            const index = parseInt(event.key) - 1;\n            if (categories[index]) {\n                simulateFilterClick(categories[index]);\n            }\n            break;\n    }\n}\n\n/**\n * Utility Functions\n */\nfunction getCategoryDisplayName(category) {\n    const categories = {\n        writing: 'Writing & Content',\n        coding: 'Coding & Development',\n        design: 'Design & Creative',\n        business: 'Business & Analytics',\n        research: 'Research & Analysis',\n        productivity: 'Productivity'\n    };\n    return categories[category] || category;\n}\n\nfunction formatRelativeTime(date) {\n    const now = new Date();\n    const diff = now - new Date(date);\n    const minutes = Math.floor(diff / 60000);\n    const hours = Math.floor(diff / 3600000);\n    const days = Math.floor(diff / 86400000);\n    \n    if (minutes < 1) return 'Just now';\n    if (minutes < 60) return `${minutes}m ago`;\n    if (hours < 24) return `${hours}h ago`;\n    if (days < 7) return `${days}d ago`;\n    \n    return new Date(date).toLocaleDateString();\n}\n\nfunction showError(message) {\n    console.error('❌', message);\n    showNotification(message, 'error');\n}\n\nfunction clearAllFilters() {\n    // Reset all filters\n    DynamicToolsApp.state.activeCategory = 'all';\n    DynamicToolsApp.state.searchQuery = '';\n    // No pagination needed\n    \n    // Update UI\n    if (DynamicToolsApp.elements.searchInput) {\n        DynamicToolsApp.elements.searchInput.value = '';\n    }\n    \n    DynamicToolsApp.elements.filterButtons.forEach(btn => {\n        btn.classList.remove('active');\n        if (btn.dataset.category === 'all') {\n            btn.classList.add('active');\n        }\n    });\n    \n    // Re-render\n    applyFilters();\n    renderTools();\n    updateUI();\n    \n    announceToScreenReader('All filters cleared');\n}\n\nfunction searchByTag(tag) {\n    if (DynamicToolsApp.elements.searchInput) {\n        DynamicToolsApp.elements.searchInput.value = tag;\n        DynamicToolsApp.elements.searchInput.dispatchEvent(new Event('input'));\n    }\n}\n\nfunction simulateFilterClick(category) {\n    const button = Array.from(DynamicToolsApp.elements.filterButtons)\n        .find(btn => btn.dataset.category === category);\n    if (button) {\n        button.click();\n    }\n}\n\nfunction toggleFavorite(toolId) {\n    // In a real app, this would save to user preferences\n    console.log(`Toggle favorite for tool: ${toolId}`);\n    trackEvent('favorite_toggle', { toolId });\n}\n\nfunction trackToolClick(toolId, toolName, rank) {\n    trackEvent('tool_click', { toolId, toolName, rank });\n}\n\nfunction trackEvent(eventName, data) {\n    // In a real app, this would send to analytics\n    console.log(`📊 Event: ${eventName}`, data);\n}\n\nfunction refreshTools() {\n    showNotification('Refreshing tools data...', 'info');\n    initializeToolsData();\n}\n\nfunction debounce(func, wait) {\n    let timeout;\n    return function executedFunction(...args) {\n        const later = () => {\n            clearTimeout(timeout);\n            func(...args);\n        };\n        clearTimeout(timeout);\n        timeout = setTimeout(later, wait);\n    };\n}\n\nfunction throttle(func, limit) {\n    let inThrottle;\n    return function(...args) {\n        if (!inThrottle) {\n            func.apply(this, args);\n            inThrottle = true;\n            setTimeout(() => inThrottle = false, limit);\n        }\n    };\n}\n\nfunction announceToScreenReader(message) {\n    const announcement = document.createElement('div');\n    announcement.setAttribute('aria-live', 'polite');\n    announcement.setAttribute('aria-atomic', 'true');\n    announcement.className = 'sr-only';\n    announcement.textContent = message;\n    \n    document.body.appendChild(announcement);\n    \n    setTimeout(() => {\n        if (announcement.parentNode) {\n            document.body.removeChild(announcement);\n        }\n    }, 1000);\n}\n\nfunction showNotification(message, type = 'info') {\n    // Use the existing notification system from main.js if available\n    if (typeof window.showNotification === 'function') {\n        window.showNotification(message, type);\n    } else {\n        console.log(`[${type.toUpperCase()}] ${message}`);\n    }\n}\n\n/**\n * Performance Monitoring\n */\nfunction monitorPerformance() {\n    // Monitor render performance\n    setInterval(() => {\n        const metrics = DynamicToolsApp.metrics;\n        if (metrics.totalRenders > 0) {\n            console.log(`📈 Performance Metrics:`, {\n                totalRenders: metrics.totalRenders,\n                averageRenderTime: `${metrics.averageRenderTime.toFixed(2)}ms`,\n                lastRenderTime: `${DynamicToolsApp.state.lastRenderTime.toFixed(2)}ms`,\n                cacheHits: metrics.cacheHits,\n                apiCalls: metrics.apiCalls\n            });\n        }\n    }, 60000); // Log every minute\n}\n\n/**\n * Development and Testing Utilities\n */\nfunction validateImplementation() {\n    const checks = {\n        database: AI_TOOLS_DATABASE?.length >= 15,\n        dynamicGrid: !!document.getElementById('dynamic-tools-grid'),\n        filterButtons: document.querySelectorAll('.filter-btn').length > 0,\n        paginationControls: !!document.getElementById('pagination-controls'),\n        searchInput: !!document.getElementById('search-input'),\n        sortSelect: !!document.getElementById('sort-select'),\n        loadMoreBtn: !!document.getElementById('load-more-btn'),\n        viewToggle: !!document.getElementById('view-toggle')\n    };\n    \n    const passed = Object.values(checks).filter(Boolean).length;\n    const total = Object.keys(checks).length;\n    \n    console.log('🔍 Dynamic Tools Implementation Validation:');\n    console.log(`✅ ${passed}/${total} checks passed`);\n    console.log('Details:', checks);\n    \n    if (passed === total) {\n        console.log('🎉 All systems ready! Dynamic Tools implementation is complete.');\n        console.log('🎉 Dynamic Tools system ready!');\n    } else {\n        console.warn('⚠️ Some components missing. Check console for details.');\n    }\n    \n    return checks;\n}\n\n// Run validation on load (development only)\nwindow.addEventListener('load', () => {\n    setTimeout(() => {\n        if (document.getElementById('dynamic-tools-grid')) {\n            validateImplementation();\n        }\n    }, 2000);\n});\n\n// Export for global access and testing\nif (typeof window !== 'undefined') {\n    window.DynamicToolsApp = DynamicToolsApp;\n    window.refreshTools = refreshTools;\n    window.clearAllFilters = clearAllFilters;\n    window.toggleViewMode = toggleViewMode;\n    window.validateDynamicTools = validateImplementation;\n}"
+    // Apply filters and render
+    applyFilters();
+    renderTools();
+    updateCounts();
+}
+
+function handleSortChange(event) {
+    const sortBy = event.target.value;
+    sortTools(sortBy);
+    renderTools();
+}
+
+function handleSearch(event) {
+    const query = event.target.value.toLowerCase().trim();
+    
+    if (query) {
+        filteredTools = currentTools.filter(tool => 
+            tool.name.toLowerCase().includes(query) ||
+            tool.description.toLowerCase().includes(query) ||
+            tool.company.toLowerCase().includes(query) ||
+            tool.tags.some(tag => tag.toLowerCase().includes(query))
+        );
+    } else {
+        applyFilters();
+    }
+    
+    renderTools();
+    updateCounts();
+}
+
+function applyFilters() {
+    if (activeCategory === 'all') {
+        filteredTools = [...currentTools];
+    } else {
+        filteredTools = currentTools.filter(tool => tool.category === activeCategory);
+    }
+}
+
+function sortTools(criteria) {
+    switch (criteria) {
+        case 'popularity':
+            filteredTools.sort((a, b) => b.marketData.popularity - a.marketData.popularity);
+            break;
+        case 'rating':
+            filteredTools.sort((a, b) => b.rating - a.rating);
+            break;
+        case 'alphabetical':
+            filteredTools.sort((a, b) => a.name.localeCompare(b.name));
+            break;
+        default: // rank
+            filteredTools.sort((a, b) => {
+                const scoreA = calculateSimpleScore(a);
+                const scoreB = calculateSimpleScore(b);
+                return scoreB - scoreA;
+            });
+    }
+}
+
+function calculateSimpleScore(tool) {
+    return (
+        tool.marketData.popularity * 0.3 +
+        tool.rating * 20 +
+        tool.marketData.trustScore * 0.4 +
+        tool.growth * 0.3
+    );
+}
+
+function renderTools() {
+    const toolsGrid = document.getElementById('dynamic-tools-grid');
+    if (!toolsGrid) return;
+    
+    if (filteredTools.length === 0) {
+        showEmptyState();
+        return;
+    }
+    
+    hideEmptyState();
+    
+    // Show first 15 tools
+    const toolsToShow = filteredTools.slice(0, 15);
+    
+    const toolsHTML = toolsToShow.map((tool, index) => 
+        generateToolCard(tool, index + 1)
+    ).join('');
+    
+    toolsGrid.innerHTML = toolsHTML;
+    
+    console.log(`⚡ Rendered ${toolsToShow.length} tools`);
+}
+
+function generateToolCard(tool, rank) {
+    const trendIcon = tool.marketData.lastWeekChange > 0 ? '↗️' : 
+                     tool.marketData.lastWeekChange < 0 ? '↘️' : '→';
+    
+    return `
+        <article class="tool-card ${rank <= 3 ? 'tool-card--featured' : ''}" 
+                 data-tool-id="${tool.id}">
+            <div class="tool-card__rank">
+                <span class="rank-number">${rank}</span>
+                ${rank === 1 ? '<span class="rank-badge">🏆</span>' : ''}
+                ${rank === 2 ? '<span class="rank-badge">🥈</span>' : ''}
+                ${rank === 3 ? '<span class="rank-badge">🥉</span>' : ''}
+            </div>
+            
+            <div class="tool-card__header">
+                <div class="tool-card__icon">
+                    <img src="${tool.icon}" 
+                         alt="${tool.name} icon" 
+                         width="48" 
+                         height="48"
+                         onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDgiIGhlaWdodD0iNDgiIHZpZXdCb3g9IjAgMCA0OCA0OCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjQ4IiBoZWlnaHQ9IjQ4IiBmaWxsPSIjZjBmMGYwIi8+Cjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkb21pbmFudC1iYXNlbGluZT0ibWlkZGxlIiBmb250LXNpemU9IjE2IiBmaWxsPSIjNjY2Ij7wn6SWPC90ZXh0Pgo8L3N2Zz4='">
+                </div>
+                <div class="tool-card__title-area">
+                    <h3 class="tool-card__title">
+                        <a href="${tool.url}" target="_blank" rel="noopener" class="tool-card__link">
+                            ${tool.name}
+                        </a>
+                    </h3>
+                    <div class="tool-card__category">${getCategoryName(tool.category)}</div>
+                    <div class="tool-card__company">by ${tool.company}</div>
+                </div>
+            </div>
+            
+            <p class="tool-card__description">${tool.description}</p>
+            
+            <div class="tool-card__metrics">
+                <div class="metric">
+                    <span class="metric-value">${tool.rating}</span>
+                    <span class="metric-label">Rating</span>
+                </div>
+                <div class="metric">
+                    <span class="metric-value">${tool.users}</span>
+                    <span class="metric-label">Users</span>
+                </div>
+                <div class="metric">
+                    <span class="metric-value">${trendIcon} ${Math.abs(tool.marketData.lastWeekChange).toFixed(1)}%</span>
+                    <span class="metric-label">7-day Change</span>
+                </div>
+            </div>
+            
+            <div class="tool-card__pricing">
+                <span class="price-badge ${tool.pricing.range[0] === 0 ? 'price-badge--free' : ''}">
+                    ${tool.pricing.type}
+                </span>
+                <span class="price-details">${tool.pricing.cost}</span>
+            </div>
+            
+            <div class="tool-card__tags">
+                ${tool.tags.slice(0, 4).map(tag => 
+                    `<span class="tag">${tag}</span>`
+                ).join('')}
+                ${tool.tags.length > 4 ? `<span class="tag tag--more">+${tool.tags.length - 4}</span>` : ''}
+            </div>
+        </article>
+    `;
+}
+
+function getCategoryName(category) {
+    const names = {
+        writing: 'Writing & Content',
+        coding: 'Coding & Development', 
+        design: 'Design & Creative',
+        business: 'Business & Analytics',
+        research: 'Research & Analysis',
+        productivity: 'Productivity'
+    };
+    return names[category] || category;
+}
+
+function updateCounts() {
+    const visibleCount = document.getElementById('visible-count');
+    const totalCount = document.getElementById('total-count');
+    
+    if (visibleCount) {
+        visibleCount.textContent = Math.min(filteredTools.length, 15);
+    }
+    if (totalCount) {
+        totalCount.textContent = filteredTools.length;
+    }
+    
+    const lastUpdateTime = document.getElementById('last-update-time');
+    if (lastUpdateTime) {
+        lastUpdateTime.textContent = 'Just now';
+    }
+}
+
+function showLoading() {
+    const spinner = document.getElementById('tools-loading');
+    if (spinner) {
+        spinner.style.display = 'block';
+    }
+}
+
+function hideLoading() {
+    const spinner = document.getElementById('tools-loading');
+    if (spinner) {
+        spinner.style.display = 'none';
+    }
+    updateCounts();
+}
+
+function showEmptyState() {
+    const emptyState = document.getElementById('empty-state');
+    const toolsGrid = document.getElementById('dynamic-tools-grid');
+    
+    if (emptyState) {
+        emptyState.style.display = 'block';
+    }
+    if (toolsGrid) {
+        toolsGrid.style.display = 'none';
+    }
+}
+
+function hideEmptyState() {
+    const emptyState = document.getElementById('empty-state');
+    const toolsGrid = document.getElementById('dynamic-tools-grid');
+    
+    if (emptyState) {
+        emptyState.style.display = 'none';
+    }
+    if (toolsGrid) {
+        toolsGrid.style.display = 'grid';
+    }
+}
+
+function showError(message) {
+    console.error('❌', message);
+    const toolsGrid = document.getElementById('dynamic-tools-grid');
+    if (toolsGrid) {
+        toolsGrid.innerHTML = `
+            <div class="error-message">
+                <h3>⚠️ Error Loading Tools</h3>
+                <p>${message}</p>
+                <button onclick="location.reload()" class="btn btn-primary">
+                    Refresh Page
+                </button>
+            </div>
+        `;
+    }
+    hideLoading();
+}
+
+// Debounce function for search
+function debounce(func, wait) {
+    let timeout;
+    return function executedFunction(...args) {
+        const later = () => {
+            clearTimeout(timeout);
+            func(...args);
+        };
+        clearTimeout(timeout);
+        timeout = setTimeout(later, wait);
+    };
+}

@@ -99,7 +99,7 @@
                 </a>
                 
                 <ul class="nav-links" role="menubar">
-                    <li role="none"><a href="../index.html" class="nav-link" role="menuitem">Home</a></li>
+                    <li role="none"><a href="../" class="nav-link" role="menuitem">Home</a></li>
                     <li role="none"><a href="news.html" class="nav-link" role="menuitem">News</a></li>
                     <li role="none"><a href="tools.html" class="nav-link" role="menuitem" aria-current="page">Tools</a></li>
                     <li role="none"><a href="../about.html" class="nav-link" role="menuitem">About</a></li>
@@ -154,6 +154,8 @@
                 </div>
                 
                 <div class="sort-section">
+                    <label for="search-input" class="sort-label">Search:</label>
+                    <input type="text" id="search-input" class="sort-select" placeholder="Search tools..." style="margin-right: var(--space-4);" />
                     <label for="sort-select" class="sort-label">Sort by:</label>
                     <select id="sort-select" class="sort-select">
                         <option value="rank">Market Ranking</option>
@@ -259,9 +261,7 @@
                     <h3 class="footer__heading">Resources</h3>
                     <ul class="footer__links">
                         <li><a href="../about" class="footer__link">About</a></li>
-                        <li><a href="../contact" class="footer__link">Contact</a></li>
-                        <li><a href="../privacy" class="footer__link">Privacy Policy</a></li>
-                        <li><a href="../terms" class="footer__link">Terms of Service</a></li>
+                        <li><a href="mailto:hello@myaibuffet.com" class="footer__link">Contact</a></li>
                     </ul>
                 </div>
 
@@ -288,8 +288,8 @@
     </footer>
 
     <!-- JavaScript -->
-    <script src="../assets/js/main.js" defer></script>
     <script src="../assets/js/tools-database.js"></script>
+    <script src="../assets/js/main.js" defer></script>
     <script src="../assets/js/dynamic-tools.js" defer></script>
 </body>
 </html>

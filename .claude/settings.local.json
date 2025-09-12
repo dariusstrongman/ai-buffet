@@ -3,7 +3,8 @@
     "allow": [
       "Bash(python:*)",
       "Bash(npx http-server:*)",
-      "WebSearch"
+      "WebSearch",
+      "Bash(rm:*)"
     ],
     "deny": [],
     "ask": []

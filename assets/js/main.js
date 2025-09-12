@@ -1486,5 +1486,5 @@ function initializeFactCardInteractions() {
     });
 }
 
-// Initialize AI Facts when DOM is ready
-document.addEventListener('DOMContentLoaded', initializeAIFacts);
+// Initialize AI Facts when DOM is ready (disabled to prevent conflicts with index.html inline script)
+// document.addEventListener('DOMContentLoaded', initializeAIFacts);

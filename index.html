@@ -960,11 +960,6 @@
 
             // Track which facts are currently displayed
             let currentlyDisplayedFacts = [0, 1, 2, 3, 4, 5];
-            
-            function getRandomFact(excludeIndices = []) {
-                const availableFacts = factDatabase.filter((_, index) => !excludeIndices.includes(index));
-                return Math.floor(Math.random() * availableFacts.length);
-            }
 
             function updateFactCard(cardIndex) {
                 const card = document.querySelector(`[data-fact-id="${cardIndex}"]`);
@@ -976,9 +971,16 @@
 
                 // Get a random fact that's not currently displayed
                 let newFactIndex;
+                let attempts = 0;
                 do {
                     newFactIndex = Math.floor(Math.random() * factDatabase.length);
-                } while (currentlyDisplayedFacts.includes(newFactIndex));
+                    attempts++;
+                    // Prevent infinite loop if we don't have enough facts
+                    if (attempts > 50) {
+                        newFactIndex = Math.floor(Math.random() * factDatabase.length);
+                        break;
+                    }
+                } while (currentlyDisplayedFacts.includes(newFactIndex) && factDatabase.length > 6);
 
                 const newFact = factDatabase[newFactIndex];
 
@@ -993,8 +995,11 @@
                     labelEl.textContent = newFact.label;
                     detailEl.textContent = newFact.detail;
                     
-                    // Update gradient class
+                    // Update gradient class  
                     statEl.style.background = `var(--${newFact.gradient})`;
+                    statEl.style.webkitBackgroundClip = 'text';
+                    statEl.style.backgroundClip = 'text';
+                    statEl.style.webkitTextFillColor = 'transparent';
 
                     // Animate back in
                     card.style.transform = 'scale(1)';
@@ -1005,26 +1010,19 @@
                 }, 250);
             }
 
-            // Start dynamic rotation with random intervals
+            // Start dynamic rotation - simplified to avoid conflicts
+            let rotationIndex = 0;
             function startFactRotation() {
                 setInterval(() => {
-                    // Pick a random card to update
-                    const randomCard = Math.floor(Math.random() * 6);
-                    updateFactCard(randomCard);
-                }, Math.random() * 8000 + 5000); // Random interval between 5-13 seconds
+                    // Rotate through cards in order, then randomly
+                    const cardToUpdate = rotationIndex < 6 ? rotationIndex : Math.floor(Math.random() * 6);
+                    updateFactCard(cardToUpdate);
+                    rotationIndex = (rotationIndex + 1) % 12; // Reset every 12 updates
+                }, 8000); // Update every 8 seconds
             }
 
-            // Also rotate individual cards at their own intervals
-            for (let i = 0; i < 6; i++) {
-                setTimeout(() => {
-                    setInterval(() => {
-                        updateFactCard(i);
-                    }, Math.random() * 15000 + 10000); // Each card rotates every 10-25 seconds
-                }, Math.random() * 5000); // Stagger the start times
-            }
-
-            // Start the main rotation system
-            startFactRotation();
+            // Start after a small delay to ensure DOM is ready
+            setTimeout(startFactRotation, 2000);
         });
     </script>
 </body>

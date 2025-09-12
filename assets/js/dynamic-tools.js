@@ -1,11 +1,5 @@
-// Dynamic AI Tools System - Pagination, Filtering & Real-time Updates
-// Structured for seamless API integration
-
+// Dynamic AI Tools System
 'use strict';
-
-/**
- * Dynamic Tools Application State
- */
 const DynamicToolsApp = {
     // Core state
     state: {

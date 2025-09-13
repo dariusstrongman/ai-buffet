@@ -196,17 +196,17 @@
                     </p>
                     <div class="hero-stats">
                         <div class="stat-item">
-                            <span class="stat-number" id="live-articles-count">150+</span>
+                            <span class="stat-number" id="live-articles-count">0+</span>
                             <span class="stat-label">Articles Today</span>
                         </div>
                         <div class="stat-divider"></div>
                         <div class="stat-item">
-                            <span class="stat-number">24/7</span>
-                            <span class="stat-label">Live Monitoring</span>
+                            <span class="stat-number" id="total-articles-count">0+</span>
+                            <span class="stat-label">Total Articles</span>
                         </div>
                         <div class="stat-divider"></div>
                         <div class="stat-item">
-                            <span class="stat-number" id="sources-count">50+</span>
+                            <span class="stat-number" id="sources-count">0+</span>
                             <span class="stat-label">Premium Sources</span>
                         </div>
                     </div>
@@ -957,7 +957,7 @@
         let filteredArticles = [];
         let currentFilter = 'all';
         let currentSort = 'relevance';
-        let currentTimeRange = 'today';
+        let currentTimeRange = 'all';
         let articlesLoaded = 0;
         const articlesPerPage = 12;
         
@@ -968,27 +968,40 @@
                     category = null,
                     limit = 50,
                     offset = 0,
-                    sortBy = 'relevance_score',
+                    sortBy = 'trending_score',
                     timeRange = 'today',
                     featured = null,
                     breaking = null,
                     isTopStory = null
                 } = options;
                 
+                // Select only the fields we need for better performance
                 let query = supabase
                     .from('articles')
-                    .select('*');
-                    
-                // Status column has been removed - no need to filter by it anymore
+                    .select(`
+                        id,
+                        title,
+                        slug,
+                        description,
+                        content_snippet,
+                        link,
+                        source,
+                        author,
+                        pub_date,
+                        featured,
+                        is_top_story,
+                        trending_score,
+                        breaking_news,
+                        word_count
+                    `);
                 
                 // Apply filters
                 if (category && category !== 'all') {
                     if (category === 'breaking') {
                         query = query.eq('breaking_news', 'TRUE');
-                    } else {
-                        // Use the new normalized category field
-                        query = query.eq('category_normalized', category);
                     }
+                    // Note: Remove category filtering since we don't have category field anymore
+                    // You may want to add a category field back or use source-based filtering
                 }
                 
                 if (featured !== null) {
@@ -1000,7 +1013,7 @@
                 }
                 
                 if (isTopStory !== null) {
-                    query = query.eq('is_top_story', isTopStory);
+                    query = query.eq('is_top_story', isTopStory ? 'TRUE' : 'FALSE');
                 }
                 
                 // Time range filter
@@ -1025,27 +1038,23 @@
                     }
                 }
                 
-                // Sorting
+                // Sorting - matches exact SQL queries
                 switch (sortBy) {
                     case 'recent':
+                        // ORDER BY pub_date DESC
                         query = query.order('pub_date', { ascending: false });
                         break;
-                    case 'trending_score':
-                        query = query.order('trending_score', { ascending: false });
+                    case 'trending':
+                        // ORDER BY trending_score DESC, pub_date DESC  
+                        query = query.order('trending_score', { ascending: false })
+                                     .order('pub_date', { ascending: false });
                         break;
-                    case 'importance_score':
-                        // Use relevance_score since importance_score doesn't exist
-                        query = query.order('relevance_score', { ascending: false });
-                        break;
-                    case 'relevance_score':
-                        query = query.order('relevance_score', { ascending: false });
-                        break;
-                    case 'impact':
-                        // Use relevance_score since market_impact was removed
-                        query = query.order('relevance_score', { ascending: false });
+                    case 'featured':
+                        query = query.order('featured', { ascending: false })
+                                     .order('pub_date', { ascending: false });
                         break;
                     default:
-                        query = query.order('pub_date', { ascending: false }); // Default to recent
+                        query = query.order('pub_date', { ascending: false });
                 }
                 
                 query = query.range(offset, offset + limit - 1);
@@ -1058,6 +1067,30 @@
                 }
                 
                 console.log(`Fetched ${data?.length || 0} articles with options:`, options);
+                console.log('🔍 Query filters applied:', {
+                    isTopStory: isTopStory !== null ? `is_top_story = '${isTopStory ? 'TRUE' : 'FALSE'}'` : 'none',
+                    featured: featured !== null ? `featured = '${featured ? 'TRUE' : 'FALSE'}'` : 'none', 
+                    breaking: breaking !== null ? `breaking_news = '${breaking ? 'TRUE' : 'FALSE'}'` : 'none',
+                    sortBy: sortBy,
+                    timeRange
+                });
+                
+                // Debug: Check if we're looking for top stories and found none
+                if (isTopStory === true && (!data || data.length === 0)) {
+                    console.warn('🔍 No articles found with is_top_story = TRUE. Check database data.');
+                }
+                
+                // Debug: Show first few results if any
+                if (data && data.length > 0) {
+                    console.log('📄 First article:', {
+                        title: data[0].title,
+                        is_top_story: data[0].is_top_story,
+                        featured: data[0].featured,
+                        breaking_news: data[0].breaking_news,
+                        trending_score: data[0].trending_score
+                    });
+                }
+                
                 return { articles: data || [], total: count || data?.length || 0 };
             } catch (error) {
                 console.error('Error in fetchNewsArticles:', error);
@@ -1072,10 +1105,8 @@
                 const { data, error } = await supabase
                     .from('articles')
                     .select('*')
-                    .eq('status', 'published')
-                    .eq('category', 'news')
                     .or(`title.ilike.%${query}%, description.ilike.%${query}%, content_snippet.ilike.%${query}%`)
-                    .order('relevance_score', { ascending: false })
+                    .order('trending_score', { ascending: false })
                     .range(offset, offset + limit - 1);
                 
                 if (error) {
@@ -1092,35 +1123,46 @@
         
         async function getArticleStats() {
             try {
+                // Get total articles count
                 const { count: totalCount } = await supabase
                     .from('articles')
-                    .select('*', { count: 'exact', head: true })
-                    .eq('status', 'published')
-                    .eq('category', 'news');
+                    .select('*', { count: 'exact', head: true });
                 
+                // Get today's articles count
                 const { count: todayCount } = await supabase
                     .from('articles')
                     .select('*', { count: 'exact', head: true })
-                    .eq('status', 'published')
-                    .eq('category', 'news')
                     .gte('pub_date', new Date(new Date().setHours(0,0,0,0)).toISOString());
                 
-                const { data: sources } = await supabase
+                // Get unique sources
+                const { data: sourcesData } = await supabase
                     .from('articles')
-                    .select('source')
-                    .eq('status', 'published')
-                    .eq('category', 'news');
+                    .select('source');
                 
-                const uniqueSources = [...new Set(sources?.map(s => s.source) || [])].length;
+                const uniqueSources = [...new Set(sourcesData?.map(s => s.source) || [])].length;
+                
+                // Get breaking news count
+                const { count: breakingCount } = await supabase
+                    .from('articles')
+                    .select('*', { count: 'exact', head: true })
+                    .eq('breaking_news', 'TRUE');
+                
+                // Get top stories count
+                const { count: topStoriesCount } = await supabase
+                    .from('articles')
+                    .select('*', { count: 'exact', head: true })
+                    .eq('is_top_story', 'TRUE');
                 
                 return {
                     total: totalCount || 0,
                     today: todayCount || 0,
-                    sources: uniqueSources
+                    sources: uniqueSources,
+                    breaking: breakingCount || 0,
+                    topStories: topStoriesCount || 0
                 };
             } catch (error) {
                 console.error('Error getting article stats:', error);
-                return { total: 0, today: 0, sources: 0 };
+                return { total: 0, today: 0, sources: 0, breaking: 0, topStories: 0 };
             }
         }
         
@@ -1161,8 +1203,10 @@
             };
             
             const getReadTime = (wordCount) => {
+                // Use actual word_count from database, fallback to reasonable estimate
+                const words = wordCount || 300;
                 const wordsPerMinute = 200;
-                const minutes = Math.ceil((wordCount || 800) / wordsPerMinute);
+                const minutes = Math.max(1, Math.ceil(words / wordsPerMinute));
                 return `${minutes} min read`;
             };
             
@@ -1173,7 +1217,7 @@
             
             if (type === 'hero') {
                 return `
-                    <article class="featured-hero-card" data-category="${article.category_normalized || 'news'}">
+                    <article class="featured-hero-card" data-category="news">
                         <div class="hero-card-background">
                             <div class="background-overlay"></div>
                             <div class="background-pattern"></div>
@@ -1187,8 +1231,8 @@
                                     </div>
                                 ` : ''}
                                 <div class="article-priority">
-                                    <span class="priority-icon">${getCategoryIcon(article.category_normalized || article.subcategory)}</span>
-                                    <span class="priority-text">${(parseFloat(article.relevance_score) || 7) >= 8 ? 'HIGH RELEVANCE' : 'TOP STORY'}</span>
+                                    <span class="priority-icon">🤖</span>
+                                    <span class="priority-text">${article.is_top_story === 'TRUE' ? 'TOP STORY' : 'FEATURED'}</span>
                                 </div>
                             </div>
                             <h3 class="hero-card-title">
@@ -1206,7 +1250,7 @@
                                 </div>
                                 <div class="meta-group">
                                     <span class="meta-icon">⭐</span>
-                                    <span class="meta-text">Score ${(parseFloat(article.relevance_score) || 7).toFixed(1)}</span>
+                                    <span class="meta-text">Trending ${(parseFloat(article.trending_score) || 3).toFixed(1)}</span>
                                 </div>
                             </div>
                         </div>
@@ -1216,19 +1260,19 @@
             
             if (type === 'secondary') {
                 return `
-                    <article class="featured-secondary-card" data-category="${article.category_normalized || 'news'}">
+                    <article class="featured-secondary-card" data-category="news">
                         <div class="secondary-card-header">
-                            <div class="category-badge ${article.category_normalized || 'news'}">
-                                <span class="badge-icon">${getCategoryIcon(article.category_normalized)}</span>
-                                <span class="badge-text">${(article.category_normalized || 'NEWS').toUpperCase()}</span>
+                            <div class="category-badge news">
+                                <span class="badge-icon">🤖</span>
+                                <span class="badge-text">AI NEWS</span>
                             </div>
-                            ${(parseFloat(article.trending_score) || parseFloat(article.relevance_score) || 0) >= 8 ? `
+                            ${(parseFloat(article.trending_score) || 0) >= 4 ? `
                                 <div class="trending-indicator">
                                     <span class="trending-icon">📈</span>
                                 </div>
                             ` : `
                                 <div class="impact-score">
-                                    <span class="score-text">${(parseFloat(article.relevance_score) || 7).toFixed(1)}</span>
+                                    <span class="score-text">${(parseFloat(article.trending_score) || 3).toFixed(1)}</span>
                                 </div>
                             `}
                         </div>
@@ -1246,19 +1290,19 @@
             
             // Standard card for grid
             return `
-                <article class="premium-news-card" data-category="${article.category_normalized || 'news'}">
+                <article class="premium-news-card" data-category="news">
                     <div class="news-card-header">
-                        <div class="category-indicator ${article.category_normalized || 'news'}">
-                            <span class="indicator-icon">${getCategoryIcon(article.category_normalized)}</span>
-                            <span class="indicator-text">${(article.category_normalized || 'NEWS').toUpperCase()}</span>
+                        <div class="category-indicator news">
+                            <span class="indicator-icon">🤖</span>
+                            <span class="indicator-text">AI NEWS</span>
                         </div>
-                        ${(parseFloat(article.trending_score) || parseFloat(article.relevance_score) || 0) >= 9 ? `
+                        ${(parseFloat(article.trending_score) || 0) >= 4 ? `
                             <div class="trending-badge">
                                 <span class="trending-icon">🔥</span>
                                 <span class="trending-text">Trending</span>
                             </div>
                         ` : `
-                            <div class="article-priority ${(parseFloat(article.relevance_score) || 7) >= 8 ? 'high' : 'medium'}">
+                            <div class="article-priority ${(parseFloat(article.trending_score) || 0) >= 4 ? 'high' : 'medium'}">
                                 <span class="priority-dot"></span>
                             </div>
                         `}
@@ -1270,21 +1314,21 @@
                         <p class="news-card-excerpt">${truncateText(article.description || article.content_snippet)}</p>
                         <div class="news-card-insights">
                             <div class="insight-tag">
-                                <span class="tag-icon">${article.category_normalized === 'business' ? '📊' : '💡'}</span>
-                                <span class="tag-text">${article.category_normalized === 'business' ? 'Market Analysis' : 'Key Insight'}</span>
+                                <span class="tag-icon">💡</span>
+                                <span class="tag-text">AI Insight</span>
                             </div>
-                            ${article.category_normalized === 'business' ? `
+                            ${article.trending_score && parseFloat(article.trending_score) >= 4 ? `
                                 <div class="stock-indicator">
-                                    <span class="stock-symbol">AI Sector</span>
-                                    <span class="stock-change positive">+${(Math.random() * 5 + 1).toFixed(1)}%</span>
+                                    <span class="stock-symbol">AI Trending</span>
+                                    <span class="stock-change positive">${parseFloat(article.trending_score).toFixed(1)}/5</span>
                                 </div>
                             ` : `
                                 <div class="impact-meter">
                                     <span class="meter-label">Relevance:</span>
                                     <div class="meter-bar">
-                                        <div class="meter-fill" style="width: ${(parseFloat(article.relevance_score) || 7) * 10}%"></div>
+                                        <div class="meter-fill" style="width: ${(parseFloat(article.trending_score) || 3) * 20}%"></div>
                                     </div>
-                                    <span class="meter-value">${(parseFloat(article.relevance_score) || 7).toFixed(1)}</span>
+                                    <span class="meter-value">${(parseFloat(article.trending_score) || 3).toFixed(1)}</span>
                                 </div>
                             `}
                         </div>
@@ -1387,32 +1431,44 @@
                 </article>
             `.repeat(3);
             
-            let options = { limit: 12 };
+            let options = {};
             
             switch (tabType) {
                 case 'top-articles':
-                    options.isTopStory = true; // Get articles where is_top_story = TRUE
-                    options.sortBy = 'importance_score';
+                    // ⭐ Top Stories → SELECT * FROM articles WHERE is_top_story = true ORDER BY pub_date DESC LIMIT 5;
+                    options = {
+                        isTopStory: true,
+                        sortBy: 'recent',
+                        limit: 5,
+                        timeRange: 'all'
+                    };
                     break;
                 case 'latest-articles':
-                    options.sortBy = 'recent'; // Sort by pub_date DESC
+                    // 📰 Latest Updates → SELECT * FROM articles ORDER BY pub_date DESC LIMIT 10;
+                    options = {
+                        sortBy: 'recent',
+                        limit: 10,
+                        timeRange: 'all'
+                    };
                     break;
                 case 'trending-articles':
-                    options.sortBy = 'trending_score'; // Sort by trending_score DESC
-                    options.timeRange = 'week';
+                    // 📈 Trending → SELECT * FROM articles ORDER BY trending_score DESC, pub_date DESC LIMIT 5;
+                    options = {
+                        sortBy: 'trending',
+                        limit: 5,
+                        timeRange: 'all'
+                    };
                     break;
             }
             
+            console.log(`🔍 ${tabType} query:`, options);
             let { articles } = await fetchNewsArticles(options);
+            console.log(`📊 ${tabType} results: ${articles.length} articles found`);
             
-            // If no articles found with strict filtering, try with looser filters
+            // If no Top Stories found, show message instead of fallback
             if (articles.length === 0 && tabType === 'top-articles') {
-                console.log('No top story articles found, trying without is_top_story filter...');
-                const fallbackResult = await fetchNewsArticles({
-                    limit: 12,
-                    sortBy: 'importance_score'
-                });
-                articles = fallbackResult.articles;
+                console.log('⚠️  No articles with is_top_story = true found');
+                // Don't fallback - show empty state for Top Stories if none are marked
             }
             
             renderTabContent(articles, tabType);
@@ -1425,11 +1481,12 @@
         }
         
         async function loadFeaturedContent() {
-            // Get top story articles (importance_score >= 7 OR breaking_news = true)
+            // Get top story articles (is_top_story = true OR breaking_news = true)
             let { articles } = await fetchNewsArticles({
                 isTopStory: true,
                 limit: 3,
-                sortBy: 'importance_score'
+                sortBy: 'featured',
+                timeRange: 'all'
             });
             
             console.log(`Top story articles found: ${articles.length}`);
@@ -1439,7 +1496,8 @@
                 const breakingResult = await fetchNewsArticles({
                     breaking: true,
                     limit: 3,
-                    sortBy: 'importance_score'
+                    sortBy: 'recent',
+                    timeRange: 'all'
                 });
                 articles = breakingResult.articles;
                 console.log(`Breaking articles found: ${articles.length}`);
@@ -1449,7 +1507,7 @@
             if (articles.length === 0) {
                 const topResult = await fetchNewsArticles({
                     limit: 3,
-                    sortBy: 'importance_score'
+                    sortBy: 'recent'
                 });
                 articles = topResult.articles;
                 console.log(`Fallback articles found: ${articles.length}`);
@@ -1498,10 +1556,32 @@
             const stats = await getArticleStats();
             
             const liveCountEl = document.getElementById('live-articles-count');
+            const totalCountEl = document.getElementById('total-articles-count');
             const sourcesCountEl = document.getElementById('sources-count');
             
-            if (liveCountEl) liveCountEl.textContent = `${stats.today}+`;
-            if (sourcesCountEl) sourcesCountEl.textContent = `${stats.sources}+`;
+            // Animate the numbers
+            if (liveCountEl) animateNumber(liveCountEl, stats.today);
+            if (totalCountEl) animateNumber(totalCountEl, stats.total);
+            if (sourcesCountEl) animateNumber(sourcesCountEl, stats.sources);
+            
+            console.log('📊 Stats updated:', stats);
+        }
+        
+        function animateNumber(element, targetNumber) {
+            const duration = 1000;
+            const start = parseInt(element.textContent) || 0;
+            const increment = (targetNumber - start) / (duration / 16);
+            let current = start;
+            
+            const timer = setInterval(() => {
+                current += increment;
+                if ((increment > 0 && current >= targetNumber) || (increment < 0 && current <= targetNumber)) {
+                    element.textContent = `${targetNumber}+`;
+                    clearInterval(timer);
+                } else {
+                    element.textContent = `${Math.floor(current)}+`;
+                }
+            }, 16);
         }
         
         // Utility functions
@@ -1562,12 +1642,12 @@
                 if (!currentTabCount) return;
                 
                 const counts = {
-                    'top-articles': '8',
-                    'latest-articles': '12',
-                    'trending-articles': '6'
+                    'top-articles': '5',     // LIMIT 5
+                    'latest-articles': '10', // LIMIT 10  
+                    'trending-articles': '5' // LIMIT 5
                 };
                 
-                currentTabCount.textContent = counts[tabType] || '8';
+                currentTabCount.textContent = counts[tabType] || '10';
             }
             
             function showTabLoading(tabType) {
@@ -1893,7 +1973,7 @@
                     // Test 1: Simple query without filters
                     const { data: testData, error: testError } = await supabase
                         .from('articles')
-                        .select('id, title, featured, breaking_news, is_top_story, trending_score, category_normalized, relevance_score, subcategory, confidence_score')
+                        .select('id, title, featured, breaking_news, is_top_story, trending_score, source, author, word_count')
                         .limit(5);
                     
                     if (testData && testData.length > 0) {
@@ -1901,10 +1981,10 @@
                         console.log('Featured values:', testData.map(article => article.featured));
                         console.log('Breaking values:', testData.map(article => article.breaking_news));
                         console.log('Top story values:', testData.map(article => article.is_top_story));
-                        console.log('Relevance scores:', testData.map(article => article.relevance_score));
                         console.log('Trending scores:', testData.map(article => article.trending_score));
-                        console.log('Category normalized:', testData.map(article => article.category_normalized));
-                        console.log('Subcategory:', testData.map(article => article.subcategory));
+                        console.log('Sources:', testData.map(article => article.source));
+                        console.log('Authors:', testData.map(article => article.author));
+                        console.log('Word counts:', testData.map(article => article.word_count));
                     }
                     
                     if (testError) {

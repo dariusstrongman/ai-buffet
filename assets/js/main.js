@@ -649,7 +649,7 @@ function handleResize() {
 async function loadRealArticles() {
     try {
         const response = await fetch(
-            'https://npetaroffoyjohjiwssf.supabase.co/rest/v1/articles?select=title,ai_summary,link,source,category,relevance_score,featured,pub_date&order=pub_date.desc&limit=20',
+            'https://npetaroffoyjohjiwssf.supabase.co/rest/v1/articles?select=title,description,content_snippet,link,source,author,pub_date,featured,is_top_story,trending_score,breaking_news,word_count&order=pub_date.desc&limit=20',
             {
                 headers: {
                     'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5wZXRhcm9mZm95am9oaml3c3NmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTcwMDk5OTgsImV4cCI6MjA3MjU4NTk5OH0.oYJ4ETV_zIDx_7KWJlEtcrIrRqy72HYEFzAs37pPzB8'
@@ -711,10 +711,12 @@ function updateLatestArticles(articles) {
 
 function createArticleHTML(article, category) {
     const title = escapeHtml(article.title || 'No title available');
-    const excerpt = escapeHtml(article.ai_summary || 'No summary available');
+    const excerpt = escapeHtml(article.description || article.content_snippet || 'No summary available');
     const link = escapeHtml(article.link || '#');
     const source = escapeHtml(article.source || 'Unknown source');
+    const author = article.author ? escapeHtml(article.author) : null;
     const pubDate = formatDate(article.pub_date);
+    const readTime = Math.max(1, Math.ceil((article.word_count || 300) / 200));
     
     return `
         <article class="card article-card card--interactive" tabindex="0" role="button" 
@@ -728,6 +730,8 @@ function createArticleHTML(article, category) {
                     <time datetime="${article.pub_date}">${pubDate}</time>
                     <span class="article-card__category">${category}</span>
                     <span>${source}</span>
+                    ${author ? `<span>by ${author}</span>` : ''}
+                    <span>${readTime}m read</span>
                 </div>
             </div>
         </article>
